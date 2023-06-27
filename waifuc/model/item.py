@@ -2,12 +2,13 @@ import json
 import os.path
 import pickle
 from dataclasses import dataclass
-from types import NoneType
 from typing import Optional
 
 from PIL import Image
 from hbutils.encoding import base64_decode, base64_encode
 from hbutils.reflection import quick_import_object
+
+NoneType = type(None)
 
 _TYPE_META = '__type'
 _BASE64_META = 'base64'
