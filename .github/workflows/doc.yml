@@ -45,20 +45,6 @@ jobs:
           dot -V
           python -m pip install -r requirements.txt
           python -m pip install -r requirements-doc.txt
-      - name: Prepare dataset
-        uses: nick-fields/retry@v2
-        if: ${{ github.event_name == 'push' }}
-        env:
-          CI: 'true'
-          HF_NARUGO_USERNAME: ${{ secrets.HF_NARUGO_USERNAME }}
-          HF_NARUGO_PASSWORD: ${{ secrets.HF_NARUGO_PASSWORD }}
-        with:
-          shell: bash
-          timeout_minutes: 20
-          max_attempts: 5
-          retry_on: any
-          command: |
-            make dataset
       - name: Generate the contents
         if: ${{ github.event_name == 'push' }}
         env:
@@ -118,19 +104,6 @@ jobs:
           dot -V
           python -m pip install -r requirements.txt
           python -m pip install -r requirements-doc.txt
-      - name: Prepare dataset
-        uses: nick-fields/retry@v2
-        env:
-          CI: 'true'
-          HF_NARUGO_USERNAME: ${{ secrets.HF_NARUGO_USERNAME }}
-          HF_NARUGO_PASSWORD: ${{ secrets.HF_NARUGO_PASSWORD }}
-        with:
-          shell: bash
-          timeout_minutes: 20
-          max_attempts: 5
-          retry_on: any
-          command: |
-            make dataset
       - name: Sync from ref
         if: ${{ github.event_name == 'push' }}
         run: |
