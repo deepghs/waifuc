@@ -54,7 +54,7 @@ class FilterSimilarAction(BaseAction):
         image = item.image
         ratio = image.height * 1.0 / image.width
         feat = lpips_extract_feature(image)
-        bucket = self._get_bin(image.meta.get('group_id'))
+        bucket = self._get_bin(item.meta.get('group_id'))
 
         if not bucket.check_duplicate(feat, ratio):
             bucket.add(feat, ratio)

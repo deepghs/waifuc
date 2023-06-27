@@ -1,23 +1,22 @@
-from typing import Iterator, List
+from typing import Iterator, Iterable
 
 from ..model import ImageItem
+
+
+class ActionStop(Exception):
+    pass
 
 
 class BaseAction:
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         raise NotImplementedError
 
-    def __rshift__(self, other):
-        if not isinstance(self, ComposedAction):
-            if not isinstance(other, ComposedAction):
-                return ComposedAction(self, other)
-            else:
-                return ComposedAction(self, *other._actions)
-        else:
-            if not isinstance(other, ComposedAction):
-                return ComposedAction(*self._actions, other)
-            else:
-                return ComposedAction(*self._actions, *other._actions)
+    def iter_from(self, iter_: Iterable[ImageItem]) -> Iterator[ImageItem]:
+        for item in iter_:
+            try:
+                yield from self.iter(item)
+            except ActionStop:
+                break
 
 
 class ProcessAction(BaseAction):
@@ -41,18 +40,3 @@ class FilterAction(BaseAction):
 
     def __call__(self, item: ImageItem) -> bool:
         return self.check(item)
-
-
-class ComposedAction(BaseAction):
-    def __init__(self, *actions: BaseAction):
-        self._actions: List[BaseAction] = list(actions)
-
-    def iter(self, item: ImageItem) -> Iterator[ImageItem]:
-        def _layer(_layer_id):
-            if _layer_id == 0:
-                yield from self._actions[_layer_id].iter(item)
-            else:
-                for img_item in _layer(_layer_id - 1):
-                    yield from self._actions[_layer_id].iter(img_item)
-
-        yield from _layer(len(self._actions) - 1)
