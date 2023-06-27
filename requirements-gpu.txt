@@ -1,0 +1,2 @@
+onnxruntime-gpu
+dghs-imgutils[gpu]>=0.2.0
