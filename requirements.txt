@@ -4,3 +4,5 @@ numpy
 tqdm
 pandas
 dghs-imgutils>=0.2.0
+pybooru
+requests
