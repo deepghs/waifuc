@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from imgutils.detect import detect_faces, detect_heads
 from imgutils.validate import is_monochrome, anime_classify, anime_rating
 
 from .base import FilterAction
@@ -47,3 +48,34 @@ class RatingFilterAction(FilterAction):
     def check(self, item: ImageItem) -> bool:
         rating, score = anime_rating(item.image, **self.kwargs)
         return rating in self.ratings and (self.threshold is None or score >= self.threshold)
+
+
+class FaceCountAction(FilterAction):
+    def __init__(self, count: int, level: str = 's', version: str = 'v1.4',
+                 conf_threshold: float = 0.25, iou_threshold: float = 0.7):
+        self.count = count
+        self.level = level
+        self.version = version
+        self.conf_threshold = conf_threshold
+        self.iou_threshold = iou_threshold
+
+    def check(self, item: ImageItem) -> bool:
+        detection = detect_faces(item.image, self.level, self.version,
+                                 conf_threshold=self.conf_threshold, iou_threshold=self.iou_threshold)
+        return len(detection) == self.count
+
+
+class HeadCountAction(FilterAction):
+    def __init__(self, count: int, level: str = 's', conf_threshold: float = 0.3, iou_threshold: float = 0.7):
+        self.count = count
+        self.level = level
+        self.conf_threshold = conf_threshold
+        self.iou_threshold = iou_threshold
+
+    def check(self, item: ImageItem) -> bool:
+        detection = detect_heads(
+            item.image, self.level,
+            conf_threshold=self.conf_threshold,
+            iou_threshold=self.iou_threshold
+        )
+        return len(detection) == self.count
