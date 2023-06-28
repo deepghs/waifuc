@@ -57,7 +57,7 @@ class DanbooruSource(BaseDataSource):
         return data['file_url']
 
     def _iter(self) -> Iterator[ImageItem]:
-        page = 0
+        page = 1
         while True:
             for data in self.client.post_list(tags=self.tags, random=self.random, page=page, limit=100):
                 try:
