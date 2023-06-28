@@ -1,6 +1,7 @@
 import copy
-from typing import Iterator
+from typing import Iterator, Optional
 
+from hbutils.reflection import context
 from tqdm.auto import tqdm
 
 from ..action import BaseAction
@@ -13,7 +14,12 @@ class BaseDataSource:
         raise NotImplementedError
 
     def _iter_from(self) -> Iterator[ImageItem]:
-        for item in tqdm(self._iter(), desc=f'{self.__class__.__name__}'):
+        ctx_name = context().get('waifuc_task_name', None)
+        if ctx_name:
+            desc = f'{self.__class__.__name__} - {ctx_name}'
+        else:
+            desc = f'{self.__class__.__name__}'
+        for item in tqdm(self._iter(), desc=desc):
             yield item
 
     def __iter__(self) -> Iterator[ImageItem]:
@@ -22,10 +28,11 @@ class BaseDataSource:
     def attach(self, *actions: BaseAction) -> 'AttachedDataSource':
         return AttachedDataSource(self, *actions)
 
-    def export(self, exporter: BaseExporter):
+    def export(self, exporter: BaseExporter, name: Optional[str] = None):
         exporter = copy.deepcopy(exporter)
         exporter.reset()
-        return exporter.export_from(iter(self))
+        with context().vars(waifuc_task_name=name):
+            return exporter.export_from(iter(self))
 
 
 class AttachedDataSource(BaseDataSource):

@@ -1,6 +1,7 @@
 import os.path
 from typing import Iterator
 
+from hbutils.reflection import context
 from hbutils.system import remove
 from tqdm.auto import tqdm
 
@@ -16,7 +17,12 @@ class BaseExporter:
 
     def export_from(self, items: Iterator[ImageItem]):
         self.init()
-        for item in tqdm(items, desc=f'{self.__class__.__name__}'):
+        ctx_name = context().get('waifuc_task_name', None)
+        if ctx_name:
+            desc = f'{self.__class__.__name__} - {ctx_name}'
+        else:
+            desc = f'{self.__class__.__name__}'
+        for item in tqdm(items, desc=desc):
             self.export(item)
 
     def reset(self):
