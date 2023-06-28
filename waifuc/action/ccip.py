@@ -1,6 +1,7 @@
 from enum import IntEnum
 from typing import Iterator, Optional
 
+from hbutils.testing import disable_output
 from imgutils.metrics import ccip_extract_feature, ccip_default_threshold, ccip_clustering, ccip_batch_differences
 
 from .base import BaseAction
@@ -14,7 +15,7 @@ class CCIPStatus(IntEnum):
 
 
 class CCIPAction(BaseAction):
-    def __init__(self, min_val_count: int = 15, step: int = 5,
+    def __init__(self, min_val_count: int = 25, step: int = 5,
                  ratio_threshold: float = 0.6, cmp_threshold: float = 0.4,
                  eps: Optional[float] = None, min_samples: Optional[int] = None,
                  model='ccip-caformer-24-randaug-pruned', threshold: Optional[float] = None):
@@ -34,8 +35,9 @@ class CCIPAction(BaseAction):
         return ccip_extract_feature(item.image, model=self.model)
 
     def _try_cluster(self) -> bool:
-        clu_ids = ccip_clustering(self.feats, method='optics', model=self.model,
-                                  eps=self.eps, min_samples=self.min_samples)
+        with disable_output():
+            clu_ids = ccip_clustering(self.feats, method='optics', model=self.model,
+                                      eps=self.eps, min_samples=self.min_samples)
         clu_counts = {}
         for id_ in clu_ids:
             if id_ != -1:
