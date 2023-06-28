@@ -1,5 +1,5 @@
 from enum import IntEnum
-from typing import Iterator, Optional
+from typing import Iterator, Optional, List, Tuple
 
 from hbutils.testing import disable_output
 from imgutils.metrics import ccip_extract_feature, ccip_default_threshold, ccip_clustering, ccip_batch_differences
@@ -61,13 +61,12 @@ class CCIPAction(BaseAction):
         else:
             return False
 
-    def _compare_to_exists(self, feat) -> bool:
+    def _compare_to_exists(self, feat) -> Tuple[bool, List[int]]:
         diffs = ccip_batch_differences([feat, *self.feats], model=self.model)[0, 1:]
         matches = diffs <= self.threshold
-        for i in range(len(self.items)):
-            if matches[i]:
-                self.item_matches[i] += 1
-        return matches.sum() >= self.cmp_threshold
+        yes = matches.sum() >= self.cmp_threshold
+        matched_item_ids = [i for i in range(len(self.items)) if matches[i]]
+        return yes, matched_item_ids
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         if self.status == CCIPStatus.INIT:
@@ -90,9 +89,13 @@ class CCIPAction(BaseAction):
 
         elif self.status == CCIPStatus.EVAL:
             feat = self._extract_feature(item)
-            if self._compare_to_exists(feat):
+            yes, matched_ids = self._compare_to_exists(feat)
+            if yes:
                 self.feats.append(feat)
                 yield item
+
+                for id_ in matched_ids:
+                    self.item_matches[id_] += 1
 
                 for i in range(len(self.items)):
                     if not self.item_released[i] and self.item_matches[i] >= self.min_rematched:
@@ -104,5 +107,7 @@ class CCIPAction(BaseAction):
 
     def reset(self):
         self.items.clear()
+        self.item_matches.clear()
+        self.item_released.clear()
         self.feats.clear()
         self.status = CCIPStatus.INIT
