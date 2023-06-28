@@ -14,6 +14,7 @@ class FileExtAction(BaseAction):
             filebody, _ = item.meta['filename']
             filename = f'{filebody}{self.ext}'
         else:
+            self.untitles += 1
             filename = f'untitled_{self.untitles}{self.ext}'
 
         yield ImageItem(item.image, {**item.meta, 'filename': filename})
