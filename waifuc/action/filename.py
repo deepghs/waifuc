@@ -1,3 +1,4 @@
+import os
 from typing import Iterator
 
 from .base import BaseAction
@@ -11,7 +12,7 @@ class FileExtAction(BaseAction):
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         if 'filename' in item.meta:
-            filebody, _ = item.meta['filename']
+            filebody, _ = os.path.splitext(item.meta['filename'])
             filename = f'{filebody}{self.ext}'
         else:
             self.untitles += 1
