@@ -80,7 +80,7 @@ class SankakuSource(BaseDataSource):
     def _iter(self) -> Iterator[ImageItem]:
         self._login()
 
-        page = 0
+        page = 1
         while True:
             resp = srequest(self.session, 'GET', 'https://capi-v2.sankakucomplex.com/posts', params={
                 'lang': 'en',
