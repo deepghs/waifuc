@@ -16,18 +16,21 @@ class CCIPStatus(IntEnum):
 
 class CCIPAction(BaseAction):
     def __init__(self, min_val_count: int = 15, step: int = 5,
-                 ratio_threshold: float = 0.6, cmp_threshold: float = 0.4,
+                 ratio_threshold: float = 0.6, cmp_threshold: float = 0.5, min_rematched: int = 10,
                  eps: Optional[float] = None, min_samples: Optional[int] = None,
                  model='ccip-caformer-24-randaug-pruned', threshold: Optional[float] = None):
         self.min_val_count = min_val_count
         self.step = step
         self.ratio_threshold = ratio_threshold
         self.cmp_threshold = cmp_threshold
+        self.min_rematched = min_rematched
         self.eps, self.min_samples = eps, min_samples
         self.model = model
         self.threshold = threshold or ccip_default_threshold(self.model)
 
         self.items = []
+        self.item_matches = []
+        self.item_released = []
         self.feats = []
         self.status = CCIPStatus.INIT
 
@@ -51,6 +54,8 @@ class CCIPAction(BaseAction):
 
         if chosen_id is not None:
             self.items = [item for i, item in enumerate(self.items) if clu_ids[i] == chosen_id]
+            self.item_matches = [0] * len(self.items)
+            self.item_released = [False] * len(self.items)
             self.feats = [feat for i, feat in enumerate(self.feats) if clu_ids[i] == chosen_id]
             return True
         else:
@@ -58,7 +63,11 @@ class CCIPAction(BaseAction):
 
     def _compare_to_exists(self, feat) -> bool:
         diffs = ccip_batch_differences([feat, *self.feats], model=self.model)[0, 1:]
-        return (diffs <= self.threshold).sum() >= self.cmp_threshold
+        matches = diffs <= self.threshold
+        for i in range(len(self.items)):
+            if matches[i]:
+                self.item_matches[i] += 1
+        return matches.sum() >= self.cmp_threshold
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         if self.status == CCIPStatus.INIT:
@@ -67,7 +76,6 @@ class CCIPAction(BaseAction):
 
             if len(self.items) >= self.min_val_count:
                 if self._try_cluster():
-                    yield from self.items
                     self.status = CCIPStatus.EVAL
                 else:
                     self.status = CCIPStatus.APPROACH
@@ -78,15 +86,18 @@ class CCIPAction(BaseAction):
 
             if (len(self.items) - self.min_val_count) % self.step == 0:
                 if self._try_cluster():
-                    yield from self.items
                     self.status = CCIPStatus.EVAL
 
         elif self.status == CCIPStatus.EVAL:
             feat = self._extract_feature(item)
             if self._compare_to_exists(feat):
-                self.items.append(item)
                 self.feats.append(feat)
                 yield item
+
+                for i in range(len(self.items)):
+                    if not self.item_released[i] and self.item_matches[i] >= self.min_rematched:
+                        yield self.items[i]
+                        self.item_released[i] = True
 
         else:
             raise ValueError(f'Unknown status for {self.__class__.__name__} - {self.status!r}.')
