@@ -2,6 +2,7 @@ import copy
 from typing import Iterator
 
 from ..action import BaseAction
+from ..export import BaseExporter
 from ..model import ImageItem
 
 
@@ -17,6 +18,11 @@ class BaseDataSource:
         for action in actions:
             action.reset()
         return AttachedDataSource(self, *actions)
+
+    def export(self, exporter: BaseExporter):
+        exporter = copy.deepcopy(exporter)
+        exporter.reset()
+        return exporter.export_from(iter(self))
 
 
 class AttachedDataSource(BaseDataSource):
