@@ -15,7 +15,7 @@ class CCIPStatus(IntEnum):
 
 
 class CCIPAction(BaseAction):
-    def __init__(self, min_val_count: int = 25, step: int = 5,
+    def __init__(self, min_val_count: int = 15, step: int = 5,
                  ratio_threshold: float = 0.6, cmp_threshold: float = 0.4,
                  eps: Optional[float] = None, min_samples: Optional[int] = None,
                  model='ccip-caformer-24-randaug-pruned', threshold: Optional[float] = None):
