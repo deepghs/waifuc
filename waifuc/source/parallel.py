@@ -13,7 +13,7 @@ class ParallelDataSource(BaseDataSource):
     def _iter(self) -> Iterator[ImageItem]:
         iters = [iter(source) for source in self.sources]
         while len(iters) > 0:
-            id_ = random.choice(range(len(iters)))
+            id_ = self.random.choice(range(len(iters)))
             iter_ = iters[id_]
 
             try:
