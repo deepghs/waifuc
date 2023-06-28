@@ -36,15 +36,16 @@ FilterSimilarModeTyping = Literal['all', 'group']
 class FilterSimilarAction(BaseAction):
     def __init__(self, mode: FilterSimilarModeTyping, threshold: float = 0.45, rtol=1.e-5, atol=1.e-8):
         self.mode = mode
+        self.threshold, self.rtol, self.atol = threshold, rtol, atol
         self.buckets: Dict[str, FeatureBucket] = {}
-        self.global_bucket = FeatureBucket()
+        self.global_bucket = FeatureBucket(threshold, rtol, atol)
 
     def _get_bin(self, group_id):
         if self.mode == 'all':
             return self.global_bucket
         elif self.mode == 'group':
             if group_id not in self.buckets:
-                self.buckets[group_id] = FeatureBucket()
+                self.buckets[group_id] = FeatureBucket(self.threshold, self.rtol, self.atol)
 
             return self.buckets[group_id]
         else:
@@ -59,3 +60,7 @@ class FilterSimilarAction(BaseAction):
         if not bucket.check_duplicate(feat, ratio):
             bucket.add(feat, ratio)
             yield item
+
+    def reset(self):
+        self.buckets.clear()
+        self.global_bucket = FeatureBucket(self.threshold, self.rtol, self.atol)

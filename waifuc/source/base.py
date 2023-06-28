@@ -1,3 +1,4 @@
+import copy
 from typing import Iterator
 
 from ..action import BaseAction
@@ -12,6 +13,9 @@ class BaseDataSource:
         yield from self._iter()
 
     def attach(self, *actions: BaseAction):
+        actions = [copy.deepcopy(action) for action in actions]
+        for action in actions:
+            action.reset()
         return AttachedDataSource(self, *actions)
 
 

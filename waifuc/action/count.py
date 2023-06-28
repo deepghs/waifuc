@@ -16,6 +16,9 @@ class FirstNSelectAction(BaseAction):
         else:
             raise ActionStop
 
+    def reset(self):
+        self._passed = 0
+
 
 class SliceSelectAction(BaseAction):
     def __init__(self, *args):
@@ -31,3 +34,6 @@ class SliceSelectAction(BaseAction):
             if self._current in self._range:
                 yield item
             self._current += 1
+
+    def reset(self):
+        self._current = 0
