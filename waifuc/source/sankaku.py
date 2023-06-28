@@ -1,6 +1,8 @@
+import datetime
 import os
 import warnings
-from typing import Optional, Iterator, List
+from enum import Enum
+from typing import Optional, Iterator, List, Tuple
 
 from PIL import Image, UnidentifiedImageError
 from hbutils.system import TemporaryDirectory, urlsplit
@@ -19,11 +21,53 @@ class NoURL(Exception):
     pass
 
 
+class Rating(str, Enum):
+    SAFE = "s"
+    QUESTIONABLE = "q"
+    EXPLICIT = "e"
+
+
+class PostOrder(Enum):
+    POPULARITY = "popularity"
+    DATE = "date"
+    QUALITY = "quality"
+    RANDOM = "random"
+    RECENTLY_FAVORITED = "recently_favorited"
+    RECENTLY_VOTED = "recently_voted"
+
+
+class FileType(Enum):
+    IMAGE = "image"  # jpeg, png, webp formats
+    GIF = "animated_gif"  # gif format
+    VIDEO = "video"  # mp4, webm formats
+
+
+def _tags_by_kwargs(**kwargs):
+    tags = []
+    for k, v in kwargs.items():
+        if v is None:
+            pass
+        elif k in {"order", "rating", "file_type"} and v is not FileType.IMAGE:  # noqa
+            tags.append(f"{k}:{v.value}")
+        elif k in {"threshold", "recommended_for", "voted"}:
+            tags.append(f"{k}:{v}")
+        elif k == "date":
+            date = "..".join(d.strftime("%Y-%m-%dT%H:%M") for d in self.date)  # type: ignore[union-attr]
+            tags.append(f"date:{date}")
+        elif k == "added_by":
+            for user in self.added_by:  # type: ignore[union-attr]
+                tags.append(f"user:{user}")
+
+    return tags
+
+
 class SankakuSource(BaseDataSource):
-    def __init__(self, tags: List[str],
+    def __init__(self, tags: List[str], order: Optional[PostOrder] = None,
+                 rating: Optional[Rating] = None, file_type: Optional[FileType] = None,
+                 date: Optional[Tuple[datetime.datetime, datetime.datetime]] = None,
                  username: Optional[str] = None, password: Optional[str] = None, access_token: Optional[str] = None,
-                 min_size: Optional[int] = 800, download_silent: bool = True, group_name: str = 'sankaku'):
-        self.tags = tags
+                 min_size: Optional[int] = 800, download_silent: bool = True, group_name: str = 'sankaku', **kwargs):
+        self.tags = tags + _tags_by_kwargs(order=order, rating=rating, file_type=file_type, date=date, **kwargs)
         self.username, self.password = username, password
         self.access_token = access_token
 
