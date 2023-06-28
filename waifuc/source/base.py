@@ -1,6 +1,8 @@
 import copy
 from typing import Iterator
 
+from tqdm.auto import tqdm
+
 from ..action import BaseAction
 from ..export import BaseExporter
 from ..model import ImageItem
@@ -10,10 +12,14 @@ class BaseDataSource:
     def _iter(self) -> Iterator[ImageItem]:
         raise NotImplementedError
 
-    def __iter__(self):
-        yield from self._iter()
+    def _iter_from(self):
+        for item in tqdm(self._iter(), desc=f'{self.__class__.__name__}'):
+            yield item
 
-    def attach(self, *actions: BaseAction):
+    def __iter__(self):
+        yield from self._iter_from()
+
+    def attach(self, *actions: BaseAction) -> 'AttachedDataSource':
         actions = [copy.deepcopy(action) for action in actions]
         for action in actions:
             action.reset()
@@ -36,3 +42,6 @@ class AttachedDataSource(BaseDataSource):
             t = action.iter_from(t)
 
         yield from t
+
+    def _iter_from(self):
+        yield from self._iter()

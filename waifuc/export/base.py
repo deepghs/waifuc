@@ -16,7 +16,7 @@ class BaseExporter:
 
     def export_from(self, items: Iterator[ImageItem]):
         self.init()
-        for item in tqdm(items):
+        for item in tqdm(items, desc=f'{self.__class__.__name__}'):
             self.export(item)
 
     def reset(self):
