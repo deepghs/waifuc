@@ -24,8 +24,9 @@ class TimeoutHTTPAdapter(HTTPAdapter):
 
 
 def get_requests_session(max_retries: int = 5, timeout: int = DEFAULT_TIMEOUT,
-                         headers: Optional[Dict[str, str]] = None) -> requests.Session:
-    session = requests.session()
+                         headers: Optional[Dict[str, str]] = None, session: Optional[requests.Session] = None) \
+        -> requests.Session:
+    session = session or requests.session()
     retries = Retry(
         total=max_retries, backoff_factor=1,
         status_forcelist=[413, 429, 500, 501, 502, 503, 504, 505, 506, 507, 509, 510, 511],
