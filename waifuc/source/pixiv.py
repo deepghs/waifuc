@@ -155,3 +155,26 @@ class PixivUserSource(BasePixivSource):
             offset += len(illustrations)
             if not illustrations:
                 break
+
+
+class PixivRankingSource(BasePixivSource):
+    def __init__(self, mode: _MODE = "day", filter: _FILTER = "for_ios",
+                 date: Optional[str] = None, req_auth: bool = True,
+                 group_name: Optional[str] = None, select: _SELECT = 'large',
+                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
+        BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
+        self.mode = mode
+        self.filter = filter
+        self.date = date
+        self.req_auth = req_auth
+
+    def _iter_illustration(self) -> Iterator[dict]:
+        offset = 0
+        while True:
+            data = self.client.illust_ranking(self.mode, self.filter, self.date, offset, self.req_auth)
+            illustrations = data['illusts']
+            yield from illustrations
+
+            offset += len(illustrations)
+            if not illustrations:
+                break
