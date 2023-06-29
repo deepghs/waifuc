@@ -1,6 +1,6 @@
 import os
 import warnings
-from typing import Iterator, Optional
+from typing import Iterator, Optional, Union
 
 from PIL import Image, UnidentifiedImageError
 from hbutils.system import urlsplit, TemporaryDirectory
@@ -126,3 +126,28 @@ class PixivSearchSource(BasePixivSource):
             yield from illustrations
 
             offset += len(illustrations)
+            if not illustrations:
+                break
+
+
+class PixivUserSource(BasePixivSource):
+    def __init__(self, user_id: Union[int, str], type: _TYPE = "illust",
+                 filter: _FILTER = "for_ios", req_auth: bool = True,
+                 group_name: Optional[str] = None, select: _SELECT = 'large',
+                 no_ai: bool = True, refresh_token: Optional[str] = None, download_silent: bool = True):
+        BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
+        self.user_id = user_id
+        self.type = type
+        self.filter = filter
+        self.req_auth = req_auth
+
+    def _iter_illustration(self) -> Iterator[dict]:
+        offset = 0
+        while True:
+            data = self.client.user_illusts(self.user_id, self.type, self.filter, offset, self.req_auth)
+            illustrations = data['illusts']
+            yield from illustrations
+
+            offset += len(illustrations)
+            if not illustrations:
+                break
