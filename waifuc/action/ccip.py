@@ -64,7 +64,7 @@ class CCIPAction(BaseAction):
     def _compare_to_exists(self, feat) -> Tuple[bool, List[int]]:
         diffs = ccip_batch_differences([feat, *self.feats], model=self.model)[0, 1:]
         matches = diffs <= self.threshold
-        yes = matches.sum() >= self.cmp_threshold
+        yes = matches.astype(float).mean() >= self.cmp_threshold
         matched_item_ids = [i for i in range(len(self.items)) if matches[i]]
         return yes, matched_item_ids
 
