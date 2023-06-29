@@ -48,7 +48,7 @@ _SELECT = Literal['square_medium', 'medium', 'large', 'original']
 
 class BasePixivSource(BaseDataSource):
     def __init__(self, group_name: Optional[str] = None, select: _SELECT = 'large',
-                 no_ai: bool = True, refresh_token: Optional[str] = None, download_silent: bool = True):
+                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
         self.group_name = group_name or 'pixiv'
         self.select = select
         self.no_ai = no_ai
@@ -66,39 +66,43 @@ class BasePixivSource(BaseDataSource):
 
         for illust in self._iter_illustration():
             if illust['type'] != 'illust':
-                if illust['page_count'] == 1:
-                    if self.select != 'original':
-                        urls = [illust['image_urls'][self.select]]
-                    else:
-                        urls = [illust['meta_single_page']['original_image_url']]
+                continue
+            if self.no_ai and illust['illust_ai_type'] == 2:
+                continue
 
+            if illust['page_count'] == 1:
+                if self.select != 'original':
+                    urls = [illust['image_urls'][self.select]]
                 else:
-                    urls = [page['image_urls'][self.select] for page in illust['meta_pages']]
+                    urls = [illust['meta_single_page']['original_image_url']]
 
-                for i, url in enumerate(urls):
-                    with TemporaryDirectory() as td:
-                        _, ext_name = os.path.splitext(urlsplit(url).filename)
-                        filename = f'{self.group_name}_{illust["id"]}_{i}{ext_name}'
-                        td_file = os.path.join(td, filename)
+            else:
+                urls = [page['image_urls'][self.select] for page in illust['meta_pages']]
 
-                        try:
-                            download_file(
-                                url, td_file, desc=filename, silent=self.download_silent,
-                                session=self.client.requests, headers={"Referer": "https://app-api.pixiv.net/"}
-                            )
-                            image = Image.open(td_file)
-                            image.load()
-                        except UnidentifiedImageError:
-                            warnings.warn(f'Pixiv resource {illust["id"]} unidentified as image, skipped.')
-                            continue
+            for i, url in enumerate(urls):
+                with TemporaryDirectory() as td:
+                    _, ext_name = os.path.splitext(urlsplit(url).filename)
+                    filename = f'{self.group_name}_{illust["id"]}_{i}{ext_name}'
+                    td_file = os.path.join(td, filename)
 
-                        meta = {
-                            'pixiv': illust,
-                            'group_id': f'{self.group_name}_{illust["id"]}',
-                            'instance_id': f'{self.group_name}_{illust["id"]}_{i}',
-                            'filename': filename,
-                        }
-                        yield ImageItem(image, meta)
+                    try:
+                        download_file(
+                            url, td_file, desc=filename, silent=self.download_silent,
+                            session=self.client.requests, headers={"Referer": "https://app-api.pixiv.net/"}
+                        )
+                        image = Image.open(td_file)
+                        image.load()
+                    except UnidentifiedImageError:
+                        warnings.warn(f'Pixiv resource {illust["id"]} unidentified as image, skipped.')
+                        continue
+
+                    meta = {
+                        'pixiv': illust,
+                        'group_id': f'{self.group_name}_{illust["id"]}',
+                        'instance_id': f'{self.group_name}_{illust["id"]}_{i}',
+                        'filename': filename,
+                    }
+                    yield ImageItem(image, meta)
 
 
 class PixivSearchSource(BasePixivSource):
@@ -106,7 +110,7 @@ class PixivSearchSource(BasePixivSource):
                  sort: _SORT = "date_desc", duration: _DURATION = None, start_date: Optional[str] = None,
                  end_date: Optional[str] = None, filter: _FILTER = "for_ios", req_auth: bool = True,
                  group_name: Optional[str] = None, select: _SELECT = 'large',
-                 no_ai: bool = True, refresh_token: Optional[str] = None, download_silent: bool = True):
+                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
         BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
         self.word = word
         self.search_target = search_target
@@ -134,7 +138,7 @@ class PixivUserSource(BasePixivSource):
     def __init__(self, user_id: Union[int, str], type: _TYPE = "illust",
                  filter: _FILTER = "for_ios", req_auth: bool = True,
                  group_name: Optional[str] = None, select: _SELECT = 'large',
-                 no_ai: bool = True, refresh_token: Optional[str] = None, download_silent: bool = True):
+                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
         BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
         self.user_id = user_id
         self.type = type
