@@ -25,6 +25,32 @@ class BaseDataSource:
     def __iter__(self) -> Iterator[ImageItem]:
         yield from self._iter_from()
 
+    def __or__(self, other):
+        from .compose import ParallelDataSource
+        if isinstance(self, ParallelDataSource):
+            if isinstance(other, ParallelDataSource):
+                return ParallelDataSource(*self.sources, *other.sources)
+            else:
+                return ParallelDataSource(*self.sources, other)
+        else:
+            if isinstance(other, ParallelDataSource):
+                return ParallelDataSource(self, *other.sources)
+            else:
+                return ParallelDataSource(self, other)
+
+    def __add__(self, other):
+        from .compose import ComposedDataSource
+        if isinstance(self, ComposedDataSource):
+            if isinstance(other, ComposedDataSource):
+                return ComposedDataSource(*self.sources, *other.sources)
+            else:
+                return ComposedDataSource(*self.sources, other)
+        else:
+            if isinstance(other, ComposedDataSource):
+                return ComposedDataSource(self, *other.sources)
+            else:
+                return ComposedDataSource(self, other)
+
     def attach(self, *actions: BaseAction) -> 'AttachedDataSource':
         return AttachedDataSource(self, *actions)
 

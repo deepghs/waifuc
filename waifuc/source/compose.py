@@ -5,6 +5,18 @@ from .base import BaseDataSource
 from ..model import ImageItem
 
 
+class ComposedDataSource(BaseDataSource):
+    def __init__(self, *sources: BaseDataSource):
+        self.sources = sources
+
+    def _iter(self) -> Iterator[ImageItem]:
+        for source in self.sources:
+            yield from iter(source)
+
+    def _iter_from(self) -> Iterator[ImageItem]:
+        yield from self._iter()
+
+
 class ParallelDataSource(BaseDataSource):
     def __init__(self, *sources: BaseDataSource, seed: Optional[int] = None):
         self.sources = sources
