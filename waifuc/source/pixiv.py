@@ -95,6 +95,9 @@ class BasePixivSource(BaseDataSource):
                     except UnidentifiedImageError:
                         warnings.warn(f'Pixiv resource {illust["id"]} unidentified as image, skipped.')
                         continue
+                    except IOError as err:
+                        warnings.warn(f'Skipped due to error: {err!r}')
+                        continue
 
                     meta = {
                         'pixiv': illust,

@@ -133,6 +133,9 @@ class SankakuSource(BaseDataSource):
                 'tags': ' '.join(self.tags),
             })
             resp.raise_for_status()
+            if not resp.json():
+                break
+
             for data in resp.json():
                 if 'image' not in data['file_type']:
                     continue
@@ -155,6 +158,9 @@ class SankakuSource(BaseDataSource):
                         image.load()
                     except UnidentifiedImageError:
                         warnings.warn(f'Resource {data["id"]} unidentified as image, skipped.')
+                        continue
+                    except IOError as err:
+                        warnings.warn(f'Skipped due to error: {err!r}')
                         continue
 
                     meta = {

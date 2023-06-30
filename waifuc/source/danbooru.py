@@ -59,7 +59,11 @@ class DanbooruSource(BaseDataSource):
     def _iter(self) -> Iterator[ImageItem]:
         page = 1
         while True:
-            for data in self.client.post_list(tags=self.tags, random=self.random, page=page, limit=100):
+            page_items = self.client.post_list(tags=self.tags, random=self.random, page=page, limit=100)
+            if not page_items:
+                break
+
+            for data in page_items:
                 try:
                     url = self._select_url(data)
                 except NoURL:
@@ -78,6 +82,9 @@ class DanbooruSource(BaseDataSource):
                         image.load()
                     except UnidentifiedImageError:
                         warnings.warn(f'Resource {data["id"]} unidentified as image, skipped.')
+                        continue
+                    except IOError as err:
+                        warnings.warn(f'Skipped due to error: {err!r}')
                         continue
 
                     meta = {

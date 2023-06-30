@@ -1,6 +1,7 @@
 from enum import IntEnum
 from typing import Iterator, Optional, List, Tuple
 
+import numpy as np
 from hbutils.testing import disable_output
 from imgutils.metrics import ccip_extract_feature, ccip_default_threshold, ccip_clustering, ccip_batch_differences
 
@@ -16,20 +17,19 @@ class CCIPStatus(IntEnum):
 
 class CCIPAction(BaseAction):
     def __init__(self, min_val_count: int = 15, step: int = 5,
-                 ratio_threshold: float = 0.6, cmp_threshold: float = 0.5, min_rematched: int = 10,
+                 ratio_threshold: float = 0.6, min_clu_dump_ratio: float = 0.3, cmp_threshold: float = 0.5,
                  eps: Optional[float] = None, min_samples: Optional[int] = None,
                  model='ccip-caformer-24-randaug-pruned', threshold: Optional[float] = None):
         self.min_val_count = min_val_count
         self.step = step
         self.ratio_threshold = ratio_threshold
+        self.min_clu_dump_ratio = min_clu_dump_ratio
         self.cmp_threshold = cmp_threshold
-        self.min_rematched = min_rematched
         self.eps, self.min_samples = eps, min_samples
         self.model = model
         self.threshold = threshold or ccip_default_threshold(self.model)
 
         self.items = []
-        self.item_matches = []
         self.item_released = []
         self.feats = []
         self.status = CCIPStatus.INIT
@@ -46,27 +46,41 @@ class CCIPAction(BaseAction):
             if id_ != -1:
                 clu_counts[id_] = clu_counts.get(id_, 0) + 1
 
+        clu_total = sum(clu_counts.values()) if clu_counts else 0
         chosen_id = None
         for id_, count in clu_counts.items():
-            if count >= len(self.items) * self.ratio_threshold:
+            if count >= clu_total * self.ratio_threshold:
                 chosen_id = id_
                 break
 
         if chosen_id is not None:
-            self.items = [item for i, item in enumerate(self.items) if clu_ids[i] == chosen_id]
-            self.item_matches = [0] * len(self.items)
-            self.item_released = [False] * len(self.items)
-            self.feats = [feat for i, feat in enumerate(self.feats) if clu_ids[i] == chosen_id]
-            return True
+            feats = [feat for i, feat in enumerate(self.feats) if clu_ids[i] == chosen_id]
+            clu_dump_ratio = np.array([
+                self._compare_to_exists(feat, base_set=feats)
+                for feat in feats
+            ]).astype(float).mean()
+
+            if clu_dump_ratio >= self.min_clu_dump_ratio:
+                self.items = [item for i, item in enumerate(self.items) if clu_ids[i] == chosen_id]
+                self.item_released = [False] * len(self.items)
+                self.feats = [feat for i, feat in enumerate(self.feats) if clu_ids[i] == chosen_id]
+                return True
+            else:
+                return False
         else:
             return False
 
-    def _compare_to_exists(self, feat) -> Tuple[bool, List[int]]:
-        diffs = ccip_batch_differences([feat, *self.feats], model=self.model)[0, 1:]
+    def _compare_to_exists(self, feat, base_set=None) -> Tuple[bool, List[int]]:
+        diffs = ccip_batch_differences([feat, *(base_set or self.feats)], model=self.model)[0, 1:]
         matches = diffs <= self.threshold
-        yes = matches.astype(float).mean() >= self.cmp_threshold
-        matched_item_ids = [i for i in range(len(self.items)) if matches[i]]
-        return yes, matched_item_ids
+        return matches.astype(float).mean() >= self.cmp_threshold
+
+    def _dump_items(self) -> Iterator[ImageItem]:
+        for i in range(len(self.items)):
+            if not self.item_released[i]:
+                if self._compare_to_exists(self.feats[i]):
+                    self.item_released[i] = True
+                    yield self.items[i]
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         if self.status == CCIPStatus.INIT:
@@ -76,6 +90,7 @@ class CCIPAction(BaseAction):
             if len(self.items) >= self.min_val_count:
                 if self._try_cluster():
                     self.status = CCIPStatus.EVAL
+                    yield from self._dump_items()
                 else:
                     self.status = CCIPStatus.APPROACH
 
@@ -86,28 +101,22 @@ class CCIPAction(BaseAction):
             if (len(self.items) - self.min_val_count) % self.step == 0:
                 if self._try_cluster():
                     self.status = CCIPStatus.EVAL
+                    yield from self._dump_items()
 
         elif self.status == CCIPStatus.EVAL:
             feat = self._extract_feature(item)
-            yes, matched_ids = self._compare_to_exists(feat)
-            if yes:
+            if self._compare_to_exists(feat):
                 self.feats.append(feat)
                 yield item
 
-                for id_ in matched_ids:
-                    self.item_matches[id_] += 1
-
-                for i in range(len(self.items)):
-                    if not self.item_released[i] and self.item_matches[i] >= self.min_rematched:
-                        yield self.items[i]
-                        self.item_released[i] = True
+                if (len(self.feats) - len(self.items)) % self.step == 0:
+                    yield from self._dump_items()
 
         else:
             raise ValueError(f'Unknown status for {self.__class__.__name__} - {self.status!r}.')
 
     def reset(self):
         self.items.clear()
-        self.item_matches.clear()
         self.item_released.clear()
         self.feats.clear()
         self.status = CCIPStatus.INIT

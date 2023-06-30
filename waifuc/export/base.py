@@ -1,11 +1,11 @@
 import os.path
 from typing import Iterator
 
-from hbutils.reflection import context
 from hbutils.system import remove
 from tqdm.auto import tqdm
 
 from ..model import ImageItem
+from ..utils import get_task_names
 
 
 class BaseExporter:
@@ -17,9 +17,9 @@ class BaseExporter:
 
     def export_from(self, items: Iterator[ImageItem]):
         self.init()
-        ctx_name = context().get('waifuc_task_name', None)
-        if ctx_name:
-            desc = f'{self.__class__.__name__} - {ctx_name}'
+        names = get_task_names()
+        if names:
+            desc = f'{self.__class__.__name__} - {".".join(names)}'
         else:
             desc = f'{self.__class__.__name__}'
         for item in tqdm(items, desc=desc):
