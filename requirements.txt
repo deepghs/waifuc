@@ -8,3 +8,4 @@ requests
 pixivpy3
 cloudscraper
 pyquery
+xmltodict
