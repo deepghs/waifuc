@@ -1,14 +1,11 @@
 import os
-import warnings
-from typing import Iterator, Optional, Union
+from typing import Iterator, Optional, Union, Tuple
 
-from PIL import Image, UnidentifiedImageError
-from hbutils.system import urlsplit, TemporaryDirectory
+from hbutils.system import urlsplit
 from pixivpy3 import AppPixivAPI
 
-from .base import BaseDataSource
-from ..model import ImageItem
-from ..utils import download_file, get_requests_session
+from .web import WebDataSource
+from ..utils import get_requests_session
 
 try:
     from typing import Literal
@@ -46,21 +43,21 @@ _BOOL = Literal["true", "false"]
 _SELECT = Literal['square_medium', 'medium', 'large', 'original']
 
 
-class BasePixivSource(BaseDataSource):
-    def __init__(self, group_name: Optional[str] = None, select: _SELECT = 'large',
+class BasePixivSource(WebDataSource):
+    def __init__(self, group_name: str = 'pixiv', select: _SELECT = 'large',
                  no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
-        self.group_name = group_name or 'pixiv'
         self.select = select
         self.no_ai = no_ai
         self.refresh_token = refresh_token
-        self.download_silent = download_silent
         self.client = AppPixivAPI()
         self.client.requests = get_requests_session(session=self.client.requests)
+        self.client.requests.headers.update({"Referer": "https://app-api.pixiv.net/"})
+        WebDataSource.__init__(self, group_name, self.client.requests, download_silent)
 
     def _iter_illustration(self) -> Iterator[dict]:
         raise NotImplementedError
 
-    def _iter(self) -> Iterator[ImageItem]:
+    def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         if self.refresh_token:
             self.client.auth(refresh_token=self.refresh_token)
 
@@ -80,39 +77,22 @@ class BasePixivSource(BaseDataSource):
                 urls = [page['image_urls'][self.select] for page in illust['meta_pages']]
 
             for i, url in enumerate(urls):
-                with TemporaryDirectory() as td:
-                    _, ext_name = os.path.splitext(urlsplit(url).filename)
-                    filename = f'{self.group_name}_{illust["id"]}_{i}{ext_name}'
-                    td_file = os.path.join(td, filename)
-
-                    try:
-                        download_file(
-                            url, td_file, desc=filename, silent=self.download_silent,
-                            session=self.client.requests, headers={"Referer": "https://app-api.pixiv.net/"}
-                        )
-                        image = Image.open(td_file)
-                        image.load()
-                    except UnidentifiedImageError:
-                        warnings.warn(f'Pixiv resource {illust["id"]} unidentified as image, skipped.')
-                        continue
-                    except IOError as err:
-                        warnings.warn(f'Skipped due to error: {err!r}')
-                        continue
-
-                    meta = {
-                        'pixiv': illust,
-                        'group_id': f'{self.group_name}_{illust["id"]}',
-                        'instance_id': f'{self.group_name}_{illust["id"]}_{i}',
-                        'filename': filename,
-                    }
-                    yield ImageItem(image, meta)
+                _, ext_name = os.path.splitext(urlsplit(url).filename)
+                filename = f'{self.group_name}_{illust["id"]}_{i}{ext_name}'
+                meta = {
+                    'pixiv': illust,
+                    'group_id': f'{self.group_name}_{illust["id"]}',
+                    'instance_id': f'{self.group_name}_{illust["id"]}_{i}',
+                    'filename': filename,
+                }
+                yield f'{illust["id"]}_{i}', url, meta
 
 
 class PixivSearchSource(BasePixivSource):
     def __init__(self, word: str, search_target: _SEARCH_TARGET = "partial_match_for_tags",
                  sort: _SORT = "date_desc", duration: _DURATION = None, start_date: Optional[str] = None,
                  end_date: Optional[str] = None, filter: _FILTER = "for_ios", req_auth: bool = True,
-                 group_name: Optional[str] = None, select: _SELECT = 'large',
+                 group_name: str = 'pixiv', select: _SELECT = 'large',
                  no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
         BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
         self.word = word
@@ -140,7 +120,7 @@ class PixivSearchSource(BasePixivSource):
 class PixivUserSource(BasePixivSource):
     def __init__(self, user_id: Union[int, str], type: _TYPE = "illust",
                  filter: _FILTER = "for_ios", req_auth: bool = True,
-                 group_name: Optional[str] = None, select: _SELECT = 'large',
+                 group_name: str = 'pixiv', select: _SELECT = 'large',
                  no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
         BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
         self.user_id = user_id
@@ -163,7 +143,7 @@ class PixivUserSource(BasePixivSource):
 class PixivRankingSource(BasePixivSource):
     def __init__(self, mode: _MODE = "day", filter: _FILTER = "for_ios",
                  date: Optional[str] = None, req_auth: bool = True,
-                 group_name: Optional[str] = None, select: _SELECT = 'large',
+                 group_name: str = 'pixiv', select: _SELECT = 'large',
                  no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
         BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
         self.mode = mode

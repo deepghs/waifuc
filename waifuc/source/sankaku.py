@@ -1,24 +1,17 @@
 import datetime
 import os
-import warnings
 from enum import Enum
-from typing import Optional, Iterator, List, Tuple
+from typing import Optional, Iterator, List, Tuple, Union
 
-from PIL import Image, UnidentifiedImageError
-from hbutils.system import TemporaryDirectory, urlsplit
+from hbutils.system import urlsplit
 
-from .base import BaseDataSource
-from ..model import ImageItem
-from ..utils import get_requests_session, srequest, download_file
+from .web import NoURL, WebDataSource
+from ..utils import get_requests_session, srequest
 
 try:
     from typing import Literal
 except (ImportError, ModuleNotFoundError):
     from typing_extensions import Literal
-
-
-class NoURL(Exception):
-    pass
 
 
 class Rating(str, Enum):
@@ -61,27 +54,24 @@ def _tags_by_kwargs(**kwargs):
     return tags
 
 
-class SankakuSource(BaseDataSource):
+class SankakuSource(WebDataSource):
     def __init__(self, tags: List[str], order: Optional[PostOrder] = None,
                  rating: Optional[Rating] = None, file_type: Optional[FileType] = None,
                  date: Optional[Tuple[datetime.datetime, datetime.datetime]] = None,
                  username: Optional[str] = None, password: Optional[str] = None, access_token: Optional[str] = None,
                  min_size: Optional[int] = 800, download_silent: bool = True, group_name: str = 'sankaku', **kwargs):
+        WebDataSource.__init__(self, group_name, get_requests_session(), download_silent)
         self.tags = tags + _tags_by_kwargs(order=order, rating=rating, file_type=file_type, date=date, **kwargs)
         self.username, self.password = username, password
         self.access_token = access_token
 
         self.min_size = min_size
-        self.download_silent = download_silent
-        self.group_name = group_name
-
-        self.session = get_requests_session(headers={
+        self.auth_session = get_requests_session(headers={
             'Content-Type': 'application/json; charset=utf-8',
             'Accept-Encoding': 'gzip, deflate, br',
             'Host': 'capi-v2.sankakucomplex.com',
             'X-Requested-With': 'com.android.browser',
         })
-        self.free_session = get_requests_session()
 
     _FILE_URLS = [
         ('sample_url', 'sample_width', 'sample_height'),
@@ -109,24 +99,24 @@ class SankakuSource(BaseDataSource):
 
     def _login(self):
         if self.access_token:
-            self.session.headers.update({
+            self.auth_session.headers.update({
                 "Authorization": f"Bearer {self.access_token}",
             })
         elif self.username and self.password:
-            resp = srequest(self.session, 'POST', 'https://login.sankakucomplex.com/auth/token',
+            resp = srequest(self.auth_session, 'POST', 'https://login.sankakucomplex.com/auth/token',
                             json={"login": self.username, "password": self.password})
             resp.raise_for_status()
             login_data = resp.json()
-            self.session.headers.update({
+            self.auth_session.headers.update({
                 "Authorization": f"{login_data['token_type']} {login_data['access_token']}",
             })
 
-    def _iter(self) -> Iterator[ImageItem]:
+    def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         self._login()
 
         page = 1
         while True:
-            resp = srequest(self.session, 'GET', 'https://capi-v2.sankakucomplex.com/posts', params={
+            resp = srequest(self.auth_session, 'GET', 'https://capi-v2.sankakucomplex.com/posts', params={
                 'lang': 'en',
                 'page': str(page),
                 'limit': '100',
@@ -145,30 +135,14 @@ class SankakuSource(BaseDataSource):
                 except NoURL:
                     continue
 
-                with TemporaryDirectory() as td:
-                    _, ext_name = os.path.splitext(urlsplit(url).filename)
-                    filename = f'{self.group_name}_{data["id"]}{ext_name}'
-                    td_file = os.path.join(td, filename)
-                    try:
-                        download_file(
-                            url, td_file, desc=filename,
-                            session=self.free_session, silent=self.download_silent
-                        )
-                        image = Image.open(td_file)
-                        image.load()
-                    except UnidentifiedImageError:
-                        warnings.warn(f'Resource {data["id"]} unidentified as image, skipped.')
-                        continue
-                    except IOError as err:
-                        warnings.warn(f'Skipped due to error: {err!r}')
-                        continue
-
-                    meta = {
-                        'sankaku': data,
-                        'group_id': f'{self.group_name}_{data["id"]}',
-                        'filename': filename,
-                        'tags': {key: 1.0 for key in [t_item['name'] for t_item in data['tags']]}
-                    }
-                    yield ImageItem(image, meta)
+                _, ext_name = os.path.splitext(urlsplit(url).filename)
+                filename = f'{self.group_name}_{data["id"]}{ext_name}'
+                meta = {
+                    'sankaku': data,
+                    'group_id': f'{self.group_name}_{data["id"]}',
+                    'filename': filename,
+                    'tags': {key: 1.0 for key in [t_item['name'] for t_item in data['tags']]}
+                }
+                yield data["id"], url, meta
 
             page += 1

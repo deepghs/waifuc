@@ -14,13 +14,7 @@ class BaseDataSource:
         raise NotImplementedError
 
     def _iter_from(self) -> Iterator[ImageItem]:
-        names = get_task_names()
-        if names:
-            desc = f'{self.__class__.__name__} - {".".join(names)}'
-        else:
-            desc = f'{self.__class__.__name__}'
-        for item in tqdm(self._iter(), desc=desc):
-            yield item
+        yield from self._iter()
 
     def __iter__(self) -> Iterator[ImageItem]:
         yield from self._iter_from()
@@ -68,6 +62,20 @@ class BaseDataSource:
             return exporter.export_from(iter(self))
 
 
+class RootDataSource(BaseDataSource):
+    def _iter(self) -> Iterator[ImageItem]:
+        raise NotImplementedError
+
+    def _iter_from(self) -> Iterator[ImageItem]:
+        names = get_task_names()
+        if names:
+            desc = f'{self.__class__.__name__} - {".".join(names)}'
+        else:
+            desc = f'{self.__class__.__name__}'
+        for item in tqdm(self._iter(), desc=desc):
+            yield item
+
+
 class AttachedDataSource(BaseDataSource):
     def __init__(self, source: BaseDataSource, *actions: BaseAction):
         self.source = source
@@ -81,6 +89,3 @@ class AttachedDataSource(BaseDataSource):
             t = action.iter_from(t)
 
         yield from t
-
-    def _iter_from(self) -> Iterator[ImageItem]:
-        yield from self._iter()

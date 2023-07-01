@@ -1,16 +1,11 @@
 import os.path
 import re
-import warnings
-from typing import Optional, Iterator, List
+from typing import Optional, Iterator, List, Tuple, Union
 
-from PIL import UnidentifiedImageError, Image
-from hbutils.system import TemporaryDirectory
 from hbutils.system import urlsplit
 from pybooru import Danbooru
 
-from .base import BaseDataSource
-from ..model import ImageItem
-from ..utils import download_file, get_requests_session
+from .web import NoURL, WebDataSource
 
 try:
     from typing import Literal
@@ -20,23 +15,17 @@ except (ImportError, ModuleNotFoundError):
 _DanbooruSiteTyping = Literal['konachan', 'yandere', 'danbooru', 'safebooru', 'lolibooru']
 
 
-class NoURL(Exception):
-    pass
-
-
-class DanbooruSource(BaseDataSource):
+class DanbooruSource(WebDataSource):
     def __init__(self, tags: List[str], random: bool = False,
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
                  site_name: _DanbooruSiteTyping = 'danbooru', site_url: Optional[str] = None,
                  group_name: Optional[str] = None):
+        WebDataSource.__init__(self, group_name or site_name, None, download_silent)
         self.client = Danbooru(site_name, site_url or '', username or '', api_key or '')
         self.tags = tags
         self.random = random
         self.min_size = min_size
-        self.download_silent = download_silent
-        self.session = get_requests_session()
-        self.group_name = group_name or site_name
 
     def _select_url(self, data):
         if self.min_size is not None and "media_asset" in data and "variants" in data["media_asset"]:
@@ -56,7 +45,7 @@ class DanbooruSource(BaseDataSource):
 
         return data['file_url']
 
-    def _iter(self) -> Iterator[ImageItem]:
+    def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         page = 1
         while True:
             page_items = self.client.post_list(tags=self.tags, random=self.random, page=page, limit=100)
@@ -69,30 +58,32 @@ class DanbooruSource(BaseDataSource):
                 except NoURL:
                     continue
 
-                with TemporaryDirectory() as td:
-                    _, ext_name = os.path.splitext(urlsplit(url).filename)
-                    filename = f'{self.group_name}_{data["id"]}{ext_name}'
-                    td_file = os.path.join(td, filename)
-                    try:
-                        download_file(
-                            url, td_file, desc=filename,
-                            session=self.session, silent=self.download_silent
-                        )
-                        image = Image.open(td_file)
-                        image.load()
-                    except UnidentifiedImageError:
-                        warnings.warn(f'Resource {data["id"]} unidentified as image, skipped.')
-                        continue
-                    except IOError as err:
-                        warnings.warn(f'Skipped due to error: {err!r}')
-                        continue
-
-                    meta = {
-                        'danbooru': data,
-                        'group_id': f'{self.group_name}_{data["id"]}',
-                        'filename': filename,
-                        'tags': {key: 1.0 for key in re.split(r'\s+', data["tag_string"])}
-                    }
-                    yield ImageItem(image, meta)
+                _, ext_name = os.path.splitext(urlsplit(url).filename)
+                filename = f'{self.group_name}_{data["id"]}{ext_name}'
+                meta = {
+                    'danbooru': data,
+                    'group_id': f'{self.group_name}_{data["id"]}',
+                    'filename': filename,
+                    'tags': {key: 1.0 for key in re.split(r'\s+', data["tag_string"])}
+                }
+                yield data['id'], url, meta
 
             page += 1
+
+
+class SafebooruSource(DanbooruSource):
+    def __init__(self, tags: List[str], random: bool = False,
+                 min_size: Optional[int] = 800, download_silent: bool = True,
+                 username: Optional[str] = None, api_key: Optional[str] = None,
+                 group_name: Optional[str] = None):
+        DanbooruSource.__init__(self, tags, random, min_size, download_silent, username, api_key,
+                                'safebooru', 'https://safebooru.donmai.us', group_name)
+
+
+class ATFBooruSource(DanbooruSource):
+    def __init__(self, tags: List[str], random: bool = False,
+                 min_size: Optional[int] = 800, download_silent: bool = True,
+                 username: Optional[str] = None, api_key: Optional[str] = None,
+                 group_name: Optional[str] = None):
+        DanbooruSource.__init__(self, tags, random, min_size, download_silent, username, api_key,
+                                'danbooru', 'https://booru.allthefallen.moe', group_name)

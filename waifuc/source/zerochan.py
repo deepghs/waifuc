@@ -1,15 +1,12 @@
 import os
-import warnings
 from enum import Enum
-from typing import Iterator, Union, List, Optional, Mapping
+from typing import Iterator, Union, List, Optional, Mapping, Tuple
 from urllib.parse import quote_plus
 
-from PIL import Image, UnidentifiedImageError
-from hbutils.system import TemporaryDirectory, urlsplit
+from hbutils.system import urlsplit
 
-from .base import BaseDataSource
-from ..model import ImageItem
-from ..utils import get_requests_session, download_file
+from .web import WebDataSource
+from ..utils import get_requests_session
 
 try:
     from typing import Literal
@@ -39,12 +36,13 @@ class Dimension(str, Enum):
 SelectTyping = Literal['medium', 'large', 'full']
 
 
-class ZerochanSource(BaseDataSource):
+class ZerochanSource(WebDataSource):
     __SITE__ = 'https://www.zerochan.net'
 
     def __init__(self, word: Union[str, List[str]], sort: Sort = Sort.FAV, time: Time = Time.ALL,
                  dimension: Optional[Dimension] = None, color: Optional[str] = None, strict: bool = False,
-                 select: SelectTyping = 'large', group_name: Optional[str] = None, download_silent: bool = True):
+                 select: SelectTyping = 'large', group_name: str = 'zerochan', download_silent: bool = True):
+        WebDataSource.__init__(self, group_name, get_requests_session(), download_silent)
         self.word = word
         self.sort = sort
         self.time = time
@@ -52,9 +50,6 @@ class ZerochanSource(BaseDataSource):
         self.color = color
         self.strict = strict
         self.select = select
-        self.group_name = group_name or 'zerochan'
-        self.download_silent = download_silent
-        self.session = get_requests_session()
 
     @property
     def _base_url(self) -> str:
@@ -110,10 +105,10 @@ class ZerochanSource(BaseDataSource):
         else:
             return urls['medium']
 
-    def _iter(self) -> Iterator[ImageItem]:
+    def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         page = 1
         while True:
-            resp = self.session.get(self._base_url, params={**self._params, 'p': str(page), 'l': '10'})
+            resp = self.session.get(self._base_url, params={**self._params, 'p': str(page), 'l': '200'})
             if resp.status_code in {403, 404}:
                 break
             resp.raise_for_status()
@@ -123,26 +118,8 @@ class ZerochanSource(BaseDataSource):
                 items = json_['items']
                 for data in items:
                     url = self._get_url(data)
-
-                    with TemporaryDirectory() as td:
-                        _, ext_name = os.path.splitext(urlsplit(url).filename)
-                        filename = f'{self.group_name}_{data["id"]}{ext_name}'
-                        td_file = os.path.join(td, filename)
-
-                        try:
-                            download_file(
-                                url, td_file, desc=filename,
-                                silent=self.download_silent, session=self.session
-                            )
-                            image = Image.open(td_file)
-                            image.load()
-                        except UnidentifiedImageError:
-                            warnings.warn(f'Zerochan resource {data["id"]} unidentified as image, skipped.')
-                            continue
-                        except IOError as err:
-                            warnings.warn(f'Skipped due to error: {err!r}')
-                            continue
-
+                    _, ext_name = os.path.splitext(urlsplit(url).filename)
+                    filename = f'{self.group_name}_{data["id"]}{ext_name}'
                     meta = {
                         'zerochan': {
                             **data,
@@ -151,6 +128,6 @@ class ZerochanSource(BaseDataSource):
                         'group_id': f'{self.group_name}_{data["id"]}',
                         'filename': filename,
                     }
-                    yield ImageItem(image, meta)
+                    yield data["id"], url, meta
 
             page += 1

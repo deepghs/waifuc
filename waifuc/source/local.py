@@ -4,11 +4,11 @@ from typing import Iterator
 
 from PIL import UnidentifiedImageError
 
-from .base import BaseDataSource
+from .base import RootDataSource
 from ..model import ImageItem
 
 
-class LocalSource(BaseDataSource):
+class LocalSource(RootDataSource):
     def __init__(self, directory: str, recursive: bool = True):
         self.directory = directory
         self.recursive = recursive
