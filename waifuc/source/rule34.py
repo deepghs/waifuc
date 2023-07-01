@@ -38,7 +38,7 @@ class HypnoHubSource(Rule34Source):
 
 class GelbooruSource(Rule34Source):
     def __init__(self, tags: List[str], min_size: Optional[int] = 800,
-                 group_name: str = 'hypnohub', download_silent: bool = True):
+                 group_name: str = 'gelbooru', download_silent: bool = True):
         Rule34LikeSource.__init__(self, 'gelbooru', 'https://gelbooru.com/',
                                   tags, min_size, group_name, download_silent)
 

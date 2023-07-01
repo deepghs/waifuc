@@ -1,6 +1,6 @@
 from .base import BaseDataSource
 from .compose import ParallelDataSource, ComposedDataSource
-from .danbooru import DanbooruSource, SafebooruSource, ATFBooruSource
+from .danbooru import DanbooruSource, SafebooruSource, ATFBooruSource, E621LikeSource, E621Source, E926Source
 from .local import LocalSource
 from .pixiv import BasePixivSource, PixivSearchSource, PixivUserSource, PixivRankingSource
 from .rule34 import Rule34LikeSource, Rule34Source, HypnoHubSource, GelbooruSource

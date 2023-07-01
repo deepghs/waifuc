@@ -47,14 +47,11 @@ class YandeLikeSource(WebDataSource):
             raise NoURL
 
     def _request(self, page):
-        resp = srequest(self.session, 'GET', f'{self.site_url}/post.json', params={
+        return srequest(self.session, 'GET', f'{self.site_url}/post.json', params={
             'tags': ' '.join(self.tags),
             'limit': '100',
             'page': str(page),
         })
-        print(resp.request.url)
-        print(resp.json())
-        return resp
 
     def _get_data_from_raw(self, raw):
         return raw
