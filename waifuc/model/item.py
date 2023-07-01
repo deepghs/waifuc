@@ -53,10 +53,10 @@ def dump_meta(data, path=()):
 
 @dataclass
 class ImageItem:
-    image: Image
+    image: Image.Image
     meta: dict
 
-    def __init__(self, image: Image, meta: Optional[dict] = None):
+    def __init__(self, image: Image.Image, meta: Optional[dict] = None):
         self.image = image
         self.meta = meta or {}
 

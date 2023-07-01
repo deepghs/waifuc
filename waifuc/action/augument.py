@@ -1,7 +1,8 @@
 import os.path
 import random
-from typing import Iterator, Optional
+from typing import Iterator, Optional, Tuple
 
+from PIL import ImageOps
 from hbutils.random import random_sha1
 
 from .base import BaseAction
@@ -47,3 +48,21 @@ class RandomFilenameAction(BaseRandomAction):
 
         filename = random_sha1(rnd=self.random) + ext
         yield ImageItem(item.image, {**item.meta, 'filename': filename})
+
+
+class MirrorAction(BaseAction):
+    def __init__(self, names: Tuple[str, str] = ('origin', 'mirror')):
+        self.origin_name, self.mirror_name = names
+
+    def iter(self, item: ImageItem) -> Iterator[ImageItem]:
+        if 'filename' in item.meta:
+            filebody, ext = os.path.splitext(item.meta['filename'])
+            yield ImageItem(item.image, {**item.meta, 'filename': f'{filebody}_{self.origin_name}{ext}'})
+            yield ImageItem(ImageOps.mirror(item.image),
+                            {**item.meta, 'filename': f'{filebody}_{self.mirror_name}{ext}'})
+        else:
+            yield ImageItem(item.image, item.meta)
+            yield ImageItem(ImageOps.mirror(item.image), item.meta)
+
+    def reset(self):
+        pass
