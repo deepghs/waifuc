@@ -113,7 +113,7 @@ class LolibooruSource(KonachanLikeSource):
                                     tags, 1, min_size, group_name, download_silent)
 
     def _request(self, page):
-        return srequest(self.session, 'GET', f'{self.site_url}//post/index.json', params={
+        return srequest(self.session, 'GET', f'{self.site_url}/post/index.json', params={
             'tags': ' '.join(self.tags),
             'limit': '100',
             'page': str(page),
@@ -145,17 +145,17 @@ class Rule34Source(Rule34LikeSource):
                                   tags, min_size, group_name, download_silent)
 
 
-class HypnoHubSource(Rule34Source):
+class HypnoHubSource(Rule34LikeSource):
     def __init__(self, tags: List[str], min_size: Optional[int] = 800,
                  group_name: str = 'hypnohub', download_silent: bool = True):
         Rule34LikeSource.__init__(self, 'hypnohub', 'https://hypnohub.net',
                                   tags, min_size, group_name, download_silent)
 
 
-class GelbooruSource(Rule34Source):
+class GelbooruSource(Rule34LikeSource):
     def __init__(self, tags: List[str], min_size: Optional[int] = 800,
                  group_name: str = 'gelbooru', download_silent: bool = True):
-        Rule34LikeSource.__init__(self, 'gelbooru', 'https://gelbooru.com/',
+        Rule34LikeSource.__init__(self, 'gelbooru', 'https://gelbooru.com',
                                   tags, min_size, group_name, download_silent)
 
     def _get_data_from_raw(self, raw):

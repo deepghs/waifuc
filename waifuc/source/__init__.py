@@ -1,3 +1,4 @@
+from .anime_pictures import AnimePicturesSource
 from .base import BaseDataSource
 from .compose import ParallelDataSource, ComposedDataSource
 from .danbooru import DanbooruSource, SafebooruSource, ATFBooruSource, E621LikeSource, E621Source, E926Source

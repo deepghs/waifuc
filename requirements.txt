@@ -4,6 +4,7 @@ numpy
 tqdm
 pandas
 dghs-imgutils>=0.2.0
-pybooru
 requests
 pixivpy3
+cloudscraper
+pyquery
