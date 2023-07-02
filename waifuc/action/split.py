@@ -8,8 +8,9 @@ from ..model import ImageItem
 
 
 class PersonSplitAction(BaseAction):
-    def __init__(self, level: str = 'm', version: str = 'v1.1',
+    def __init__(self, keep_original: bool = False, level: str = 'm', version: str = 'v1.1',
                  conf_threshold: float = 0.3, iou_threshold: float = 0.5):
+        self.keep_original = keep_original
         self.level = level
         self.version = version
         self.conf_threshold = conf_threshold
@@ -24,6 +25,9 @@ class PersonSplitAction(BaseAction):
             filebody, ext = os.path.splitext(filename)
         else:
             filebody, ext = None, None
+
+        if self.keep_original:
+            yield item
 
         for i, (area, _, _) in enumerate(detection):
             if filebody is not None:
