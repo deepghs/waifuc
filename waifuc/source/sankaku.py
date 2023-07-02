@@ -127,7 +127,7 @@ class SankakuSource(WebDataSource):
                 break
 
             for data in resp.json():
-                if 'image' not in data['file_type']:
+                if 'file_type' not in data or 'image' not in data['file_type']:
                     continue
 
                 try:
