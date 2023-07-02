@@ -105,7 +105,7 @@ class ZerochanSource(WebDataSource):
             url_fallbacks = []
 
         for url in url_fallbacks:
-            resp = self.session.head(url)
+            resp = srequest(self.session, 'HEAD', url, raise_for_status=False)
             if resp.ok:
                 return url
         else:
