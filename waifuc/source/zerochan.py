@@ -6,7 +6,7 @@ from urllib.parse import quote_plus
 from hbutils.system import urlsplit
 
 from .web import WebDataSource
-from ..utils import get_requests_session
+from ..utils import get_requests_session, srequest
 
 try:
     from typing import Literal
@@ -108,7 +108,8 @@ class ZerochanSource(WebDataSource):
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         page = 1
         while True:
-            resp = self.session.get(self._base_url, params={**self._params, 'p': str(page), 'l': '200'})
+            resp = srequest(self.session, 'GET', self._base_url,
+                            params={**self._params, 'p': str(page), 'l': '200'})
             if resp.status_code in {403, 404}:
                 break
             resp.raise_for_status()
@@ -129,5 +130,7 @@ class ZerochanSource(WebDataSource):
                         'filename': filename,
                     }
                     yield data["id"], url, meta
+            else:
+                break
 
             page += 1
