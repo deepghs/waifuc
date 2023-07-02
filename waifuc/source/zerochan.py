@@ -1,4 +1,5 @@
 import os
+import warnings
 from enum import Enum
 from typing import Iterator, Union, List, Optional, Mapping, Tuple
 from urllib.parse import quote_plus
@@ -6,7 +7,7 @@ from urllib.parse import quote_plus
 from hbutils.system import urlsplit
 
 from .web import WebDataSource
-from ..utils import get_requests_session, srequest
+from ..utils import get_requests_session, srequest, get_task_names
 
 try:
     from typing import Literal
@@ -41,8 +42,13 @@ class ZerochanSource(WebDataSource):
 
     def __init__(self, word: Union[str, List[str]], sort: Sort = Sort.FAV, time: Time = Time.ALL,
                  dimension: Optional[Dimension] = None, color: Optional[str] = None, strict: bool = False,
-                 select: SelectTyping = 'large', group_name: str = 'zerochan', download_silent: bool = True):
-        WebDataSource.__init__(self, group_name, get_requests_session(), download_silent)
+                 select: SelectTyping = 'large', group_name: str = 'zerochan', download_silent: bool = True,
+                 user_agent=None):
+        if user_agent:
+            headers = {'User-Agent': user_agent}
+        else:
+            headers = {}
+        WebDataSource.__init__(self, group_name, get_requests_session(headers=headers), download_silent)
         self.word = word
         self.sort = sort
         self.time = time
@@ -109,14 +115,17 @@ class ZerochanSource(WebDataSource):
         page = 1
         while True:
             resp = srequest(self.session, 'GET', self._base_url,
-                            params={**self._params, 'p': str(page), 'l': '200'})
+                            params={**self._params, 'p': str(page), 'l': '200'},
+                            raise_for_status=False)
             if resp.status_code in {403, 404}:
+                warnings.warn(f'{resp!r} found at {resp.request.url}, {get_task_names()!r}, quit!')
                 break
             resp.raise_for_status()
 
             json_ = resp.json()
             if 'items' in json_:
                 items = json_['items']
+                print(warnings.warn(f'{len(items)} item(s) found in {get_task_names()}.'))
                 for data in items:
                     url = self._get_url(data)
                     _, ext_name = os.path.splitext(urlsplit(url).filename)
