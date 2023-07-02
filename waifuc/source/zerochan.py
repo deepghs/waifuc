@@ -1,5 +1,4 @@
 import os
-import warnings
 from enum import Enum
 from typing import Iterator, Union, List, Optional, Mapping, Tuple
 from urllib.parse import quote_plus
@@ -7,7 +6,7 @@ from urllib.parse import quote_plus
 from hbutils.system import urlsplit
 
 from .web import WebDataSource
-from ..utils import get_requests_session, srequest, get_task_names
+from ..utils import get_requests_session, srequest
 
 try:
     from typing import Literal
@@ -118,14 +117,12 @@ class ZerochanSource(WebDataSource):
                             params={**self._params, 'p': str(page), 'l': '200'},
                             raise_for_status=False)
             if resp.status_code in {403, 404}:
-                warnings.warn(f'{resp!r} found at {resp.request.url}, {get_task_names()!r}, quit!')
                 break
             resp.raise_for_status()
 
             json_ = resp.json()
             if 'items' in json_:
                 items = json_['items']
-                print(warnings.warn(f'{len(items)} item(s) found in {get_task_names()}.'))
                 for data in items:
                     url = self._get_url(data)
                     _, ext_name = os.path.splitext(urlsplit(url).filename)
