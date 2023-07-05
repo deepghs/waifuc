@@ -4,6 +4,7 @@ from typing import Iterator, Tuple, Union
 
 import requests
 from PIL import UnidentifiedImageError, Image
+from PIL.Image import DecompressionBombError
 from hbutils.system import urlsplit, TemporaryDirectory
 
 from .base import RootDataSource
@@ -40,7 +41,7 @@ class WebDataSource(RootDataSource):
                 except UnidentifiedImageError:
                     warnings.warn(f'{self.group_name.capitalize()} resource {id_} unidentified as image, skipped.')
                     continue
-                except IOError as err:
+                except (IOError, DecompressionBombError) as err:
                     warnings.warn(f'Skipped due to error: {err!r}')
                     continue
 
