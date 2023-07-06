@@ -62,6 +62,8 @@ class KonachanLikeSource(WebDataSource):
             resp = self._request(page)
             resp.raise_for_status()
 
+            if not resp.text.strip():
+                break
             page_list = self._get_data_from_raw(resp.json())
             if not page_list:
                 break
