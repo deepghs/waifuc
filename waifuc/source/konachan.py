@@ -162,7 +162,7 @@ class GelbooruSource(Rule34LikeSource):
                                   tags, min_size, group_name, download_silent)
 
     def _get_data_from_raw(self, raw):
-        return raw['post']
+        return raw['post'] if 'post' in raw else None
 
 
 class XbooruLikeSource(Rule34LikeSource):
