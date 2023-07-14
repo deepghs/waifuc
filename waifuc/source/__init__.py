@@ -11,5 +11,6 @@ from .local import LocalSource
 from .paheal import PahealSource
 from .pixiv import BasePixivSource, PixivSearchSource, PixivUserSource, PixivRankingSource
 from .sankaku import SankakuSource, PostOrder, Rating, FileType
+from .wallhaven import WallHavenSource
 from .web import WebDataSource
 from .zerochan import ZerochanSource
