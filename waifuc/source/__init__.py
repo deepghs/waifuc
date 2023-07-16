@@ -4,6 +4,7 @@ from .compose import ParallelDataSource, ComposedDataSource
 from .danbooru import DanbooruSource, SafebooruSource, ATFBooruSource, E621LikeSource, E621Source, E926Source
 from .derpibooru import DerpibooruLikeSource, DerpibooruSource, FurbooruSource
 from .duitang import DuitangSource
+from .huashi6 import Huashi6Source
 from .konachan import KonachanLikeSource, YandeSource, KonachanSource, KonachanNetSource, LolibooruSource, \
     Rule34LikeSource, Rule34Source, HypnoHubSource, GelbooruSource, XbooruLikeSource, XbooruSource, \
     SafebooruOrgSource, TBIBSource
