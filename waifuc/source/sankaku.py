@@ -85,7 +85,7 @@ class SankakuSource(WebDataSource):
             for url_name, width_name, height_name in self._FILE_URLS:
                 if url_name in data and width_name in data and height_name in data:
                     url, width, height = data[url_name], data[width_name], data[height_name]
-                    if width >= self.min_size and height >= self.min_size:
+                    if width and height and width >= self.min_size and height >= self.min_size:
                         if f_url is None or width < f_width:
                             f_url, f_width, f_height = url, width, height
 
