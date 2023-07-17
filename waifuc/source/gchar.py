@@ -3,6 +3,7 @@ from operator import __or__
 from typing import Iterator, Tuple, Optional, List, Mapping
 
 from ditk import logging
+from gchar.games.base import Character
 from hbutils.string import plural_word
 
 from .anime_pictures import AnimePicturesSource
@@ -43,7 +44,10 @@ class GcharAutoSource(BaseDataSource):
                  pixiv_refresh_token: Optional[str] = None, extra_cfg: Optional[Mapping[str, dict]] = None):
         from gchar.games import get_character
 
-        self.ch = get_character(ch, allow_fuzzy, fuzzy_threshold, contains_extra)
+        if isinstance(ch, Character):
+            self.ch = ch
+        else:
+            self.ch = get_character(ch, allow_fuzzy, fuzzy_threshold, contains_extra)
         if not self.ch:
             raise ValueError(f'Character {ch!r} not found.')
         logging.info(f'Character {self.ch!r} found in gchar.')
