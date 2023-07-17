@@ -1,5 +1,4 @@
 import datetime
-import logging
 import os
 from enum import Enum
 from typing import Optional, Iterator, List, Tuple, Union
@@ -93,7 +92,7 @@ class SankakuSource(WebDataSource):
             if f_url is not None:
                 return f_url
 
-        if 'file_url' in data:
+        if 'file_url' in data and data['file_url']:
             return data['file_url']
         else:
             raise NoURL
@@ -136,7 +135,6 @@ class SankakuSource(WebDataSource):
                 except NoURL:
                     continue
 
-                logging.warning(f'Sankaku url: {url!r}')
                 _, ext_name = os.path.splitext(urlsplit(url).filename)
                 filename = f'{self.group_name}_{data["id"]}{ext_name}'
                 meta = {
