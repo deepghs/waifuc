@@ -41,7 +41,8 @@ class GcharAutoSource(BaseDataSource):
     def __init__(self, ch, allow_fuzzy: bool = False, fuzzy_threshold: int = 80, contains_extra: bool = True,
                  sure_only: bool = True, preset_sites: Tuple[str, ...] = _PRESET_SITES,
                  max_preset_limit: Optional[int] = None, main_sources_count: int = 3,
-                 pixiv_refresh_token: Optional[str] = None, extra_cfg: Optional[Mapping[str, dict]] = None):
+                 blacklist_sites: Tuple[str, ...] = (), pixiv_refresh_token: Optional[str] = None,
+                 extra_cfg: Optional[Mapping[str, dict]] = None):
         from gchar.games import get_character
 
         if isinstance(ch, Character):
@@ -63,6 +64,8 @@ class GcharAutoSource(BaseDataSource):
         if 'pixiv' in self.preset_sites and not self.pixiv_refresh_token:
             raise ValueError('Pixiv refresh token not given for presetting pixiv source!')
         self.main_sources_count = main_sources_count
+
+        self.blacklist_sites = blacklist_sites
 
     def _select_keyword_for_site(self, site) -> Tuple[Optional[str], Optional[int]]:
         from gchar.resources.sites import list_site_tags
@@ -120,7 +123,7 @@ class GcharAutoSource(BaseDataSource):
         _all_sites = set(_REGISTERED_SITE_SOURCES.keys())
         if not self.pixiv_refresh_token:
             _all_sites.remove('pixiv')
-        _all_sites = sorted(_all_sites - set(self.preset_sites))
+        _all_sites = sorted(_all_sites - set(self.preset_sites) - set(self.blacklist_sites))
         logging.info(f'Available sites for main sources: {_all_sites!r}.')
 
         site_pairs = []
