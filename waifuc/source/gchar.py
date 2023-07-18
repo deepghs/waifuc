@@ -110,7 +110,7 @@ class GcharAutoSource(BaseDataSource):
             self._build_source_on_site(site)
             for site in self.preset_sites
         ]
-        sources = [source for source in sources if sources is not None]
+        sources = [source for source in sources if source is not None]
         if sources:
             retval = reduce(__or__, sources)
             if self.max_preset_limit is not None:
@@ -138,6 +138,7 @@ class GcharAutoSource(BaseDataSource):
             self._build_source_on_site(site)
             for site, _, _ in site_pairs
         ]
+        sources = [source for source in sources if source is not None]
         if sources:
             return reduce(__or__, sources)
         else:
