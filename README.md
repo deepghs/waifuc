@@ -45,11 +45,11 @@ Grab surtr (arknights)'s dataset
 ```python
 import os
 
-from waifuc.action import AlignMaxSizeAction, NoMonochromeAction, FilterSimilarAction, \
-    TaggingAction, PaddingAlignAction, PersonSplitAction, FaceCountAction, FirstNSelectAction, \
+from waifuc.action import AlignMaxSizeAction, NoMonochromeAction, FilterSimilarAction,
+    TaggingAction, PaddingAlignAction, PersonSplitAction, FaceCountAction, FirstNSelectAction,
     CCIPAction, ModeConvertAction, ClassFilterAction, FileOrderAction
 from waifuc.export import TextualInversionExporter
-from waifuc.source import SankakuSource, PostOrder, PixivSearchSource, DanbooruSource, \
+from waifuc.source import SankakuSource, PostOrder, PixivSearchSource, DanbooruSource,
     ZerochanSource, AnimePicturesSource
 
 if __name__ == '__main__':
@@ -88,6 +88,6 @@ if __name__ == '__main__':
         FirstNSelectAction(200),  # first 200 images
         # MirrorAction(),  # mirror then for augmentation
         # RandomFilenameAction(),  # random rename files
-    ).export(TextualInversionExporter('surtr_dataset'))  # save to surtr_dataset directory
+    ).export_item(TextualInversionExporter('surtr_dataset'))  # save to surtr_dataset directory
 
 ```

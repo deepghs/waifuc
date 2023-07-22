@@ -9,3 +9,4 @@ pixivpy3
 cloudscraper
 pyquery
 xmltodict
+huggingface_hub>=0.14.0

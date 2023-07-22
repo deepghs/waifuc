@@ -9,40 +9,58 @@ from ..utils import get_task_names
 
 
 class BaseExporter:
-    def init(self):
+    def pre_export(self):
         raise NotImplementedError
 
-    def export(self, item: ImageItem):
+    def export_item(self, item: ImageItem):
+        raise NotImplementedError
+
+    def post_export(self):
         raise NotImplementedError
 
     def export_from(self, items: Iterator[ImageItem]):
-        self.init()
+        self.pre_export()
         names = get_task_names()
         if names:
             desc = f'{self.__class__.__name__} - {".".join(names)}'
         else:
             desc = f'{self.__class__.__name__}'
         for item in tqdm(items, desc=desc):
-            self.export(item)
+            self.export_item(item)
+        self.post_export()
 
     def reset(self):
         raise NotImplementedError
 
 
-class SaveExporter(BaseExporter):
-    def __init__(self, output_dir, clear: bool = False, no_meta: bool = False):
+class LocalDirectoryExporter(BaseExporter):
+    def __init__(self, output_dir, clear: bool = False):
         self.output_dir = output_dir
         self.clear = clear
-        self.no_meta = no_meta
-        self.untitles = 0
 
-    def init(self):
+    def pre_export(self):
         if self.clear and os.path.exists(self.output_dir):
             remove(self.output_dir)
 
         os.makedirs(self.output_dir, exist_ok=True)
 
-    def export(self, item: ImageItem):
+    def export_item(self, item: ImageItem):
+        raise NotImplementedError
+
+    def post_export(self):
+        pass
+
+    def reset(self):
+        raise NotImplementedError
+
+
+class SaveExporter(LocalDirectoryExporter):
+    def __init__(self, output_dir, clear: bool = False, no_meta: bool = False):
+        LocalDirectoryExporter.__init__(self, output_dir, clear)
+        self.no_meta = no_meta
+        self.untitles = 0
+
+    def export_item(self, item: ImageItem):
         if 'filename' in item.meta:
             filename = item.meta['filename']
         else:

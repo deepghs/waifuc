@@ -1,31 +1,23 @@
 import os
 
-from hbutils.system import remove
 from imgutils.tagging import tags_to_text
 
-from .base import BaseExporter
+from .base import LocalDirectoryExporter
 from ..model import ImageItem
 
 
-class TextualInversionExporter(BaseExporter):
+class TextualInversionExporter(LocalDirectoryExporter):
     def __init__(self, output_dir: str, clear: bool = False,
                  use_spaces: bool = False, use_escape: bool = True,
                  include_score: bool = False, score_descend: bool = True):
-        self.output_dir = output_dir
-        self.clear = clear
+        LocalDirectoryExporter.__init__(self, output_dir, clear)
         self.use_spaces = use_spaces
         self.use_escape = use_escape
         self.include_score = include_score
         self.score_descend = score_descend
         self.untitles = 0
 
-    def init(self):
-        if self.clear and os.path.exists(self.output_dir):
-            remove(self.output_dir)
-
-        os.makedirs(self.output_dir, exist_ok=True)
-
-    def export(self, item: ImageItem):
+    def export_item(self, item: ImageItem):
         if 'filename' in item.meta:
             filename = item.meta['filename']
         else:
