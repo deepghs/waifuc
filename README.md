@@ -22,6 +22,8 @@ Efficient Train Data Collector for Anime Waifu.
 
 **This project is still under development, official version will be released soon afterwards.**
 
+If you need to use it immediately, just clone it and run `pip install .`.
+
 ## Installation
 
 You can simply install it with `pip` command line from the official PyPI site.
@@ -55,6 +57,7 @@ if __name__ == '__main__':
     # data source for surtr in arknights, images from many sites will be crawled
     # all supported games and sites can be found at
     # https://narugo1992.github.io/gchar/main/best_practice/supported/index.html#supported-games-and-sites
+    # ATTENTION: GcharAutoSource required `pip install waifuc[gchar]`
     s = GcharAutoSource('surtr')
 
     # crawl images, process them, and then save them to directory with given format
