@@ -45,51 +45,40 @@ to [Installation](https://deepghs.github.io/waifuc/main/tutorials/installation/i
 Grab surtr (arknights)'s dataset
 
 ```python
-import os
-
-from waifuc.action import AlignMaxSizeAction, NoMonochromeAction, FilterSimilarAction,
-    TaggingAction, PaddingAlignAction, PersonSplitAction, FaceCountAction, FirstNSelectAction,
-    CCIPAction, ModeConvertAction, ClassFilterAction, FileOrderAction
+from waifuc.action import NoMonochromeAction, FilterSimilarAction, \
+    TaggingAction, PaddingAlignAction, PersonSplitAction, FaceCountAction, FirstNSelectAction, \
+    CCIPAction, ModeConvertAction, ClassFilterAction, FileOrderAction, RandomFilenameAction, AlignMinSizeAction
 from waifuc.export import TextualInversionExporter
-from waifuc.source import SankakuSource, PostOrder, PixivSearchSource, DanbooruSource,
-    ZerochanSource, AnimePicturesSource
+from waifuc.source import GcharAutoSource
 
 if __name__ == '__main__':
-    s1 = PixivSearchSource('スルト(アークナイツ)', sort='popular_desc', no_ai=True,
-                           refresh_token=os.environ['PIXIV_REFRESH_TOKEN'])
-    s2 = DanbooruSource(['surtr_(arknights)'], username='username', api_key='api_key')
-    s3 = SankakuSource(
-        ['surtr_(arknights)', '-ai-created'],
-        order=PostOrder.QUALITY,
-        # rating=Rating.SAFE,
-        username='username', password='password',
-    )
-    s4 = ZerochanSource('Surtr (Arknights)', strict=True)
-    s5 = AnimePicturesSource(['surtr (arknights)'])
+    # data source for surtr in arknights, images from many sites will be crawled
+    # all supported games and sites can be found at
+    # https://narugo1992.github.io/gchar/main/best_practice/supported/index.html#supported-games-and-sites
+    s = GcharAutoSource('surtr')
 
-    # grab from zerochan and anime pictures first
-    # and when up to 70, grab from pixiv, danbooru and sankaku
-    s = (s4 | s5).attach(FaceCountAction(1))[:70] + (s1 | s2 | s3)
-
+    # crawl images, process them, and then save them to directory with given format
     s.attach(
         ModeConvertAction('RGB', 'white'),
         NoMonochromeAction(),  # no monochrome, greyscale or sketch
         ClassFilterAction(['illustration', 'bangumi']),  # no comic or 3d
-        # RatingFilterAction(['safe', 'r15']),
-        FilterSimilarAction('all'),  # filter similar images
-        FaceCountAction(count=1),  # 1 face per image
-        PersonSplitAction(),  # cut for each person
+        # RatingFilterAction(['safe', 'r15']),  # filter images with rating, like safe, r15, r18
+        FilterSimilarAction('all'),  # filter duplicated images
+        FaceCountAction(count=1),  # drop images with 0 or >1 faces
+        PersonSplitAction(),  # crop for each person
         FaceCountAction(count=1),
         FileOrderAction(),  # Rename files in order
-        CCIPAction(min_val_count=15),  # CCIP, filter the character you may not wanna see in dataset
-        AlignMaxSizeAction(800),
+        CCIPAction(min_val_count=15),  # CCIP, filter the character you may not want to see in dataset
+        AlignMinSizeAction(800),  # if min(height, weight) > 800, resize it to 800
         TaggingAction(force=True),  # tagging with wd14 v2
         PaddingAlignAction((512, 512)),  # align to 512x512
-        # RandomFilenameAction(),
         FilterSimilarAction('all'),  # filter again
-        FirstNSelectAction(200),  # first 200 images
+        FirstNSelectAction(20),  # first 200 images
         # MirrorAction(),  # mirror then for augmentation
-        # RandomFilenameAction(),  # random rename files
-    ).export_item(TextualInversionExporter('surtr_dataset'))  # save to surtr_dataset directory
+        RandomFilenameAction(ext='.png'),  # random rename files
+    ).export(
+        # save to surtr_dataset directory
+        TextualInversionExporter('surtr_dataset')
+    )
 
 ```

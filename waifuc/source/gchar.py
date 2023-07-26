@@ -21,7 +21,7 @@ _PRESET_SITES = ('zerochan', 'anime_pictures')
 _REGISTERED_SITE_SOURCES = {
     'anime_pictures': AnimePicturesSource,
     'atfbooru': ATFBooruSource,
-    'sankaku': SankakuSource,
+    # 'sankaku': SankakuSource,  # still something wrong with sankaku source
     'danbooru': DanbooruSource,
     'hypnohub': HypnoHubSource,
     'konachan': KonachanSource,
