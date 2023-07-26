@@ -20,6 +20,8 @@
 
 Efficient Train Data Collector for Anime Waifu.
 
+**This project is still under development, official version will be released soon afterwards.**
+
 ## Installation
 
 You can simply install it with `pip` command line from the official PyPI site.
