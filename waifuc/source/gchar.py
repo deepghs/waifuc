@@ -92,11 +92,13 @@ class GcharAutoSource(BaseDataSource):
             extra_cfg = dict(self.extra_cfg.get(site, None) or {})
             logging.info(f'Recommended keyword for site {site!r} is {keyword!r}, '
                          f'with {plural_word(count, "known post")}.')
-            if issubclass(site_class, DanbooruSource):
+            if issubclass(site_class, (DanbooruSource, AnimePicturesSource)):
                 return site_class([keyword, 'solo'], **extra_cfg)
-            elif issubclass(site_class, (KonachanLikeSource, AnimePicturesSource, SankakuSource)):
+            elif issubclass(site_class, (KonachanLikeSource, SankakuSource)):
                 return site_class([keyword], **extra_cfg)
-            elif issubclass(site_class, (WallHavenSource, ZerochanSource)):
+            elif issubclass(site_class, ZerochanSource):
+                return ZerochanSource(keyword, strict=True, **extra_cfg)
+            elif issubclass(site_class, WallHavenSource):
                 return site_class(keyword, **extra_cfg)
             elif issubclass(site_class, (PixivSearchSource,)):
                 return site_class(keyword, refresh_token=self.pixiv_refresh_token, **extra_cfg)
