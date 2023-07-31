@@ -8,7 +8,7 @@ from hbutils.string import plural_word
 
 from .anime_pictures import AnimePicturesSource
 from .base import BaseDataSource
-from .danbooru import ATFBooruSource, DanbooruSource
+from .danbooru import ATFBooruSource, DanbooruSource, DanbooruLikeSource
 from .konachan import KonachanSource, KonachanNetSource, HypnoHubSource, LolibooruSource, XbooruSource, YandeSource, \
     Rule34Source, KonachanLikeSource
 from .pixiv import PixivSearchSource
@@ -92,7 +92,7 @@ class GcharAutoSource(BaseDataSource):
             extra_cfg = dict(self.extra_cfg.get(site, None) or {})
             logging.info(f'Recommended keyword for site {site!r} is {keyword!r}, '
                          f'with {plural_word(count, "known post")}.')
-            if issubclass(site_class, (DanbooruSource, AnimePicturesSource)):
+            if issubclass(site_class, (DanbooruLikeSource, AnimePicturesSource)):
                 return site_class([keyword, 'solo'], **extra_cfg)
             elif issubclass(site_class, (KonachanLikeSource, SankakuSource)):
                 return site_class([keyword], **extra_cfg)
