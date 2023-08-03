@@ -1,8 +1,11 @@
+import glob
 import os
+import pathlib
 import re
 from typing import Iterator
 
 from PIL import UnidentifiedImageError
+from imgutils.data import load_image
 
 from .base import RootDataSource
 from ..model import ImageItem
@@ -38,3 +41,36 @@ class LocalSource(RootDataSource):
                 'filename': os.path.basename(file),
             }
             yield ImageItem(origin_item.image, meta)
+
+
+class LocalTISource(RootDataSource):
+    def __init__(self, directory: str):
+        self.directory = directory
+
+    def _iter(self) -> Iterator[ImageItem]:
+        group_name = re.sub(r'[\W_]+', '_', self.directory).strip('_')
+        for f in glob.glob(os.path.join(self.directory, '*')):
+            if not os.path.isfile(f):
+                continue
+
+            try:
+                image = load_image(f)
+            except UnidentifiedImageError:
+                continue
+
+            id_ = os.path.splitext(os.path.basename(f))[0]
+            txt_file = os.path.join(self.directory, f'{id_}.txt')
+            if os.path.exists(txt_file):
+                full_text = pathlib.Path(txt_file).read_text(encoding='utf-8')
+                words = re.split(r'\s*,\s*', full_text)
+                tags = {word: 1.0 for word in words}
+            else:
+                tags = {}
+
+            meta = {
+                'path': os.path.abspath(f),
+                'group_id': group_name,
+                'filename': os.path.basename(f),
+                'tags': tags,
+            }
+            yield ImageItem(image, meta)
