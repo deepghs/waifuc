@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Iterator, Optional, Union, Tuple
 
@@ -109,6 +110,8 @@ class PixivSearchSource(BasePixivSource):
         while True:
             data = self.client.search_illust(self.word, self.search_target, self.sort, self.duration,
                                              self.start_date, self.end_date, self.filter, offset, self.req_auth)
+            if 'illusts' not in data:
+                logging.warning(f'Illusts not found in page (offset: {offset!r}), skipped: {data!r}.')
             illustrations = data['illusts']
             yield from illustrations
 
@@ -132,6 +135,8 @@ class PixivUserSource(BasePixivSource):
         offset = 0
         while True:
             data = self.client.user_illusts(self.user_id, self.type, self.filter, offset, self.req_auth)
+            if 'illusts' not in data:
+                logging.warning(f'Illusts not found in page (offset: {offset!r}), skipped: {data!r}.')
             illustrations = data['illusts']
             yield from illustrations
 
@@ -155,6 +160,8 @@ class PixivRankingSource(BasePixivSource):
         offset = 0
         while True:
             data = self.client.illust_ranking(self.mode, self.filter, self.date, offset, self.req_auth)
+            if 'illusts' not in data:
+                logging.warning(f'Illusts not found in page (offset: {offset!r}), skipped: {data!r}.')
             illustrations = data['illusts']
             yield from illustrations
 
