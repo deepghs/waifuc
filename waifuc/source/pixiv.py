@@ -112,6 +112,7 @@ class PixivSearchSource(BasePixivSource):
                                              self.start_date, self.end_date, self.filter, offset, self.req_auth)
             if 'illusts' not in data:
                 logging.warning(f'Illusts not found in page (offset: {offset!r}), skipped: {data!r}.')
+                break
             illustrations = data['illusts']
             yield from illustrations
 
@@ -137,6 +138,7 @@ class PixivUserSource(BasePixivSource):
             data = self.client.user_illusts(self.user_id, self.type, self.filter, offset, self.req_auth)
             if 'illusts' not in data:
                 logging.warning(f'Illusts not found in page (offset: {offset!r}), skipped: {data!r}.')
+                break
             illustrations = data['illusts']
             yield from illustrations
 
@@ -162,6 +164,7 @@ class PixivRankingSource(BasePixivSource):
             data = self.client.illust_ranking(self.mode, self.filter, self.date, offset, self.req_auth)
             if 'illusts' not in data:
                 logging.warning(f'Illusts not found in page (offset: {offset!r}), skipped: {data!r}.')
+                break
             illustrations = data['illusts']
             yield from illustrations
 
