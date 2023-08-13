@@ -45,4 +45,5 @@ class WebDataSource(RootDataSource):
                     warnings.warn(f'Skipped due to error: {err!r}')
                     continue
 
+                meta = {**meta, 'url': url}
                 yield ImageItem(image, meta)
