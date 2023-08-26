@@ -6,7 +6,7 @@ from .ccip import CCIPAction
 from .count import SliceSelectAction, FirstNSelectAction
 from .filename import FileExtAction, FileOrderAction
 from .filter import NoMonochromeAction, OnlyMonochromeAction, ClassFilterAction, RatingFilterAction, FaceCountAction, \
-    HeadCountAction, PersonRatioAction
+    HeadCountAction, PersonRatioAction, MinSizeFilterAction
 from .lpips import FilterSimilarAction
 from .split import PersonSplitAction
 from .tagging import TaggingAction, TagFilterAction

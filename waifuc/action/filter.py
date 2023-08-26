@@ -97,3 +97,11 @@ class PersonRatioAction(FilterAction):
 
         (x0, y0, x1, y1), _, _ = detections[0]
         return abs((x1 - x0) * (y1 - y0)) >= self.ratio * (item.image.width * item.image.height)
+
+
+class MinSizeFilterAction(FilterAction):
+    def __init__(self, min_size: int):
+        self.min_size = min_size
+
+    def check(self, item: ImageItem) -> bool:
+        return min(item.image.width, item.image.height) >= self.min_size

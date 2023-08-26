@@ -34,7 +34,7 @@ FilterSimilarModeTyping = Literal['all', 'group']
 
 
 class FilterSimilarAction(BaseAction):
-    def __init__(self, mode: FilterSimilarModeTyping, threshold: float = 0.45, rtol=5.e-2, atol=2.e-2):
+    def __init__(self, mode: FilterSimilarModeTyping = 'all', threshold: float = 0.45, rtol=5.e-2, atol=2.e-2):
         self.mode = mode
         self.threshold, self.rtol, self.atol = threshold, rtol, atol
         self.buckets: Dict[str, FeatureBucket] = {}
