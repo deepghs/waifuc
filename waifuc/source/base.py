@@ -89,3 +89,8 @@ class AttachedDataSource(BaseDataSource):
             t = action.iter_from(t)
 
         yield from t
+
+
+class EmptySource(BaseDataSource):
+    def _iter(self) -> Iterator[ImageItem]:
+        yield from []

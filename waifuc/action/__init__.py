@@ -8,5 +8,5 @@ from .filename import FileExtAction, FileOrderAction
 from .filter import NoMonochromeAction, OnlyMonochromeAction, ClassFilterAction, RatingFilterAction, FaceCountAction, \
     HeadCountAction, PersonRatioAction, MinSizeFilterAction
 from .lpips import FilterSimilarAction
-from .split import PersonSplitAction
+from .split import PersonSplitAction, ThreeStageSplitAction
 from .tagging import TaggingAction, TagFilterAction
