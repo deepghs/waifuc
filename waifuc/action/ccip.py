@@ -35,7 +35,10 @@ class CCIPAction(BaseAction):
         self.status = CCIPStatus.INIT
 
     def _extract_feature(self, item: ImageItem):
-        return ccip_extract_feature(item.image, model=self.model)
+        if 'ccip_feature' in item.meta:
+            return item.meta['ccip_feature']
+        else:
+            return ccip_extract_feature(item.image, model=self.model)
 
     def _try_cluster(self) -> bool:
         with disable_output():
