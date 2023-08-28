@@ -1,6 +1,7 @@
 import glob
 import os
 import pathlib
+import random
 import re
 from typing import Iterator
 
@@ -12,9 +13,10 @@ from ..model import ImageItem
 
 
 class LocalSource(RootDataSource):
-    def __init__(self, directory: str, recursive: bool = True):
+    def __init__(self, directory: str, recursive: bool = True, shuffle: bool = False):
         self.directory = directory
         self.recursive = recursive
+        self.shuffle = shuffle
 
     def _iter_files(self):
         if self.recursive:
@@ -26,6 +28,12 @@ class LocalSource(RootDataSource):
             group_name = re.sub(r'[\W_]+', '_', self.directory).strip('_')
             for file in os.listdir(self.directory):
                 yield os.path.join(self.directory, file), group_name
+
+    def _actual_iter_files(self):
+        lst = list(self._iter_files())
+        if self.shuffle:
+            random.shuffle(lst)
+        yield from lst
 
     def _iter(self) -> Iterator[ImageItem]:
         for file, group_name in self._iter_files():
