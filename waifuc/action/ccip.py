@@ -145,4 +145,7 @@ class CCIPAction(BaseAction):
         self.items.clear()
         self.item_released.clear()
         self.feats.clear()
-        self.status = CCIPStatus.INIT
+        if self.init_source:
+            self.status = CCIPStatus.INIT_WITH_SOURCE
+        else:
+            self.status = CCIPStatus.INIT
