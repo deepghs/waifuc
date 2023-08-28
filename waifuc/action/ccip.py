@@ -13,13 +13,16 @@ class CCIPStatus(IntEnum):
     INIT = 0x1
     APPROACH = 0x2
     EVAL = 0x3
+    INIT_WITH_SOURCE = 0x4
 
 
 class CCIPAction(BaseAction):
-    def __init__(self, min_val_count: int = 15, step: int = 5,
+    def __init__(self, init_source=None, *, min_val_count: int = 15, step: int = 5,
                  ratio_threshold: float = 0.6, min_clu_dump_ratio: float = 0.3, cmp_threshold: float = 0.5,
                  eps: Optional[float] = None, min_samples: Optional[int] = None,
                  model='ccip-caformer-24-randaug-pruned', threshold: Optional[float] = None):
+        self.init_source = init_source
+
         self.min_val_count = min_val_count
         self.step = step
         self.ratio_threshold = ratio_threshold
@@ -32,7 +35,10 @@ class CCIPAction(BaseAction):
         self.items = []
         self.item_released = []
         self.feats = []
-        self.status = CCIPStatus.INIT
+        if self.init_source:
+            self.status = CCIPStatus.INIT_WITH_SOURCE
+        else:
+            self.status = CCIPStatus.INIT
 
     def _extract_feature(self, item: ImageItem):
         if 'ccip_feature' in item.meta:
@@ -85,8 +91,26 @@ class CCIPAction(BaseAction):
                     self.item_released[i] = True
                     yield self.items[i]
 
+    def _eval_iter(self, item: ImageItem) -> Iterator[ImageItem]:
+        feat = self._extract_feature(item)
+        if self._compare_to_exists(feat):
+            self.feats.append(feat)
+            yield item
+
+            if (len(self.feats) - len(self.items)) % self.step == 0:
+                yield from self._dump_items()
+
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
-        if self.status == CCIPStatus.INIT:
+        if self.status == CCIPStatus.INIT_WITH_SOURCE:
+            for item in self.init_source:
+                feat = self._extract_feature(item)
+                self.feats.append(feat)
+                yield item
+
+            yield from self._eval_iter(item)
+            self.status = CCIPStatus.EVAL
+
+        elif self.status == CCIPStatus.INIT:
             self.items.append(item)
             self.feats.append(self._extract_feature(item))
 
@@ -107,13 +131,7 @@ class CCIPAction(BaseAction):
                     yield from self._dump_items()
 
         elif self.status == CCIPStatus.EVAL:
-            feat = self._extract_feature(item)
-            if self._compare_to_exists(feat):
-                self.feats.append(feat)
-                yield item
-
-                if (len(self.feats) - len(self.items)) % self.step == 0:
-                    yield from self._dump_items()
+            yield from self._eval_iter(item)
 
         else:
             raise ValueError(f'Unknown status for {self.__class__.__name__} - {self.status!r}.')
