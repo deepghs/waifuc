@@ -1,7 +1,9 @@
+import logging
 from enum import IntEnum
 from typing import Iterator, Optional, List, Tuple
 
 import numpy as np
+from hbutils.string import plural_word
 from hbutils.testing import disable_output
 from imgutils.metrics import ccip_extract_feature, ccip_default_threshold, ccip_clustering, ccip_batch_differences
 
@@ -35,7 +37,7 @@ class CCIPAction(BaseAction):
         self.items = []
         self.item_released = []
         self.feats = []
-        if self.init_source:
+        if self.init_source is not None:
             self.status = CCIPStatus.INIT_WITH_SOURCE
         else:
             self.status = CCIPStatus.INIT
@@ -102,13 +104,16 @@ class CCIPAction(BaseAction):
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         if self.status == CCIPStatus.INIT_WITH_SOURCE:
+            cnt = 0
+            logging.info('Existing anchor detected.')
             for item in self.init_source:
-                feat = self._extract_feature(item)
-                self.feats.append(feat)
+                self.feats.append(self._extract_feature(item))
                 yield item
+                cnt += 1
+            logging.info(f'{plural_word(cnt, "items")} loaded from anchor.')
 
-            yield from self._eval_iter(item)
             self.status = CCIPStatus.EVAL
+            yield from self._eval_iter(item)
 
         elif self.status == CCIPStatus.INIT:
             self.items.append(item)
