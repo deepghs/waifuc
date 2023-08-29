@@ -57,5 +57,6 @@ class VideoSource(BaseDataSource):
 
         source = EmptySource()
         for file in files:
-            source = source + cls(file)
+            if os.path.isfile(file) and os.access(file, os.R_OK):
+                source = source + cls(file)
         return source
