@@ -96,3 +96,17 @@ if __name__ == '__main__':
     )
 
 ```
+
+Usage of 3-stage-cropper:
+
+```python
+from waifuc.action import ThreeStageSplitAction
+from waifuc.export import SaveExporter
+from waifuc.source import LocalSource
+
+source = LocalSource('/your/path/contains/images')
+source.attach(
+    ThreeStageSplitAction(),
+).export(SaveExporter('/your/output/path'))
+
+```
