@@ -31,11 +31,11 @@ class VideoSource(BaseDataSource):
             logging.error(f'Video {self.video_file!r} is invalid, skipped')
             return
 
-        with av.open(content) as container:
-            stream = container.streams.video[0]
-            stream.codec_context.skip_frame = "NONKEY"
+        try:
+            with av.open(content) as container:
+                stream = container.streams.video[0]
+                stream.codec_context.skip_frame = "NONKEY"
 
-            try:
                 for i, frame in enumerate(tqdm(
                         container.decode(stream),
                         desc=f'Video Extracting - {os.path.basename(self.video_file)}')):
@@ -45,8 +45,8 @@ class VideoSource(BaseDataSource):
                         'index': i,
                     }
                     yield ImageItem(frame.to_image(), meta)
-            except InvalidDataError as err:
-                logging.warning(f'Video extraction skipped due to error - {err!r}')
+        except InvalidDataError as err:
+            logging.warning(f'Video extraction skipped due to error - {err!r}')
 
     @classmethod
     def from_directory(cls, directory: str, recursive: bool = True) -> BaseDataSource:
