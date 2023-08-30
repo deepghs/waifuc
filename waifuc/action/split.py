@@ -82,6 +82,8 @@ class ThreeStageSplitAction(BaseAction):
 
         for i, person_item in self._split_person(item, filebody, ext):
             person_image = person_item.image
+            yield person_image
+
             half_detects = detect_halfbody(person_image)
             if half_detects:
                 halfbody_area, halfbody_type, halfbody_score = half_detects[0]
