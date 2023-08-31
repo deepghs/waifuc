@@ -1,5 +1,6 @@
 from .align import AlignMaxSizeAction, AlignMinSizeAction, PaddingAlignAction
 from .augument import RandomFilenameAction, RandomChoiceAction, BaseRandomAction, MirrorAction
+from .background import BackgroundRemovalAction
 from .base import BaseAction, ProcessAction, FilterAction, ActionStop
 from .basic import ModeConvertAction
 from .ccip import CCIPAction

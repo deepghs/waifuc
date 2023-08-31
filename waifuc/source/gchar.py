@@ -1,8 +1,8 @@
+import logging
 from functools import reduce
 from operator import __or__
 from typing import Iterator, Tuple, Optional, List, Mapping
 
-from ditk import logging
 from gchar.games.base import Character
 from hbutils.string import plural_word
 
