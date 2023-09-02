@@ -45,7 +45,7 @@ class VideoSource(BaseDataSource):
                         'index': i,
                     }
                     yield ImageItem(frame.to_image(), meta)
-        except InvalidDataError as err:
+        except (InvalidDataError, av.error.ValueError) as err:
             logging.warning(f'Video extraction skipped due to error - {err!r}')
 
     @classmethod
