@@ -105,3 +105,11 @@ class MinSizeFilterAction(FilterAction):
 
     def check(self, item: ImageItem) -> bool:
         return min(item.image.width, item.image.height) >= self.min_size
+
+
+class MinAreaFilterAction(FilterAction):
+    def __init__(self, min_size: int):
+        self.min_size = min_size
+
+    def check(self, item: ImageItem) -> bool:
+        return (item.image.width * item.image.height) ** 0.5 >= self.min_size
