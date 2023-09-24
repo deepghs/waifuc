@@ -55,10 +55,12 @@ class LocalDirectoryExporter(BaseExporter):
 
 
 class SaveExporter(LocalDirectoryExporter):
-    def __init__(self, output_dir, clear: bool = False, no_meta: bool = False):
+    def __init__(self, output_dir, clear: bool = False, no_meta: bool = False,
+                 skip_when_image_exist: bool = False):
         LocalDirectoryExporter.__init__(self, output_dir, clear)
         self.no_meta = no_meta
         self.untitles = 0
+        self.skip_when_image_exist = skip_when_image_exist
 
     def export_item(self, item: ImageItem):
         if 'filename' in item.meta:
@@ -71,7 +73,7 @@ class SaveExporter(LocalDirectoryExporter):
         full_directory = os.path.dirname(full_filename)
         if full_directory:
             os.makedirs(full_directory, exist_ok=True)
-        item.save(full_filename, no_meta=self.no_meta)
+        item.save(full_filename, no_meta=self.no_meta, skip_when_image_exist=self.skip_when_image_exist)
 
     def reset(self):
         self.untitles = 0

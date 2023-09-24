@@ -80,8 +80,9 @@ class ImageItem:
 
         return cls(image, meta)
 
-    def save(self, image_file, no_meta: bool = False):
-        self.image.save(image_file)
+    def save(self, image_file, no_meta: bool = False, skip_when_image_exist: bool = False):
+        if not skip_when_image_exist or not os.path.exists(image_file):
+            self.image.save(image_file)
         if not no_meta and self.meta:
             meta_file = self._image_file_to_meta_file(image_file)
             with open(meta_file, 'w', encoding='utf-8') as f:
