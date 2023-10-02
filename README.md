@@ -26,7 +26,7 @@ If you need to use it immediately, just clone it and run `pip install .`.
 
 ## Installation
 
-You can simply install it with `pip` command line from the official PyPI site.
+~You can simply install it with `pip` command line from the official PyPI site.~ PyPI version is not ready now, please install waifuc with source code.
 
 ```shell
 pip install waifuc
