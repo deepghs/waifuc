@@ -26,17 +26,22 @@ If you need to use it immediately, just clone it and run `pip install .`.
 
 ## Installation
 
-~You can simply install it with `pip` command line from the official PyPI site.~ PyPI version is not ready now, please install waifuc with source code.
+PyPI version is not ready now, please install waifuc with source code.
 
 ```shell
-pip install waifuc
+git+https://github.com/deepghs/waifuc.git@main#egg=waifuc
 ```
 
-If your operating environment includes a available GPU, you can use the following installation command to achieve higher
-performance:
+If your operating environment includes available CUDA, you can use the following installation command to achieve higher
 
 ```shell
-pip install waifuc[gpu]
+git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[gpu]
+```
+
+If you need to process with videos, you can install waifuc with
+
+```shell
+git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[video]
 ```
 
 For more information about installation, you can refer
@@ -44,7 +49,9 @@ to [Installation](https://deepghs.github.io/waifuc/main/tutorials/installation/i
 
 ## An Example
 
-Grab surtr (arknights)'s dataset
+### Quickly Get Character's Dataset
+
+Grab surtr (arknights)'s dataset for LoRA Training
 
 ```python
 from waifuc.action import NoMonochromeAction, FilterSimilarAction, \
@@ -57,7 +64,7 @@ if __name__ == '__main__':
     # data source for surtr in arknights, images from many sites will be crawled
     # all supported games and sites can be found at
     # https://narugo1992.github.io/gchar/main/best_practice/supported/index.html#supported-games-and-sites
-    # ATTENTION: GcharAutoSource required `pip install waifuc[gchar]`
+    # ATTENTION: GcharAutoSource required `git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[gchar]`
     s = GcharAutoSource('surtr')
 
     # crawl images, process them, and then save them to directory with given format
@@ -97,7 +104,102 @@ if __name__ == '__main__':
 
 ```
 
-Usage of 3-stage-cropper:
+### Quick Crawl Images from Websites
+
+The following code will give you 10 images of surtr (arknights) with metadata saved.
+
+```python
+from waifuc.action import HeadCountAction, AlignMinSizeAction
+from waifuc.export import SaveExporter
+from waifuc.source import DanbooruSource
+
+if __name__ == '__main__':
+    source = DanbooruSource(['surtr_(arknights)', 'solo'])
+    source.attach(
+        # only 1 head,
+        HeadCountAction(1),
+
+        # if shorter side is over 640, just resize it to 640
+        AlignMinSizeAction(640),
+    )[:10].export(  # only first 10 images
+        # save images (with meta information from danbooru site)
+        SaveExporter('/data/surtr_arknights')
+    )
+
+```
+
+And this is what's in `/data/surtr_arknights` afterwards
+
+![img.png](assets/danbooru_crawler_example.png)
+
+Similarly, you can crawl from pixiv with similar code, just by changing the source
+
+```python
+from waifuc.action import HeadCountAction, AlignMinSizeAction, CCIPAction
+from waifuc.export import SaveExporter
+from waifuc.source import PixivSearchSource
+
+if __name__ == '__main__':
+    source = PixivSearchSource(
+        'アークナイツ (surtr OR スルト OR 史尔特尔)',
+        refresh_token='use_your_own_refresh_token'
+    )
+    source.attach(
+        # only 1 head,
+        HeadCountAction(1),
+
+        # pixiv often have some irrelevant character mixed in
+        # so CCIPAction is necessary here to drop these images
+        CCIPAction(),
+
+        # if shorter side is over 640, just resize it to 640
+        AlignMinSizeAction(640),
+    )[:10].export(  # only first 10 images
+        # save images (with meta information from danbooru site)
+        SaveExporter('/data/surtr_arknights_pixiv')
+    )
+```
+
+This is what you can get at `/data/surtr_arknights_pixiv`
+
+![pixiv example](./assets/pixiv_crawler_example.png)
+
+Here is a list of website source we currently supported
+
+| Name                                              | Import Statement                              |
+|:--------------------------------------------------|:----------------------------------------------|
+| [ATFBooruSource](https://booru.allthefallen.moe)  | from waifuc.source import ATFBooruSource      |
+| [AnimePicturesSource](https://anime-pictures.net) | from waifuc.source import AnimePicturesSource |
+| [DanbooruSource](https://danbooru.donmai.us)      | from waifuc.source import DanbooruSource      |
+| [DerpibooruSource](https://derpibooru.org)        | from waifuc.source import DerpibooruSource    |
+| [DuitangSource](https://www.duitang.com)          | from waifuc.source import DuitangSource       |
+| [E621Source](https://e621.net)                    | from waifuc.source import E621Source          |
+| [E926Source](https://e926.net)                    | from waifuc.source import E926Source          |
+| [FurbooruSource](https://furbooru.com)            | from waifuc.source import FurbooruSource      |
+| [GelbooruSource](https://gelbooru.com)            | from waifuc.source import GelbooruSource      |
+| [Huashi6Source](https://www.huashi6.com)          | from waifuc.source import Huashi6Source       |
+| [HypnoHubSource](https://hypnohub.net)            | from waifuc.source import HypnoHubSource      |
+| [KonachanNetSource](https://konachan.net)         | from waifuc.source import KonachanNetSource   |
+| [KonachanSource](https://konachan.com)            | from waifuc.source import KonachanSource      |
+| [LolibooruSource](https://lolibooru.moe)          | from waifuc.source import LolibooruSource     |
+| [PahealSource](https://rule34.paheal.net)         | from waifuc.source import PahealSource        |
+| [PixivRankingSource](https://pixiv.net)           | from waifuc.source import PixivRankingSource  |
+| [PixivSearchSource](https://pixiv.net)            | from waifuc.source import PixivSearchSource   |
+| [PixivUserSource](https://pixiv.net)              | from waifuc.source import PixivUserSource     |
+| [Rule34Source](https://rule34.xxx)                | from waifuc.source import Rule34Source        |
+| [SafebooruOrgSource](https://safebooru.org)       | from waifuc.source import SafebooruOrgSource  |
+| [SafebooruSource](https://safebooru.donmai.us)    | from waifuc.source import SafebooruSource     |
+| [SankakuSource](https://chan.sankakucomplex.com)  | from waifuc.source import SankakuSource       |
+| [TBIBSource](https://tbib.org)                    | from waifuc.source import TBIBSource          |
+| [WallHavenSource](https://wallhaven.cc)           | from waifuc.source import WallHavenSource     |
+| [XbooruSource](https://xbooru.com)                | from waifuc.source import XbooruSource        |
+| [YandeSource](https://yande.re)                   | from waifuc.source import YandeSource         |
+| [ZerochanSource](https://www.zerochan.net)        | from waifuc.source import ZerochanSource      |
+
+### 3-Stage-Cropping of Local Dataset
+
+This code is loading images from local directory, and crop the images with 3-stage-cropping method (head, halfbody, full
+person), and then save it to another local directory.
 
 ```python
 from waifuc.action import ThreeStageSplitAction

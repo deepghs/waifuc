@@ -3,7 +3,6 @@ from functools import reduce
 from operator import __or__
 from typing import Iterator, Tuple, Optional, List, Mapping
 
-from gchar.games.base import Character
 from hbutils.string import plural_word
 
 from .anime_pictures import AnimePicturesSource
@@ -44,6 +43,7 @@ class GcharAutoSource(BaseDataSource):
                  blacklist_sites: Tuple[str, ...] = (), pixiv_refresh_token: Optional[str] = None,
                  extra_cfg: Optional[Mapping[str, dict]] = None):
         from gchar.games import get_character
+        from gchar.games.base import Character
 
         if isinstance(ch, Character):
             self.ch = ch
