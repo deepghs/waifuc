@@ -1,4 +1,5 @@
 from functools import partial
+from typing import Iterator, Union, List, Mapping
 
 from PIL import Image
 from imgutils.tagging import get_deepdanbooru_tags, get_wd14_tags, get_mldanbooru_tags
@@ -7,7 +8,7 @@ from .base import ProcessAction, BaseAction
 from ..model import ImageItem
 
 try:
-    from typing import Literal, Iterator, Union, List, Mapping
+    from typing import Literal
 except (ImportError, ModuleNotFoundError):
     from typing_extensions import Literal
 
