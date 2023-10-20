@@ -16,3 +16,4 @@ responses>=0.20.0
 pytest-image-diff>=0.0.11
 matplotlib
 natsort
+git+https://github.com/narugo1992/responses.git@dev/binary
