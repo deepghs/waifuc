@@ -22,7 +22,7 @@ def _load_req(file: str):
 requirements = _load_req('requirements.txt')
 
 _REQ_PATTERN = re.compile(r'^requirements-(\w+)\.txt$')
-_REQ_BLACKLIST = {'zoo'}
+_REQ_BLACKLIST = {'zoo', 'test'}
 group_requirements = {
     item.group(1): _load_req(item.group(0))
     for item in [_REQ_PATTERN.fullmatch(reqpath) for reqpath in os.listdir()] if item
