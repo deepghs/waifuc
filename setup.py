@@ -53,7 +53,7 @@ setup(
     # environment
     python_requires=">=3.7",
     install_requires=requirements,
-    tests_require=group_requirements['test'],
+    tests_require=(group_requirements.get('test') or []),
     extras_require=group_requirements,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
