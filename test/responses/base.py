@@ -1,4 +1,5 @@
 import os.path
+import zipfile
 from functools import wraps
 from typing import Optional
 
@@ -21,12 +22,21 @@ def resp_recorder(name: Optional[str] = None):
                 file_path = os.path.join(td, f'{_name}.yaml')
                 f = _recorder.record(file_path=file_path)(func)
                 retval = f(*args, **kwargs)
-                hf_client.upload_file(
-                    path_or_fileobj=file_path,
-                    path_in_repo=f'{_name}.yaml',
-                    repo_id=_REMOTE_REPOSITORY,
-                    repo_type='dataset'
-                )
+
+                with TemporaryDirectory() as ztd:
+                    zip_file = os.path.join(ztd, f'{_name}.zip')
+                    with zipfile.ZipFile(zip_file, 'w') as zf:
+                        for root, dirs, files in os.walk(td):
+                            for file in files:
+                                filepath = os.path.join(td, root, file)
+                                zf.write(filepath, os.path.relpath(filepath, td))
+
+                    hf_client.upload_file(
+                        path_or_fileobj=zip_file,
+                        path_in_repo=f'{_name}.zip',
+                        repo_id=_REMOTE_REPOSITORY,
+                        repo_type='dataset'
+                    )
 
             return retval
 
