@@ -8,7 +8,7 @@ from huggingface_hub import HfApi
 from responses import _recorder
 
 _KNOWN_RECORDERS = {}
-_REMOTE_REPOSITORY = 'deepghs/waifuc_responses'
+_REMOTE_REPOSITORY = 'deepghs/waifuc_unittest'
 hf_client = HfApi(token=os.environ.get('HF_TOKEN'))
 
 
@@ -33,7 +33,7 @@ def resp_recorder(name: Optional[str] = None):
 
                     hf_client.upload_file(
                         path_or_fileobj=zip_file,
-                        path_in_repo=f'{_name}.zip',
+                        path_in_repo=f'responses/{_name}.zip',
                         repo_id=_REMOTE_REPOSITORY,
                         repo_type='dataset'
                     )

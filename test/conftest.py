@@ -14,7 +14,7 @@ from .responses.base import _REMOTE_REPOSITORY
 @contextmanager
 def _mock_with_hf_func(name):
     with TemporaryDirectory() as td:
-        zip_file = hf_hub_download(_REMOTE_REPOSITORY, filename=f'{name}.zip', repo_type='dataset')
+        zip_file = hf_hub_download(_REMOTE_REPOSITORY, filename=f'responses/{name}.zip', repo_type='dataset')
         with zipfile.ZipFile(zip_file, 'r') as zf:
             zf.extractall(td)
 
