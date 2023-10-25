@@ -28,6 +28,18 @@ def danbooru():
 
 
 @pytest.fixture(scope='session')
+def duitang_nian():
+    with mock_responses_from_hf('duitang_nian'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def duitang_nian_non_strict():
+    with mock_responses_from_hf('duitang_nian_non_strict'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def e621_amiya():
     with mock_responses_from_hf('e621_amiya'):
         yield
