@@ -1,7 +1,7 @@
 import pytest
 import responses
 
-from waifuc.source import DanbooruSource, SafebooruSource
+from waifuc.source import DanbooruSource, SafebooruSource, ATFBooruSource, E621Source
 
 
 @pytest.mark.unittest
@@ -34,4 +34,28 @@ class TestSourceDanbooru:
         assert len(items) == 10
         for item in items:
             assert '1girl' in item.meta['tags']
+            assert 'solo' in item.meta['tags']
+
+    @responses.activate
+    def test_atfbooru(self, atfbooru):
+        source = ATFBooruSource(['scathach_(fate)_(all)'])
+        items = list(source[:10])
+        assert len(items) == 9
+        for item in items:
+            assert 'scathach_(fate)_(all)' in item.meta['tags']
+
+    @responses.activate
+    def test_e621(self, e621_amiya, e621_surtr):
+        source = E621Source(['amiya_(arknights)', 'solo'])
+        items = list(source[:10])
+        assert len(items) == 10
+        for item in items:
+            assert 'amiya_(arknights)' in item.meta['tags']
+            assert 'solo' in item.meta['tags']
+
+        source = E621Source(['surtr_(arknights)', 'solo'])
+        items = list(source[:10])
+        assert len(items) == 3
+        for item in items:
+            assert 'surtr_(arknights)' in item.meta['tags']
             assert 'solo' in item.meta['tags']

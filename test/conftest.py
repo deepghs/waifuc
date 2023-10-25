@@ -17,6 +17,24 @@ def safebooru():
 
 
 @pytest.fixture(scope='session')
+def atfbooru():
+    with mock_responses_from_hf('atfbooru'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def e621_amiya():
+    with mock_responses_from_hf('e621_amiya'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def e621_surtr():
+    with mock_responses_from_hf('e621_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def ccip_simple():
     with mock_datasource_dir_from_hf('ccip_simple') as dir_:
         yield dir_
