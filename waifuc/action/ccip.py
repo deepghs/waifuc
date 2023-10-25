@@ -106,9 +106,9 @@ class CCIPAction(BaseAction):
         if self.status == CCIPStatus.INIT_WITH_SOURCE:
             cnt = 0
             logging.info('Existing anchor detected.')
-            for item in self.init_source:
-                self.feats.append(self._extract_feature(item))
-                yield item
+            for item_ in self.init_source:
+                self.feats.append(self._extract_feature(item_))
+                yield item_
                 cnt += 1
             logging.info(f'{plural_word(cnt, "items")} loaded from anchor.')
 
