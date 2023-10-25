@@ -28,6 +28,18 @@ def e621_surtr():
 
 
 @pytest.fixture(scope='session')
+def e926_amiya():
+    with mock_responses_from_hf('e926_amiya'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def e926_surtr():
+    with mock_responses_from_hf('e926_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def safebooru():
     with mock_responses_from_hf('safebooru'):
         yield

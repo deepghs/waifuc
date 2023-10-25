@@ -1,4 +1,4 @@
-from waifuc.source import DanbooruSource, SafebooruSource, ATFBooruSource, E621Source
+from waifuc.source import DanbooruSource, SafebooruSource, ATFBooruSource, E621Source, E926Source
 
 from .base import resp_recorder
 
@@ -30,4 +30,16 @@ def e621_amiya():
 @resp_recorder()
 def e621_surtr():
     s1 = E621Source(['surtr_(arknights)', 'solo'])
+    items = list(s1[:10])
+
+
+@resp_recorder()
+def e926_amiya():
+    s1 = E926Source(['amiya_(arknights)', 'solo'])
+    items = list(s1[:10])
+
+
+@resp_recorder()
+def e926_surtr():
+    s1 = E926Source(['surtr_(arknights)', 'solo'])
     items = list(s1[:10])
