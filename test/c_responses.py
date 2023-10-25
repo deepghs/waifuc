@@ -4,6 +4,18 @@ from .responses import mock_responses_from_hf
 
 
 @pytest.fixture(scope='session')
+def anime_pictures_2girls():
+    with mock_responses_from_hf('anime_pictures_2girls'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def anime_pictures_surtr():
+    with mock_responses_from_hf('anime_pictures_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def atfbooru():
     with mock_responses_from_hf('atfbooru'):
         yield
