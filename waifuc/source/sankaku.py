@@ -8,11 +8,6 @@ from hbutils.system import urlsplit
 from .web import NoURL, WebDataSource
 from ..utils import get_requests_session, srequest
 
-try:
-    from typing import Literal
-except (ImportError, ModuleNotFoundError):
-    from typing_extensions import Literal
-
 
 class Rating(str, Enum):
     SAFE = "s"

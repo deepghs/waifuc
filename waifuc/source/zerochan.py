@@ -1,17 +1,12 @@
 import os
 from enum import Enum
-from typing import Iterator, Union, List, Optional, Mapping, Tuple
+from typing import Iterator, Union, List, Optional, Mapping, Tuple, Literal
 from urllib.parse import quote_plus
 
 from hbutils.system import urlsplit
 
 from .web import WebDataSource
 from ..utils import get_requests_session, srequest
-
-try:
-    from typing import Literal
-except (ImportError, ModuleNotFoundError):
-    from typing_extensions import Literal
 
 
 class Sort(str, Enum):

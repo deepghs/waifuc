@@ -1,6 +1,6 @@
 import os
 from enum import Enum
-from typing import Iterator, Tuple, Union, List
+from typing import Iterator, Tuple, Union, List, Literal
 
 import cloudscraper
 from hbutils.system import urlsplit
@@ -8,11 +8,6 @@ from pyquery import PyQuery as pq
 
 from .web import WebDataSource
 from ..utils import get_requests_session, srequest
-
-try:
-    from typing import Literal
-except (ImportError, ModuleNotFoundError):
-    from typing_extensions import Literal
 
 
 class OrderBy(str, Enum):

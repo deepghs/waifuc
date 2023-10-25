@@ -1,17 +1,12 @@
 import os
 from enum import IntFlag
-from typing import Iterator, Tuple, Union, Optional
+from typing import Iterator, Tuple, Union, Optional, Literal
 
 import cloudscraper
 from hbutils.system import urlsplit
 
 from .web import WebDataSource
 from ..utils import get_requests_session, srequest
-
-try:
-    from typing import Literal
-except (ModuleNotFoundError, ImportError):
-    from typing_extensions import Literal
 
 
 class Category(IntFlag):

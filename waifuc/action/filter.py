@@ -1,15 +1,10 @@
-from typing import List, Optional
+from typing import List, Optional, Literal
 
 from imgutils.detect import detect_faces, detect_heads, detect_person
 from imgutils.validate import is_monochrome, anime_classify, anime_rating
 
 from .base import FilterAction
 from ..model import ImageItem
-
-try:
-    from typing import Literal
-except (ImportError, ModuleNotFoundError):
-    from typing_extensions import Literal
 
 
 class NoMonochromeAction(FilterAction):

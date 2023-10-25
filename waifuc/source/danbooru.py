@@ -1,6 +1,6 @@
 import os.path
 import re
-from typing import Optional, Iterator, List, Tuple, Union
+from typing import Optional, Iterator, List, Tuple, Union, Literal
 
 from hbutils.system import urlsplit
 from requests.auth import HTTPBasicAuth
@@ -8,11 +8,6 @@ from requests.auth import HTTPBasicAuth
 from .web import NoURL, WebDataSource
 from ..config.meta import __TITLE__, __VERSION__
 from ..utils import get_requests_session, srequest
-
-try:
-    from typing import Literal
-except (ImportError, ModuleNotFoundError):
-    from typing_extensions import Literal
 
 _DanbooruSiteTyping = Literal['konachan', 'yandere', 'danbooru', 'safebooru', 'lolibooru']
 
