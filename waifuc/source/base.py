@@ -11,7 +11,7 @@ from ..utils import task_ctx, get_task_names
 
 class BaseDataSource:
     def _iter(self) -> Iterator[ImageItem]:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def _iter_from(self) -> Iterator[ImageItem]:
         yield from self._iter()
@@ -64,7 +64,7 @@ class BaseDataSource:
 
 class RootDataSource(BaseDataSource):
     def _iter(self) -> Iterator[ImageItem]:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def _iter_from(self) -> Iterator[ImageItem]:
         names = get_task_names()

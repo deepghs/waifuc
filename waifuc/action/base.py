@@ -9,7 +9,7 @@ class ActionStop(Exception):
 
 class BaseAction:
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def iter_from(self, iter_: Iterable[ImageItem]) -> Iterator[ImageItem]:
         for item in iter_:
@@ -19,12 +19,12 @@ class BaseAction:
                 break
 
     def reset(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class ProcessAction(BaseAction):
     def process(self, item: ImageItem) -> ImageItem:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         yield self.process(item)
@@ -38,7 +38,7 @@ class ProcessAction(BaseAction):
 
 class FilterAction(BaseAction):
     def check(self, item: ImageItem) -> bool:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         if self.check(item):

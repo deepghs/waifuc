@@ -51,7 +51,7 @@ class BasePixivSource(WebDataSource):
         WebDataSource.__init__(self, group_name, self.client.requests, download_silent)
 
     def _iter_illustration(self) -> Iterator[dict]:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         if self.refresh_token:

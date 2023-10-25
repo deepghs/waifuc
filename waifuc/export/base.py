@@ -10,13 +10,13 @@ from ..utils import get_task_names
 
 class BaseExporter:
     def pre_export(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def export_item(self, item: ImageItem):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def post_export(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def export_from(self, items: Iterator[ImageItem]):
         self.pre_export()
@@ -30,7 +30,7 @@ class BaseExporter:
         self.post_export()
 
     def reset(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class LocalDirectoryExporter(BaseExporter):
@@ -45,13 +45,13 @@ class LocalDirectoryExporter(BaseExporter):
         os.makedirs(self.output_dir, exist_ok=True)
 
     def export_item(self, item: ImageItem):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def post_export(self):
         pass
 
     def reset(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class SaveExporter(LocalDirectoryExporter):

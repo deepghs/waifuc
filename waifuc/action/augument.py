@@ -15,7 +15,7 @@ class BaseRandomAction(BaseAction):
         self.random = random.Random(self.seed)
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def reset(self):
         self.random = random.Random(self.seed)
