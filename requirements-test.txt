@@ -17,3 +17,4 @@ matplotlib
 natsort
 git+https://github.com/narugo1992/responses.git@dev/binary
 click>=8.0.0
+gchar>=0.1.0
