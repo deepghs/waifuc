@@ -64,6 +64,18 @@ def e926_surtr():
 
 
 @pytest.fixture(scope='session')
+def gelbooru_2dogs():
+    with mock_responses_from_hf('gelbooru_2dogs'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def gelbooru_surtr():
+    with mock_responses_from_hf('gelbooru_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def huashi6_nian():
     with mock_responses_from_hf('huashi6_nian'):
         yield
