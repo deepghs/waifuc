@@ -2,7 +2,7 @@ import pytest
 import responses
 
 from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource, \
-    GelbooruSource
+    GelbooruSource, XbooruSource
 
 
 @pytest.mark.unittest
@@ -123,5 +123,25 @@ class TestSourceKonachan:
             assert 'texas_(arknights)' in item.meta['tags']
             assert 'lappland_(arknights)' in item.meta['tags']
             assert '2girls' in item.meta['tags']
+            assert 'comic' not in item.meta['tags']
+            assert 'monochrome' not in item.meta['tags']
+
+    @responses.activate
+    def test_xbooru(self, xbooru_surtr, xbooru_2dogs):
+        source = XbooruSource(['surtr_(arknights)', 'solo'])
+        items = list(source[:15])
+        assert len(items) == 15
+        for item in items:
+            assert 'surtr_(arknights)' in item.meta['tags']
+            # solo not in these tags in xbooru
+            # assert 'solo' in item.meta['tags']
+
+        source = XbooruSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
+        items = list(source[:20])
+        assert len(items) == 8
+        for item in items:
+            assert 'texas_(arknights)' in item.meta['tags']
+            assert 'lappland_(arknights)' in item.meta['tags']
+            assert '2_girls' in item.meta['tags']
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
