@@ -112,6 +112,18 @@ def pixiv_search_surtr():
 
 
 @pytest.fixture(scope='session')
+def rule34_2dogs():
+    with mock_responses_from_hf('rule34_2dogs'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def rule34_surtr():
+    with mock_responses_from_hf('rule34_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def safebooru():
     with mock_responses_from_hf('safebooru'):
         yield

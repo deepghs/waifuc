@@ -1,7 +1,7 @@
 import pytest
 import responses
 
-from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource
+from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source
 
 
 @pytest.mark.unittest
@@ -63,6 +63,25 @@ class TestSourceKonachan:
             assert 'solo' in item.meta['tags']
 
         source = LolibooruSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
+        items = list(source[:20])
+        assert len(items) == 20
+        for item in items:
+            assert 'texas_(arknights)' in item.meta['tags']
+            assert 'lappland_(arknights)' in item.meta['tags']
+            assert '2girls' in item.meta['tags']
+            assert 'comic' not in item.meta['tags']
+            assert 'monochrome' not in item.meta['tags']
+
+    @responses.activate
+    def test_rule34(self, rule34_surtr, rule34_2dogs):
+        source = Rule34Source(['surtr_(arknights)', 'solo'])
+        items = list(source[:15])
+        assert len(items) == 15
+        for item in items:
+            assert 'surtr_(arknights)' in item.meta['tags']
+            assert 'solo' in item.meta['tags']
+
+        source = Rule34Source(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
         items = list(source[:20])
         assert len(items) == 20
         for item in items:
