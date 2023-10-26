@@ -64,6 +64,12 @@ def e926_surtr():
 
 
 @pytest.fixture(scope='session')
+def huashi6_nian():
+    with mock_responses_from_hf('huashi6_nian'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def pixiv_search_surtr():
     with mock_responses_from_hf('pixiv_search_surtr'):
         yield
