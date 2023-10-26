@@ -178,6 +178,18 @@ def tbib_surtr():
 
 
 @pytest.fixture(scope='session')
+def wallhaven_id_105577():
+    with mock_responses_from_hf('wallhaven_id_105577'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def wallhaven_surtr():
+    with mock_responses_from_hf('wallhaven_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def xbooru_2dogs():
     with mock_responses_from_hf('xbooru_2dogs'):
         yield
