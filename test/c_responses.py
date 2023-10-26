@@ -166,6 +166,24 @@ def safebooru_org_surtr():
 
 
 @pytest.fixture(scope='session')
+def sankaku_2dogs():
+    with mock_responses_from_hf('sankaku_2dogs'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def sankaku_surtr():
+    with mock_responses_from_hf('sankaku_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def sankaku_texas_yuri():
+    with mock_responses_from_hf('sankaku_texas_yuri'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def tbib_2dogs():
     with mock_responses_from_hf('tbib_2dogs'):
         yield
