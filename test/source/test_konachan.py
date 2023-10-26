@@ -2,7 +2,7 @@ import pytest
 import responses
 
 from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource, \
-    GelbooruSource, XbooruSource, SafebooruOrgSource
+    GelbooruSource, XbooruSource, SafebooruOrgSource, TBIBSource
 
 
 @pytest.mark.unittest
@@ -156,6 +156,25 @@ class TestSourceKonachan:
             assert 'solo' in item.meta['tags']
 
         source = SafebooruOrgSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
+        items = list(source[:20])
+        assert len(items) == 20
+        for item in items:
+            assert 'texas_(arknights)' in item.meta['tags']
+            assert 'lappland_(arknights)' in item.meta['tags']
+            assert '2girls' in item.meta['tags']
+            assert 'comic' not in item.meta['tags']
+            assert 'monochrome' not in item.meta['tags']
+
+    @responses.activate
+    def test_tbib(self, tbib_surtr, tbib_2dogs):
+        source = TBIBSource(['surtr_(arknights)', 'solo'])
+        items = list(source[:15])
+        assert len(items) == 15
+        for item in items:
+            assert 'surtr_(arknights)' in item.meta['tags']
+            assert 'solo' in item.meta['tags']
+
+        source = TBIBSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
         items = list(source[:20])
         assert len(items) == 20
         for item in items:

@@ -1,6 +1,6 @@
 from test.responses import resp_recorder
 from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource, \
-    GelbooruSource, XbooruSource, SafebooruOrgSource
+    GelbooruSource, XbooruSource, SafebooruOrgSource, TBIBSource
 
 
 @resp_recorder()
@@ -108,4 +108,16 @@ def safebooru_org_surtr():
 @resp_recorder()
 def safebooru_org_2dogs():
     source = SafebooruOrgSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
+    _ = list(source[:20])
+
+
+@resp_recorder()
+def tbib_surtr():
+    source = TBIBSource(['surtr_(arknights)', 'solo'])
+    _ = list(source[:15])
+
+
+@resp_recorder()
+def tbib_2dogs():
+    source = TBIBSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
     _ = list(source[:20])
