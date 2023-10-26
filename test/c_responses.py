@@ -70,6 +70,30 @@ def huashi6_nian():
 
 
 @pytest.fixture(scope='session')
+def konachan_2dogs():
+    with mock_responses_from_hf('konachan_2dogs'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def konachan_net_2dogs():
+    with mock_responses_from_hf('konachan_net_2dogs'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def konachan_net_surtr():
+    with mock_responses_from_hf('konachan_net_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def konachan_surtr():
+    with mock_responses_from_hf('konachan_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def pixiv_search_surtr():
     with mock_responses_from_hf('pixiv_search_surtr'):
         yield
@@ -78,6 +102,18 @@ def pixiv_search_surtr():
 @pytest.fixture(scope='session')
 def safebooru():
     with mock_responses_from_hf('safebooru'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def yande_2dogs():
+    with mock_responses_from_hf('yande_2dogs'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def yande_surtr():
+    with mock_responses_from_hf('yande_surtr'):
         yield
 
 
