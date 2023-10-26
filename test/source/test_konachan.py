@@ -2,7 +2,7 @@ import pytest
 import responses
 
 from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource, \
-    GelbooruSource, XbooruSource
+    GelbooruSource, XbooruSource, SafebooruOrgSource
 
 
 @pytest.mark.unittest
@@ -143,5 +143,24 @@ class TestSourceKonachan:
             assert 'texas_(arknights)' in item.meta['tags']
             assert 'lappland_(arknights)' in item.meta['tags']
             assert '2_girls' in item.meta['tags']
+            assert 'comic' not in item.meta['tags']
+            assert 'monochrome' not in item.meta['tags']
+
+    @responses.activate
+    def test_safebooru_org(self, safebooru_org_surtr, safebooru_org_2dogs):
+        source = SafebooruOrgSource(['surtr_(arknights)', 'solo'])
+        items = list(source[:15])
+        assert len(items) == 15
+        for item in items:
+            assert 'surtr_(arknights)' in item.meta['tags']
+            assert 'solo' in item.meta['tags']
+
+        source = SafebooruOrgSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
+        items = list(source[:20])
+        assert len(items) == 20
+        for item in items:
+            assert 'texas_(arknights)' in item.meta['tags']
+            assert 'lappland_(arknights)' in item.meta['tags']
+            assert '2girls' in item.meta['tags']
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']

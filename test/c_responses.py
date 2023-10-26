@@ -154,6 +154,18 @@ def safebooru():
 
 
 @pytest.fixture(scope='session')
+def safebooru_org_2dogs():
+    with mock_responses_from_hf('safebooru_org_2dogs'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def safebooru_org_surtr():
+    with mock_responses_from_hf('safebooru_org_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def xbooru_2dogs():
     with mock_responses_from_hf('xbooru_2dogs'):
         yield
