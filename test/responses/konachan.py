@@ -1,5 +1,5 @@
 from test.responses import resp_recorder
-from waifuc.source import KonachanSource, KonachanNetSource, YandeSource
+from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource
 
 
 @resp_recorder()
@@ -35,4 +35,16 @@ def yande_surtr():
 @resp_recorder()
 def yande_2dogs():
     source = YandeSource(['texas_(arknights)', 'lappland_(arknights)'])
+    _ = list(source[:20])
+
+
+@resp_recorder()
+def lolibooru_surtr():
+    source = LolibooruSource(['surtr_(arknights)', 'solo'])
+    _ = list(source[:15])
+
+
+@resp_recorder()
+def lolibooru_2dogs():
+    source = LolibooruSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
     _ = list(source[:20])
