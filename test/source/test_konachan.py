@@ -1,7 +1,7 @@
 import pytest
 import responses
 
-from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source
+from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource
 
 
 @pytest.mark.unittest
@@ -90,3 +90,18 @@ class TestSourceKonachan:
             assert '2girls' in item.meta['tags']
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
+
+    @responses.activate
+    def test_hypnohub(self, hypnohub_surtr, hypnohub_2dogs):
+        source = HypnoHubSource(['surtr_(arknights)'])
+        items = list(source[:15])
+        assert len(items) == 2
+        for item in items:
+            assert 'surtr_(arknights)' in item.meta['tags']
+
+        source = HypnoHubSource(['texas_(arknights)', 'lappland_(arknights)'])
+        items = list(source[:20])
+        assert len(items) == 2
+        for item in items:
+            assert 'texas_(arknights)' in item.meta['tags']
+            assert 'lappland_(arknights)' in item.meta['tags']

@@ -1,5 +1,5 @@
 from test.responses import resp_recorder
-from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source
+from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource
 
 
 @resp_recorder()
@@ -59,4 +59,16 @@ def rule34_surtr():
 @resp_recorder()
 def rule34_2dogs():
     source = Rule34Source(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
+    _ = list(source[:20])
+
+
+@resp_recorder()
+def hypnohub_surtr():
+    source = HypnoHubSource(['surtr_(arknights)'])
+    _ = list(source[:15])
+
+
+@resp_recorder()
+def hypnohub_2dogs():
+    source = HypnoHubSource(['texas_(arknights)', 'lappland_(arknights)'])
     _ = list(source[:20])

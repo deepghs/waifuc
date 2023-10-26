@@ -70,6 +70,18 @@ def huashi6_nian():
 
 
 @pytest.fixture(scope='session')
+def hypnohub_2dogs():
+    with mock_responses_from_hf('hypnohub_2dogs'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def hypnohub_surtr():
+    with mock_responses_from_hf('hypnohub_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def konachan_2dogs():
     with mock_responses_from_hf('konachan_2dogs'):
         yield
