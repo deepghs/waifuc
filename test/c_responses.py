@@ -130,6 +130,12 @@ def lolibooru_surtr():
 
 
 @pytest.fixture(scope='session')
+def paheal_surtr():
+    with mock_responses_from_hf('paheal_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def pixiv_search_surtr():
     with mock_responses_from_hf('pixiv_search_surtr'):
         yield
