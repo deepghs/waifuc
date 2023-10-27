@@ -136,8 +136,38 @@ def paheal_surtr():
 
 
 @pytest.fixture(scope='session')
+def pixiv_ranking_day():
+    with mock_responses_from_hf('pixiv_ranking_day'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def pixiv_ranking_week_r18():
+    with mock_responses_from_hf('pixiv_ranking_week_r18'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def pixiv_search_surtr():
     with mock_responses_from_hf('pixiv_search_surtr'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def pixiv_search_surtr_original():
+    with mock_responses_from_hf('pixiv_search_surtr_original'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def pixiv_user_2864095():
+    with mock_responses_from_hf('pixiv_user_2864095'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def pixiv_user_2864095_original():
+    with mock_responses_from_hf('pixiv_user_2864095_original'):
         yield
 
 
