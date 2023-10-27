@@ -1,4 +1,4 @@
-hbutils>=0.9.0
+hbutils>=0.9.2
 pillow
 numpy
 tqdm
