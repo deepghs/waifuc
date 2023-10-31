@@ -31,3 +31,12 @@ class TestSourceZerochan:
         for item in items:
             assert 'Surtr (Arknights)' in item.meta['zerochan']['tags']
             assert 'Surtr (Arknights)' == item.meta['zerochan']['tag']
+
+    @responses.activate
+    def test_zerochan_camilla(self, zerochan_camilla_strict):
+        source = ZerochanSource('Camilla (Fire Emblem)', strict=True)
+        items = list(source[:10])
+        assert len(items) == 10
+        for item in items:
+            assert 'Camilla' in item.meta['zerochan']['tags']
+            assert 'Camilla' in item.meta['zerochan']['tag']

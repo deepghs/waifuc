@@ -1,7 +1,7 @@
 import os
 from enum import Enum
 from typing import Iterator, Union, List, Optional, Mapping, Tuple, Literal
-from urllib.parse import quote_plus
+from urllib.parse import quote_plus, urljoin
 
 from hbutils.system import urlsplit
 
@@ -108,12 +108,23 @@ class ZerochanSource(WebDataSource):
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         page = 1
         while True:
-            resp = srequest(self.session, 'GET', self._base_url,
-                            params={**self._params, 'p': str(page), 'l': '200'},
-                            raise_for_status=False)
-            if resp.status_code in {403, 404}:
+            quit_ = False
+            _base_url = self._base_url
+            while True:
+                resp = srequest(self.session, 'GET', _base_url,
+                                params={**self._params, 'p': str(page), 'l': '200'},
+                                allow_redirects=False, raise_for_status=False)
+                if resp.status_code // 100 == 3:
+                    _base_url = urljoin(_base_url, resp.headers['Location'])
+                elif resp.status_code in {403, 404}:
+                    quit_ = True
+                    break
+                else:
+                    resp.raise_for_status()
+                    break
+
+            if quit_:
                 break
-            resp.raise_for_status()
 
             json_ = resp.json()
             if 'items' in json_:
