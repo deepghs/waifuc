@@ -37,7 +37,7 @@ class ZerochanSource(WebDataSource):
     def __init__(self, word: Union[str, List[str]], sort: Sort = Sort.FAV, time: Time = Time.ALL,
                  dimension: Optional[Dimension] = None, color: Optional[str] = None, strict: bool = False,
                  select: SelectTyping = 'large', group_name: str = 'zerochan', download_silent: bool = True,
-                 user_agent=None):
+                 user_agent=None, username: Optional[str] = None, password: Optional[str] = None):
         if user_agent:
             headers = {'User-Agent': user_agent}
         else:
@@ -50,6 +50,34 @@ class ZerochanSource(WebDataSource):
         self.color = color
         self.strict = strict
         self.select = select
+
+        self.username = username
+        self._password = password
+        self._is_authed = False
+
+    def _auth(self):
+        if not self._is_authed and self.username is not None:
+            resp = self.session.post(
+                'https://www.zerochan.net/login',
+                data={
+                    'ref': '/',
+                    'name': self.username,
+                    'password': self._password,
+                    'login': 'Login'
+                },
+                headers={
+                    'Referrer': "https://www.zerochan.net/login?ref=%2F",
+                    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,'
+                              'image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7',
+                    'Accept-Encoding': 'gzip, deflate, br',
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                allow_redirects=False,
+            )
+            if resp.status_code != 303:
+                raise ConnectionError('Username or password wrong, failed to login to zerochan.net.')
+
+            self._is_authed = True
 
     @property
     def _base_url(self) -> str:
@@ -106,6 +134,7 @@ class ZerochanSource(WebDataSource):
             return urls['medium']
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
+        self._auth()
         page = 1
         while True:
             quit_ = False
