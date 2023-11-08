@@ -40,3 +40,33 @@ class TestSourceZerochan:
         for item in items:
             assert 'Camilla' in item.meta['zerochan']['tags']
             assert 'Camilla' in item.meta['zerochan']['tag']
+
+    @responses.activate
+    def test_zerochan_amiya_login(self, zerochan_amiya_login):
+        source = ZerochanSource(
+            'Amiya',
+            username='your_username',
+            password='your_password',
+        )
+        items = list(source[:10])
+        assert len(items) == 10
+        not_key = False
+        for item in items:
+            assert 'Amiya' in item.meta['zerochan']['tags']
+            if 'Amiya' not in item.meta['zerochan']['tag']:
+                not_key = True
+        assert not_key
+
+    @responses.activate
+    def test_zerochan_amiya_login_strict(self, zerochan_amiya_login_strict):
+        source = ZerochanSource(
+            'Amiya',
+            username='your_username',
+            password='your_password',
+            strict=True,
+        )
+        items = list(source[:10])
+        assert len(items) == 10
+        for item in items:
+            assert 'Amiya' in item.meta['zerochan']['tags']
+            assert 'Amiya' in item.meta['zerochan']['tag']

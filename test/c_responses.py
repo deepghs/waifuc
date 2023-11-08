@@ -268,6 +268,18 @@ def yande_surtr():
 
 
 @pytest.fixture(scope='session')
+def zerochan_amiya_login():
+    with mock_responses_from_hf('zerochan_amiya_login'):
+        yield
+
+
+@pytest.fixture(scope='session')
+def zerochan_amiya_login_strict():
+    with mock_responses_from_hf('zerochan_amiya_login_strict'):
+        yield
+
+
+@pytest.fixture(scope='session')
 def zerochan_camilla_strict():
     with mock_responses_from_hf('zerochan_camilla_strict'):
         yield
