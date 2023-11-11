@@ -16,4 +16,4 @@ __DESCRIPTION__ = 'Efficient Train Data Collector for Anime Waifu'
 __AUTHOR__ = 'narugo1992'
 
 #: Email of the authors'.
-__AUTHOR_EMAIL__ = 'narugo@126.com'
+__AUTHOR_EMAIL__ = 'narugo992@gmail.com'

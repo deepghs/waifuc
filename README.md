@@ -29,19 +29,19 @@ If you need to use it immediately, just clone it and run `pip install .`.
 PyPI version is not ready now, please install waifuc with source code.
 
 ```shell
-git+https://github.com/deepghs/waifuc.git@main#egg=waifuc
+pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc
 ```
 
 If your operating environment includes available CUDA, you can use the following installation command to achieve higher
 
 ```shell
-git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[gpu]
+pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[gpu]
 ```
 
 If you need to process with videos, you can install waifuc with
 
 ```shell
-git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[video]
+pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[video]
 ```
 
 For more information about installation, you can refer
