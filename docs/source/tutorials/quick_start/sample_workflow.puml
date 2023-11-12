@@ -1,0 +1,54 @@
+@startuml
+start
+:DanbooruSource(['surtr_(arknights)']):\nImage From Danbooru;
+:ModeConvertAction('RGB', 'white'):\nConvert Image to RGB Mode\n(Give a White Background When Transparent);
+
+if (NoMonochromeAction():\nImage is Not Monochrome) then (yes)
+  if (ClassFilterAction(['illustration', 'bangumi']):\nImage is not Comic or 3D) then (yes)
+    if (FilterSimilarAction('all'):\nImage is Not Similar With Previous Images) then (yes)
+      if (FaceCountAction(count=1):\nOnly 1 Face Found in Image) then (yes)
+        :PersonSplitAction():\nSplit Images By Different Persons Inside;
+        if (FaceCountAction(count=1):\nOnly 1 Face Found in Each Image) then (yes)
+          if (CCIPAction():\nCharacter is Not Surtr) then (no)
+            if (AlignMinSizeAction(800):\nMinimum of Width and Height Over 800) then (yes)
+              :Resize the Image,\nShorter Edge <= 800;
+            else (no)
+            endif
+            :TaggingAction(force=True):\nTagging Image with WD14 Tagger;
+            if (FilterSimilarAction('all'):\nImage is Not Similar With Previous Images) then (yes)
+              :Drop This Image;
+              stop
+            else (no)
+              if (FirstNSelectAction(200):\n200th Image Reach this Step) then (yes)
+                :Stop The Pipeline,\nNo More Images Will be Accepted;
+              else (no)
+              endif
+              :RandomFilenameAction(ext='.png'):\nRandom Rename the Image File,\nWith Extension Name .png;
+              :TextualInversionExporter('/data/surtr_dataset'):\nSave Image to directory /data/surtr_dataset;
+            endif
+          else (yes)
+            :Drop This Image;
+            stop
+          endif
+        else (no)
+          :Drop This Image;
+          stop
+        endif
+      else (no)
+        :Drop This Image;
+        stop
+      endif
+    else (no)
+      :Drop This Image;
+      stop
+    endif
+  else (no)
+    :Drop This Image;
+    stop
+  endif
+else (no)
+  :Drop This Image;
+  stop
+endif
+end
+@enduml
