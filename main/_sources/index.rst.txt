@@ -13,6 +13,10 @@ configuration file's structure and their versions.
 
     tutorials/installation/index
     tutorials/quick_start/index
+    tutorials/crawl_images/index
+    tutorials/process_images/index
+    tutorials/crawl_videos/index
+    tutorials/device/index
 
 .. toctree::
     :maxdepth: 2
