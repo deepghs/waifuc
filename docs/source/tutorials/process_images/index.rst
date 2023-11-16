@@ -7,8 +7,11 @@ For data that is about to be crawled or has already been crawled, further proces
 
 **Important Note:**
 
-1. When processing crawled data, all data sources support a caching mechanism. This means you can temporarily store data using a defined variable. For the sake of convenience, we will demonstrate using ``LocalSource`` to load local data. In reality, actions can be used with any data source.
-2. Waifuc provides a variety of preset actions. Due to space limitations, not all features will be demonstrated here. A comprehensive list of functions can be found in the documentation.
+.. note::
+
+    1. When processing crawled data, all data sources support a caching mechanism. This means you can temporarily store data using a defined variable. For the sake of convenience, we will demonstrate using ``LocalSource`` to load local data. In reality, actions can be used with any data source.
+    2. Waifuc provides a variety of preset actions. Due to space limitations, not all features will be demonstrated here. A comprehensive list of functions can be found in the documentation.
+
 
 How to Process Data
 -----------------------------
