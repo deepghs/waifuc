@@ -157,14 +157,12 @@
 
 不过好消息是，DeepGHS团队已经一定程度上解决了这个问题——团队提供了一个\ **额外的、支持多语言输入的、可以直接使用角色名字的数据源**
 
-.. note:: 让我介绍一下gchar：
-
+.. note::
     ``gchar``\为\ ``Source``\ 的扩展包，包含了\ **一个预置的角色数据库，对目前主流二游的所有角色支持：**
+        - **中/日/英官方名称检索**
+        - **神秘网友援助的别名/外号检索**
 
-   - **中/日/英官方名称检索**
-   - **神秘网友援助的别名/外号检索**
-
-(具体支持列表详见：\ https://narugo1992.github.io/gchar/main/best_practice/supported/index.html#supported-games-and-sites )
+    具体支持列表详见：\ https://narugo1992.github.io/gchar/main/best_practice/supported/index.html#supported-games-and-sites
 
 这个包通过如下命令进行安装：
 

@@ -305,8 +305,7 @@ Duitang
     .. image:: local_to_dataset.png
         :align: center
 
-.. note:: 值得注意的是:
-
+.. note::
     - \ ``LocalSource``\ **对所有本地的数据集都可进行加载，并不一定需要元数据**
 
     - 若没有json文件，得到的图像数据将不包含初始元数据，这意味着tag等信息必须重新生成
