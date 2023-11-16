@@ -1,6 +1,8 @@
 Extracting Character Images from Videos
 ================================================================
 
+(Chinese Doc：\ https://deepghs.github.io/waifuc/main/tutorials-CN/crawl_videos/index.html )
+
 Install Additional Dependencies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 

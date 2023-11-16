@@ -1,6 +1,8 @@
 Crawling Some Images From Websites
 =================================================
 
+(Chinese Doc：\ https://deepghs.github.io/waifuc/main/tutorials-CN/crawl_images/index.html )
+
 How to Crawl Data From Websites?
 ----------------------------------------------
 
