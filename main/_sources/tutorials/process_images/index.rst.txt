@@ -1,6 +1,8 @@
 Process Crawled or Local Images and Data
 =======================================================
 
+(Chinese Doc：\ https://deepghs.github.io/waifuc/main/tutorials-CN/process_images/index.html )
+
 For data that is about to be crawled or has already been crawled, further processing is often needed to make it suitable for LoRA training. This section will introduce such functionalities in waifuc.
 
 **Important Note:**

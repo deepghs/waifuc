@@ -62,6 +62,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../crawl_videos/index.html">Extracting Character Images from Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../device/index.html">How to Prevent Waifuc from Using GPU</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Information</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
@@ -99,6 +108,7 @@
     
   <section id="training-a-lora-for-my-waifu">
 <h1>Training a LoRA for My Waifu<a class="headerlink" href="#training-a-lora-for-my-waifu" title="Permalink to this heading"></a></h1>
+<p>(Chinese Doc：<a class="reference external" href="https://deepghs.github.io/waifuc/main/tutorials-CN/quick_start/index.html">https://deepghs.github.io/waifuc/main/tutorials-CN/quick_start/index.html</a> )</p>
 <p>Before we dive in, please note the following:</p>
 <ol class="arabic simple">
 <li><p>You should have Python installed and a basic understanding of Python. For Python tutorials, you can refer to <a class="reference external" href="https://python.swaroopch.com/">https://python.swaroopch.com/</a>.</p></li>
@@ -109,12 +119,12 @@
 <ol class="arabic">
 <li><p>First, get to know your waifu, especially her name and origin. For example, my waifu is the beautiful demon girl with red hair named Surtr from the mobile game Arknights.</p>
 <blockquote>
-<div><img alt="../../_images/surtr.png" class="align-center" src="../../_images/surtr.png" />
+<div><img alt="../../_images/surtr1.png" class="align-center" src="../../_images/surtr1.png" />
 </div></blockquote>
 </li>
 <li><p><strong>Find her on an image website and note the search keywords.</strong> For Surtr, you can use the tag <code class="docutils literal notranslate"><span class="pre">surtr_(arknights)</span></code> on <a class="reference external" href="https://danbooru.donmai.us/">Danbooru</a> to find her images.</p>
 <blockquote>
-<div><img alt="../../_images/danbooru_surtr.png" class="align-center" src="../../_images/danbooru_surtr.png" />
+<div><img alt="../../_images/danbooru_surtr1.png" class="align-center" src="../../_images/danbooru_surtr1.png" />
 </div></blockquote>
 </li>
 <li><p>Save the following code in a file named <code class="docutils literal notranslate"><span class="pre">crawl.py</span></code>:</p>
@@ -174,7 +184,7 @@
 </li>
 <li><p>After running the code, open the <code class="docutils literal notranslate"><span class="pre">/data/surtr_dataset</span></code> folder to find surtr’s training dataset. It contains 200 images, each with a corresponding txt file for tags.</p>
 <blockquote>
-<div><img alt="../../_images/danbooru_crawled.png" class="align-center" src="../../_images/danbooru_crawled.png" />
+<div><img alt="../../_images/danbooru_crawled1.png" class="align-center" src="../../_images/danbooru_crawled1.png" />
 </div></blockquote>
 </li>
 <li><p>Congratulations! You can now use the <code class="docutils literal notranslate"><span class="pre">/data/surtr_dataset</span></code> folder for LoRA training. 🎉</p></li>
@@ -217,7 +227,7 @@
 </li>
 </ol>
 <p>The overall process is illustrated below:</p>
-<img alt="../../_images/sample_workflow.puml.svg" class="align-center" src="../../_images/sample_workflow.puml.svg" /><p>Building upon this foundation, you can:</p>
+<img alt="../../_images/sample_workflow.puml1.svg" class="align-center" src="../../_images/sample_workflow.puml1.svg" /><p>Building upon this foundation, you can:</p>
 <ol class="arabic simple">
 <li><p><strong>Replace the data source</strong> to <strong>crawl data from other websites</strong>. We support various data sources for different websites, including Pixiv, Sankaku, Rule34, AnimePictures, Zerochan, Konachan, Duitang, Huashi6, and more.</p></li>
 <li><p>If you have images in your <strong>local folder</strong>, you can use <code class="docutils literal notranslate"><span class="pre">LocalSource</span></code> to <strong>load them into the pipeline</strong> for processing.</p></li>
@@ -322,7 +332,6 @@
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../cn_docs/tutorials/quick_start/index.html">cn_docs</a></dd>
                         <dd><a href="index.html">main</a></dd>
                 </dl>
         </div>

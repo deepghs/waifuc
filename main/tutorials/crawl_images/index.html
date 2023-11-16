@@ -73,6 +73,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../crawl_videos/index.html">Extracting Character Images from Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../device/index.html">How to Prevent Waifuc from Using GPU</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Information</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
@@ -110,10 +119,11 @@
     
   <section id="crawling-some-images-from-websites">
 <h1>Crawling Some Images From Websites<a class="headerlink" href="#crawling-some-images-from-websites" title="Permalink to this heading"></a></h1>
+<p>(Chinese Doc：<a class="reference external" href="https://deepghs.github.io/waifuc/main/tutorials-CN/crawl_images/index.html">https://deepghs.github.io/waifuc/main/tutorials-CN/crawl_images/index.html</a> )</p>
 <section id="how-to-crawl-data-from-websites">
 <h2>How to Crawl Data From Websites?<a class="headerlink" href="#how-to-crawl-data-from-websites" title="Permalink to this heading"></a></h2>
 <p>In fact, <strong>waifuc can crawl from many websites, not just Danbooru</strong>. But before we get started, allow me to formally introduce my another waifu, Amiya, a cute bunny girl. (You may ask why I have so many waifus. Well, as you know, anime lovers have an infinite number of waifus; they are all my honey and angels <strong>😍</strong>)</p>
-<img alt="../../_images/amiya.png" class="align-center" src="../../_images/amiya.png" />
+<img alt="../../_images/amiya1.png" class="align-center" src="../../_images/amiya1.png" />
 <section id="zerochan">
 <h3>Zerochan<a class="headerlink" href="#zerochan" title="Permalink to this heading"></a></h3>
 <p><a class="reference external" href="https://zerochan.net/">Zerochan</a> is a website with many high-quality images. We can crawl from it in a straightforward way. Considering we only need 50 images due to the large quantity, the following code achieves this:</p>
@@ -131,7 +141,7 @@
 </pre></div>
 </div>
 <p>Please note that we use <code class="docutils literal notranslate"><span class="pre">SaveExporter</span></code> here instead of the previous <code class="docutils literal notranslate"><span class="pre">TextureInversionExporter</span></code>. Its function will be explained in the following sections. The data crawled here will be stored locally in the <code class="docutils literal notranslate"><span class="pre">/data/amiya_zerochan</span></code> directory, as shown below:</p>
-<img alt="../../_images/zerochan_simple_50.png" class="align-center" src="../../_images/zerochan_simple_50.png" />
+<img alt="../../_images/zerochan_simple_501.png" class="align-center" src="../../_images/zerochan_simple_501.png" />
 <p>However, we’ve noticed an issue—Zerochan has many member-only images, requiring login to access. To address this, we can use our username and password for authentication to obtain more and higher-quality images:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">ZerochanSource</span>
@@ -148,7 +158,7 @@
 </pre></div>
 </div>
 <p>Indeed, we successfully obtained many member-only images, as shown below:</p>
-<img alt="../../_images/zerochan_login_50.png" class="align-center" src="../../_images/zerochan_login_50.png" />
+<img alt="../../_images/zerochan_login_501.png" class="align-center" src="../../_images/zerochan_login_501.png" />
 <p>However, many of these images have relatively low resolutions, with few exceeding 1000 pixels in either dimension. This is because Zerochan defaults to using the <code class="docutils literal notranslate"><span class="pre">large</span></code> size to speed up downloads. If you need larger images, you can modify the size selection like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">ZerochanSource</span>
@@ -184,7 +194,7 @@
 </pre></div>
 </div>
 <p>Now we have high-quality images of Amiya alone from Zerochan, as shown below:</p>
-<img alt="../../_images/zerochan_login_50_full_strict.png" class="align-center" src="../../_images/zerochan_login_50_full_strict.png" />
+<img alt="../../_images/zerochan_login_50_full_strict1.png" class="align-center" src="../../_images/zerochan_login_50_full_strict1.png" />
 </section>
 <section id="danbooru">
 <h3>Danbooru<a class="headerlink" href="#danbooru" title="Permalink to this heading"></a></h3>
@@ -384,7 +394,7 @@
 </pre></div>
 </div>
 <p>The code above first crawls 30 images from Danbooru and then another 30 from Zerochan. Consequently, we get a dataset like this:</p>
-<img alt="../../_images/source_concat.png" class="align-center" src="../../_images/source_concat.png" />
+<img alt="../../_images/source_concat1.png" class="align-center" src="../../_images/source_concat1.png" />
 <p>Moreover, in some cases, we might not know in advance the number of images each data source contains. Instead, we may want to collect images from different sources as much as possible, with a specific total quantity in mind. In such cases, we can use the union operation, as shown below:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span><span class="p">,</span> <span class="n">ZerochanSource</span>
@@ -413,7 +423,7 @@
 </pre></div>
 </div>
 <p>In this example, it randomly crawls one image at a time from either of the two websites until it collects 60 images. Thus, the final dataset is not fixed, and the following dataset is just an example:</p>
-<img alt="../../_images/source_union.png" class="align-center" src="../../_images/source_union.png" />
+<img alt="../../_images/source_union1.png" class="align-center" src="../../_images/source_union1.png" />
 <p>In fact, all waifuc data sources support such concatenation and union operations. You can even perform complex nested operations to construct a sophisticated data source:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span><span class="p">,</span> <span class="n">ZerochanSource</span><span class="p">,</span> <span class="n">PixivSearchSource</span>
@@ -488,7 +498,7 @@
 </pre></div>
 </div>
 <p>The above code crawls images from both Zerochan and Danbooru, removes the background for images from Zerochan, and saves a total of 60 images. The results you get might look similar to the following, where images from Zerochan have their backgrounds removed:</p>
-<img alt="../../_images/source_complex_attach.png" class="align-center" src="../../_images/source_complex_attach.png" />
+<img alt="../../_images/source_complex_attach1.png" class="align-center" src="../../_images/source_complex_attach1.png" />
 <p>Concatenation and union are essential features of waifuc data sources, and using them wisely makes the configuration of data sources very flexible and versatile.</p>
 </section>
 <section id="why-are-there-so-many-json-files">
@@ -672,7 +682,7 @@
 </pre></div>
 </div>
 <p>The code above reloads the dataset containing metadata that was previously saved and re-saves it in the format of the LoRA training dataset. The resulting files will look like the following:</p>
-<img alt="../../_images/local_to_dataset.png" class="align-center" src="../../_images/local_to_dataset.png" />
+<img alt="../../_images/local_to_dataset1.png" class="align-center" src="../../_images/local_to_dataset1.png" />
 <p>Of course, it’s worth noting that <code class="docutils literal notranslate"><span class="pre">LocalSource</span></code> can be used not only for paths containing metadata files but also for paths containing only images. However, it will not include the initial metadata in the pipeline, meaning that information such as tags will need to be regenerated.</p>
 <p>Additionally, like other data sources, <strong>`LocalSource` also supports concatenation and union operations</strong>. Leveraging this feature, you can use data from both the internet and local sources to build a dataset.</p>
 <p>When you are sure that you only need images and don’t need any metadata for the next loading, you can use the <code class="docutils literal notranslate"><span class="pre">no_meta</span></code> parameter of <cite>SaveExporter</cite> to achieve this:</p>
@@ -690,7 +700,7 @@
 </pre></div>
 </div>
 <p>This code will not save any metadata files, and you will precisely get 50 images, as shown below:</p>
-<img alt="../../_images/save_no_meta.png" class="align-center" src="../../_images/save_no_meta.png" />
+<img alt="../../_images/save_no_meta1.png" class="align-center" src="../../_images/save_no_meta1.png" />
 </section>
 <section id="i-don-t-want-to-save-images-to-disk-how-can-i-use-them-directly">
 <h2>I Don’t Want to Save Images to Disk, How Can I Use Them Directly?<a class="headerlink" href="#i-don-t-want-to-save-images-to-disk-how-can-i-use-them-directly" title="Permalink to this heading"></a></h2>
@@ -758,7 +768,6 @@
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../cn_docs/tutorials/crawl_images/index.html">cn_docs</a></dd>
                         <dd><a href="index.html">main</a></dd>
                 </dl>
         </div>

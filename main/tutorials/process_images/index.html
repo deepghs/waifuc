@@ -76,6 +76,15 @@
 <li class="toctree-l1"><a class="reference internal" href="../crawl_videos/index.html">Extracting Character Images from Videos</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../device/index.html">How to Prevent Waifuc from Using GPU</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Information</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
@@ -113,6 +122,7 @@
     
   <section id="process-crawled-or-local-images-and-data">
 <h1>Process Crawled or Local Images and Data<a class="headerlink" href="#process-crawled-or-local-images-and-data" title="Permalink to this heading"></a></h1>
+<p>(Chinese Doc：<a class="reference external" href="https://deepghs.github.io/waifuc/main/tutorials-CN/process_images/index.html">https://deepghs.github.io/waifuc/main/tutorials-CN/process_images/index.html</a> )</p>
 <p>For data that is about to be crawled or has already been crawled, further processing is often needed to make it suitable for LoRA training. This section will introduce such functionalities in waifuc.</p>
 <p><strong>Important Note:</strong></p>
 <div class="admonition note">
@@ -206,7 +216,7 @@
 <section id="nomonochromeaction">
 <h3>NoMonochromeAction<a class="headerlink" href="#nomonochromeaction" title="Permalink to this heading"></a></h3>
 <p>When processing training data, monochrome images (as defined <a class="reference external" href="https://danbooru.donmai.us/wiki_pages/monochrome?z=2">here</a>) often sneak in. In most cases, these images are not desirable because they can have a negative impact on the model’s training. Therefore, we want to filter them out. In waifuc, this is very simple. For example, for the following images stored in <code class="docutils literal notranslate"><span class="pre">/data/raw</span></code>:</p>
-<img alt="../../_images/monochrome_raw.png" class="align-center" src="../../_images/monochrome_raw.png" />
+<img alt="../../_images/monochrome_raw1.png" class="align-center" src="../../_images/monochrome_raw1.png" />
 <p>We can use the following code to filter out monochrome images:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
@@ -223,12 +233,12 @@
 </div>
 <p>However, note that depending on the content of the images, this action may also filter out images with color that are too similar to monochrome images.</p>
 <p>Non-monochrome images will be saved in the <code class="docutils literal notranslate"><span class="pre">/data/dstdataset</span></code> path, as shown below:</p>
-<img alt="../../_images/monochrome_processed.png" class="align-center" src="../../_images/monochrome_processed.png" />
+<img alt="../../_images/monochrome_processed1.png" class="align-center" src="../../_images/monochrome_processed1.png" />
 </section>
 <section id="classfilteraction">
 <h3>ClassFilterAction<a class="headerlink" href="#classfilteraction" title="Permalink to this heading"></a></h3>
 <p>Similarly, when processing training data, there are often manga and 3D images mixed in. In most cases, we want to exclude them. This is also very easy for waifuc. For example, for the following image:</p>
-<img alt="../../_images/class_raw.png" class="align-center" src="../../_images/class_raw.png" />
+<img alt="../../_images/class_raw1.png" class="align-center" src="../../_images/class_raw1.png" />
 <p>You can use the following code to filter out manga (images with comic frames) and 3D images:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">ClassFilterAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
@@ -245,12 +255,12 @@
 </pre></div>
 </div>
 <p>The final saved images are accurately filtered out:</p>
-<img alt="../../_images/class_processed.png" class="align-center" src="../../_images/class_processed.png" />
+<img alt="../../_images/class_processed1.png" class="align-center" src="../../_images/class_processed1.png" />
 </section>
 <section id="filtersimilaraction">
 <h3>FilterSimilarAction<a class="headerlink" href="#filtersimilaraction" title="Permalink to this heading"></a></h3>
 <p>When fetching data, we often need to filter out identical or similar images. In waifuc, there is a <code class="docutils literal notranslate"><span class="pre">FilterSimilarAction</span></code> based on the <a class="reference external" href="https://github.com/richzhang/PerceptualSimilarity">LPIPS model</a> to filter similar images. For example, for the following 10 images:</p>
-<img alt="../../_images/lpips_raw.png" class="align-center" src="../../_images/lpips_raw.png" />
+<img alt="../../_images/lpips_raw1.png" class="align-center" src="../../_images/lpips_raw1.png" />
 <p>You can use the following code to filter out similar images:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FilterSimilarAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
@@ -266,12 +276,12 @@
 </pre></div>
 </div>
 <p>The final images obtained are as follows:</p>
-<img alt="../../_images/lpips_processed.png" class="align-center" src="../../_images/lpips_processed.png" />
+<img alt="../../_images/lpips_processed1.png" class="align-center" src="../../_images/lpips_processed1.png" />
 </section>
 <section id="taggingaction">
 <h3>TaggingAction<a class="headerlink" href="#taggingaction" title="Permalink to this heading"></a></h3>
 <p>To train a LoRA dataset, it is generally necessary to label the content of the images. The specific format is an image plus a text file with the same name. For example, for the following set of images:</p>
-<img alt="../../_images/tagging_raw.png" class="align-center" src="../../_images/tagging_raw.png" />
+<img alt="../../_images/tagging_raw1.png" class="align-center" src="../../_images/tagging_raw1.png" />
 <p>You can use the following code to generate tags for them and export them using <code class="docutils literal notranslate"><span class="pre">TextureInversionExporter</span></code>:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">TaggingAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">TextualInversionExporter</span>
@@ -287,7 +297,7 @@
 </pre></div>
 </div>
 <p>The resulting dataset looks like this:</p>
-<img alt="../../_images/tagging_processed.png" class="align-center" src="../../_images/tagging_processed.png" />
+<img alt="../../_images/tagging_processed1.png" class="align-center" src="../../_images/tagging_processed1.png" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ol class="arabic simple">
@@ -299,7 +309,7 @@
 <section id="personsplitaction">
 <h3>PersonSplitAction<a class="headerlink" href="#personsplitaction" title="Permalink to this heading"></a></h3>
 <p>When fetching images, you may encounter images with multiple people. In some cases, we may want to split the various characters in the image to facilitate further filtering. In such cases, you can use <cite>PersonSplitAction</cite>. For example, for the following image:</p>
-<img alt="../../_images/person_split_raw.png" class="align-center" src="../../_images/person_split_raw.png" />
+<img alt="../../_images/person_split_raw1.png" class="align-center" src="../../_images/person_split_raw1.png" />
 <p>You can use the following code to split the image:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">PersonSplitAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
@@ -315,12 +325,12 @@
 </pre></div>
 </div>
 <p>The final split and saved images look like this:</p>
-<img alt="../../_images/person_split_processed.png" class="align-center" src="../../_images/person_split_processed.png" />
+<img alt="../../_images/person_split_processed1.png" class="align-center" src="../../_images/person_split_processed1.png" />
 </section>
 <section id="facecountaction">
 <h3>FaceCountAction<a class="headerlink" href="#facecountaction" title="Permalink to this heading"></a></h3>
 <p>Waifuc can also filter based on the number of faces in an image. For example, for the following set of images:</p>
-<img alt="../../_images/face_count_raw.png" class="align-center" src="../../_images/face_count_raw.png" />
+<img alt="../../_images/face_count_raw1.png" class="align-center" src="../../_images/face_count_raw1.png" />
 <p>You can use the following code to filter out images with only one face:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FaceCountAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
@@ -336,7 +346,7 @@
 </pre></div>
 </div>
 <p>The resulting dataset looks like this, with photos containing multiple faces filtered out:</p>
-<img alt="../../_images/face_count_processed.png" class="align-center" src="../../_images/face_count_processed.png" />
+<img alt="../../_images/face_count_processed1.png" class="align-center" src="../../_images/face_count_processed1.png" />
 </section>
 <section id="ccipaction">
 <h3>CCIPAction<a class="headerlink" href="#ccipaction" title="Permalink to this heading"></a></h3>
@@ -356,7 +366,7 @@
 </pre></div>
 </div>
 <p>The effect is shown in the image below. Seven irrelevant images are randomly removed from a total of 32 images:</p>
-<img alt="../../_images/ccip_simple.jpeg" class="align-center" src="../../_images/ccip_simple.jpeg" />
+<img alt="../../_images/ccip_simple1.jpeg" class="align-center" src="../../_images/ccip_simple1.jpeg" />
 <p>Moreover, when we stack <code class="docutils literal notranslate"><span class="pre">PersonSplitAction</span></code> and <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code>, we can filter images that contain both single and multiple characters in the data source (which is actually very common). The code is as follows:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">CCIPAction</span><span class="p">,</span> <span class="n">PersonSplitAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
@@ -373,7 +383,7 @@
 </pre></div>
 </div>
 <p>The effect is shown in the image below:</p>
-<img alt="../../_images/ccip_complex.jpeg" class="align-center" src="../../_images/ccip_complex.jpeg" />
+<img alt="../../_images/ccip_complex1.jpeg" class="align-center" src="../../_images/ccip_complex1.jpeg" />
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <ol class="arabic simple">
@@ -420,7 +430,7 @@
 <section id="threestagesplitaction">
 <h3>ThreeStageSplitAction<a class="headerlink" href="#threestagesplitaction" title="Permalink to this heading"></a></h3>
 <p>In some experiments related to LoRA character model training, it has been preliminarily proven that splitting the same portrait image again for model training can improve LoRA’s generalization and enhance the fidelity of character details. Therefore, waifuc also supports such operations. For example, for the following set of images:</p>
-<img alt="../../_images/3stage_raw.png" class="align-center" src="../../_images/3stage_raw.png" />
+<img alt="../../_images/3stage_raw1.png" class="align-center" src="../../_images/3stage_raw1.png" />
 <p>You can use <code class="docutils literal notranslate"><span class="pre">ThreeStageSplitAction</span></code> to split the images into full body - upper body - head, as shown in the code below:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">ThreeStageSplitAction</span><span class="p">,</span> <span class="n">FilterSimilarAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
@@ -437,7 +447,7 @@
 </pre></div>
 </div>
 <p>The <code class="docutils literal notranslate"><span class="pre">FilterSimilarAction</span></code> can filter out highly similar sub-images that may appear after the split. It is recommended to add this action. The final processed dataset looks like this:</p>
-<img alt="../../_images/3stage_processed.png" class="align-center" src="../../_images/3stage_processed.png" />
+<img alt="../../_images/3stage_processed1.png" class="align-center" src="../../_images/3stage_processed1.png" />
 </section>
 </section>
 <section id="other-actions">
@@ -482,7 +492,6 @@
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../cn_docs/tutorials/process_images/index.html">cn_docs</a></dd>
                         <dd><a href="index.html">main</a></dd>
                 </dl>
         </div>

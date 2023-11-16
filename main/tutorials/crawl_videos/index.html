@@ -63,6 +63,15 @@
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../device/index.html">How to Prevent Waifuc from Using GPU</a></li>
 </ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
 <p class="caption" role="heading"><span class="caption-text">Information</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
@@ -100,6 +109,7 @@
     
   <section id="extracting-character-images-from-videos">
 <h1>Extracting Character Images from Videos<a class="headerlink" href="#extracting-character-images-from-videos" title="Permalink to this heading"></a></h1>
+<p>(Chinese Doc：<a class="reference external" href="https://deepghs.github.io/waifuc/main/tutorials-CN/crawl_videos/index.html">https://deepghs.github.io/waifuc/main/tutorials-CN/crawl_videos/index.html</a> )</p>
 <section id="install-additional-dependencies">
 <h2>Install Additional Dependencies<a class="headerlink" href="#install-additional-dependencies" title="Permalink to this heading"></a></h2>
 <p>waifuc also provides a method to extract images from videos. Before running, you need to install additional dependencies, including the <code class="docutils literal notranslate"><span class="pre">pyav</span></code> library, for video processing:</p>
@@ -123,7 +133,7 @@
 </pre></div>
 </div>
 <p>The saved images look like this:</p>
-<img alt="../../_images/video_simple.png" class="align-center" src="../../_images/video_simple.png" />
+<img alt="../../_images/video_simple1.png" class="align-center" src="../../_images/video_simple1.png" />
 </section>
 <section id="extract-images-from-a-folder-containing-videos">
 <h2>Extract Images from a Folder Containing Videos<a class="headerlink" href="#extract-images-from-a-folder-containing-videos" title="Permalink to this heading"></a></h2>
@@ -158,7 +168,7 @@
 </pre></div>
 </div>
 <p>The code above extracts frames from videos and saves portraits obtained from those frames, as shown below:</p>
-<img alt="../../_images/video_split.png" class="align-center" src="../../_images/video_split.png" />
+<img alt="../../_images/video_split1.png" class="align-center" src="../../_images/video_split1.png" />
 <p>However, it seems that some images are not suitable for training. Therefore, in actual anime videos, you can add more actions to obtain a higher quality training dataset. For example, the following code:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">PersonSplitAction</span><span class="p">,</span> <span class="n">FilterSimilarAction</span><span class="p">,</span> <span class="n">FileOrderAction</span><span class="p">,</span> <span class="n">MinSizeFilterAction</span><span class="p">,</span> <span class="n">FaceCountAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
@@ -191,7 +201,7 @@
 </pre></div>
 </div>
 <p>This will result in the following dataset:</p>
-<img alt="../../_images/video_split_better.png" class="align-center" src="../../_images/video_split_better.png" />
+<img alt="../../_images/video_split_better1.png" class="align-center" src="../../_images/video_split_better1.png" />
 </section>
 </section>
 
@@ -230,7 +240,6 @@
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../cn_docs/tutorials/crawl_videos/index.html">cn_docs</a></dd>
                         <dd><a href="index.html">main</a></dd>
                 </dl>
         </div>

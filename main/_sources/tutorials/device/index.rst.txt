@@ -1,6 +1,8 @@
 How to Prevent Waifuc from Using GPU
 =====================================================
 
+(Chinese Doc：\ https://deepghs.github.io/waifuc/main/tutorials-CN/device/index.html )
+
 Preventing GPU Usage in Waifuc
 ---------------------------------------------
 
