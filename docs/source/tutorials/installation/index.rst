@@ -1,6 +1,8 @@
 Installation
 ===================
 
+(Chinese Doc：\ https://deepghs.github.io/waifuc/main/tutorials-CN/installation/index.html )
+
 waifuc is currently hosted on PyPI. It required python >= 3.8.
 
 You can simply install waifuc from PyPI with the following command:

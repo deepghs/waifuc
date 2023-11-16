@@ -1,6 +1,8 @@
 Training a LoRA for My Waifu
 ======================================
 
+(Chinese Doc：\ https://deepghs.github.io/waifuc/main/tutorials-CN/quick_start/index.html )
+
 Before we dive in, please note the following:
 
 1. You should have Python installed and a basic understanding of Python. For Python tutorials, you can refer to `https://python.swaroopch.com/ <https://python.swaroopch.com/>`_.

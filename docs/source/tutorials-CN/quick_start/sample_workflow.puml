@@ -1,0 +1,54 @@
+@startuml
+start
+:DanbooruSource(['surtr_(arknights)']):\n从Danbooru爬取图像数据;
+:ModeConvertAction('RGB', 'white')\n转换为RGB色彩格式\n(对透明背景的添加白色背景);
+
+if (NoMonochromeAction()\n是否是单色图？) then (否)
+  if (ClassFilterAction(['illustration', 'bangumi'])\n是否是插画或番剧截图？) then (是)
+    if (FilterSimilarAction('all')\n和处理过的图像数据是否相似？) then (否)
+      if (FaceCountAction(count=1)\n是否包含且仅包含单一人像？) then (是)
+        :PersonSplitAction()\n裁出图像中包含人物的部分;
+        if (FaceCountAction(count=1)\n是否包含且仅包含单一人像？) then (是)
+          if (CCIPAction()\n人物是否为史尔特尔？) then (是)
+            if (AlignMinSizeAction(800)\n短边是否大于800像素？) then (是)
+              :等比例压缩图像数据至短边长度为800像素;
+            else (否)
+            endif
+            :TaggingAction(force=True)\n通过WD14打标器进行图像数据标注;
+            if (FilterSimilarAction('all')\n和处理过的图像数据是否相似？) then (是)
+              :丢弃本图像数据;
+              stop
+            else (否)
+              if (FirstNSelectAction(200)\n处理到这一步的图像数据是否有200张？) then (是)
+                :停止后继图像数据的处理并关闭流水线;
+              else (否)
+              endif
+              :RandomFilenameAction(ext='.png')\n随机命名处理后的图像数据并保存为PNG扩展名图像文件;
+              :TextualInversionExporter('/data/surtr_dataset')\n将图像文件保存到指定的目录;
+            endif
+          else (否)
+            :丢弃本图像数据;
+            stop
+          endif
+        else (否)
+          :丢弃本图像数据;
+          stop
+        endif
+      else (否)
+        :丢弃本图像数据;
+        stop
+      endif
+    else (是)
+      :丢弃本图像数据;
+      stop
+    endif
+  else (否)
+    :丢弃本图像数据;
+    stop
+  endif
+else (是)
+  :丢弃本图像数据;
+  stop
+endif
+end
+@enduml

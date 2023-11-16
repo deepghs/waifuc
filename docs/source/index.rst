@@ -20,6 +20,17 @@ configuration file's structure and their versions.
 
 .. toctree::
     :maxdepth: 2
+    :caption: 中文教程
+
+    tutorials-CN/installation/index
+    tutorials-CN/quick_start/index
+    tutorials-CN/crawl_images/index
+    tutorials-CN/process_images/index
+    tutorials-CN/crawl_videos/index
+    tutorials-CN/device/index
+
+.. toctree::
+    :maxdepth: 2
     :caption: Best Practice
 
 .. toctree::
