@@ -9,7 +9,7 @@ You can simply install waifuc from PyPI with the following command:
 
 .. code:: shell
 
-    pip install waifuc
+    pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc
 
 You can also install with the newest version through GitHub:
 

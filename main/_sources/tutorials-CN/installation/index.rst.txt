@@ -19,7 +19,7 @@ waifuc目前已经由PYPI包管理器进行托管，需要的Python版本为3.8�
 
     .. code:: shell
 
-        pip install waifuc
+        pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc
 
 检查安装是否成功时，可使用pip指令，如下所示：
 
