@@ -21,7 +21,7 @@ class VideoSource(BaseDataSource):
     def __init__(self, video_file):
         if av is None:
             raise ImportError(f'pyav not installed, {self.__class__.__name__} is unavailable. '
-                              f'Please install this with `pip install waifuc[video]` to solve this problem.')
+                              f'Please install this with `pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[video]` to solve this problem.')
         self.video_file = video_file
 
     def _iter(self) -> Iterator[ImageItem]:
