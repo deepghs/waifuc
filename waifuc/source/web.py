@@ -27,9 +27,12 @@ class WebDataSource(RootDataSource):
 
     def _iter(self) -> Iterator[ImageItem]:
         for id_, url, meta in self._iter_data():
+            _, ext_name = os.path.splitext(urlsplit(url).filename)
+            if ext_name.lower() == '.gif':
+                warnings.warn(f'{self.group_name.capitalize()} resource {id_} is a GIF image, skipped.')
+                continue
+            filename = f'{self.group_name}_{id_}{ext_name}'
             with TemporaryDirectory(ignore_cleanup_errors=True) as td:
-                _, ext_name = os.path.splitext(urlsplit(url).filename)
-                filename = f'{self.group_name}_{id_}{ext_name}'
                 td_file = os.path.join(td, filename)
                 try:
                     download_file(
