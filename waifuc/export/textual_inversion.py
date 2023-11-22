@@ -10,8 +10,8 @@ class TextualInversionExporter(LocalDirectoryExporter):
     def __init__(self, output_dir: str, clear: bool = False,
                  use_spaces: bool = False, use_escape: bool = True,
                  include_score: bool = False, score_descend: bool = True,
-                 skip_when_image_exist: bool = False):
-        LocalDirectoryExporter.__init__(self, output_dir, clear)
+                 skip_when_image_exist: bool = False, ignore_error_when_export: bool = False):
+        LocalDirectoryExporter.__init__(self, output_dir, clear, ignore_error_when_export)
         self.use_spaces = use_spaces
         self.use_escape = use_escape
         self.include_score = include_score

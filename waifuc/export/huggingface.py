@@ -12,7 +12,9 @@ from ..model import ImageItem
 class HuggingFaceExporter(BaseExporter):
     def __init__(self, repository: str, file_in_repo: str,
                  cls: Type[LocalDirectoryExporter], args: tuple = (), kwargs: Optional[Mapping[str, Any]] = None,
-                 repo_type: str = 'dataset', revision: str = 'main', hf_token: Optional[str] = None):
+                 repo_type: str = 'dataset', revision: str = 'main', hf_token: Optional[str] = None,
+                 ignore_error_when_export: bool = False):
+        BaseExporter.__init__(self, ignore_error_when_export)
         self.repository = repository
         self.repo_type, self.revision = repo_type, revision
         self.file_in_repo = file_in_repo
