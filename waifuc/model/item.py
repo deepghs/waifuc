@@ -1,8 +1,9 @@
 import json
+import logging
 import os.path
 import pickle
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Mapping, Any
 
 from PIL import Image
 from hbutils.encoding import base64_decode, base64_encode
@@ -80,11 +81,14 @@ class ImageItem:
 
         return cls(image, meta)
 
-    def save(self, image_file, no_meta: bool = False, skip_when_image_exist: bool = False):
+    def save(self, image_file, no_meta: bool = False, skip_when_image_exist: bool = False,
+             save_params: Optional[Mapping[str, Any]] = None):
         if not skip_when_image_exist or not os.path.exists(image_file):
-            self.image.save(image_file)
+            logging.debug(f'Saving image to {image_file!r}, params: {save_params or {}!r} ...')
+            self.image.save(image_file, **(save_params or {}))
         if not no_meta and self.meta:
             meta_file = self._image_file_to_meta_file(image_file)
+            logging.debug(f'Saving metadata file for image {image_file!r} to {meta_file!r} ...')
             with open(meta_file, 'w', encoding='utf-8') as f:
                 json.dump(dump_meta(self.meta), f)
 

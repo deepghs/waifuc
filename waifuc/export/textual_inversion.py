@@ -1,4 +1,5 @@
 import os
+from typing import Optional, Mapping, Any
 
 from imgutils.tagging import tags_to_text
 
@@ -10,7 +11,8 @@ class TextualInversionExporter(LocalDirectoryExporter):
     def __init__(self, output_dir: str, clear: bool = False,
                  use_spaces: bool = False, use_escape: bool = True,
                  include_score: bool = False, score_descend: bool = True,
-                 skip_when_image_exist: bool = False, ignore_error_when_export: bool = False):
+                 skip_when_image_exist: bool = False, ignore_error_when_export: bool = False,
+                 save_params: Optional[Mapping[str, Any]] = None):
         LocalDirectoryExporter.__init__(self, output_dir, clear, ignore_error_when_export)
         self.use_spaces = use_spaces
         self.use_escape = use_escape
@@ -18,6 +20,7 @@ class TextualInversionExporter(LocalDirectoryExporter):
         self.score_descend = score_descend
         self.untitles = 0
         self.skip_when_image_exist = skip_when_image_exist
+        self.save_params = save_params or {}
 
     def export_item(self, item: ImageItem):
         if 'filename' in item.meta:
@@ -35,7 +38,7 @@ class TextualInversionExporter(LocalDirectoryExporter):
             os.makedirs(full_directory, exist_ok=True)
 
         if not self.skip_when_image_exist or not os.path.exists(full_filename):
-            item.image.save(full_filename)
+            item.image.save(full_filename, **(self.save_params or {}))
         with open(full_tagname, 'w', encoding='utf-8') as f:
             f.write(tags_to_text(tags, self.use_spaces, self.use_escape, self.include_score, self.score_descend))
 
