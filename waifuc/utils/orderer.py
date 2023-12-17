@@ -3,16 +3,21 @@ from typing import Dict, Optional
 
 
 class Orderer:
+    def __init__(self):
+        self._current = -1
+
+    @property
+    def current(self):
+        return self._current
+
     def step(self) -> int:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def wait_for_num(self, num: int, timeout: Optional[float] = None) -> bool:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class NoBlockOrderer(Orderer):
-    def __init__(self):
-        self._current = -1
 
     def step(self) -> int:
         self._current += 1
@@ -24,8 +29,8 @@ class NoBlockOrderer(Orderer):
 
 class SerializableOrderer(Orderer):
     def __init__(self):
+        Orderer.__init__(self)
         self._events: Dict[int, Event] = {}
-        self._current = -1
         self._lock = Lock()
 
     def step(self) -> int:
