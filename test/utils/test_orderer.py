@@ -108,4 +108,5 @@ class TestUtilsOrderer:
         assert [serializable.step() for i in range(10)] == [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
         assert v10.wait()
         assert v10.is_set
+        assert v10x.wait()
         assert v10x.is_set
