@@ -1,5 +1,7 @@
 import os
+import os
 import warnings
+from threading import Thread
 from typing import Iterator, Tuple, Union, Optional
 
 import requests
@@ -9,7 +11,8 @@ from hbutils.system import urlsplit, TemporaryDirectory
 
 from .base import RootDataSource
 from ..model import ImageItem
-from ..utils import get_requests_session, download_file
+from ..utils import get_requests_session, download_file, SerializableParallelModule, NonSerializableParallelModule, \
+    Stopped
 
 
 class NoURL(Exception):
@@ -60,3 +63,42 @@ class WebDataSource(BaseWebDataSource):
             item = self._get_item(id_, url, meta)
             if item is not None:
                 yield item
+
+
+class ParallelWebDataSource(BaseWebDataSource):
+    def __init__(self, group_name: str, session: requests.Session = None, download_silent: bool = True,
+                 max_workers: Optional[int] = None, serializable: bool = True):
+        BaseWebDataSource.__init__(self, group_name, session, download_silent)
+        if serializable:
+            self._parallel = SerializableParallelModule(max_workers=max_workers)
+        else:
+            self._parallel = NonSerializableParallelModule(max_workers=max_workers)
+        self._thread = Thread(target=self._fn_item_load)
+
+    def _fn_item_load(self):
+        for id_, url, meta in self._iter_data():
+            try:
+                self._parallel.submit_task(self._get_item, id_, url, meta)
+            except Stopped:
+                break
+
+        self._parallel.shutdown()
+
+    def cleanup(self):
+        self._parallel.shutdown()
+        self._parallel.join()
+        self._thread.join()
+
+    def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
+        raise NotImplementedError  # pragma: no cover
+
+    def _iter(self) -> Iterator[ImageItem]:
+        self._thread.start()
+        while True:
+            try:
+                item = self._parallel.next_value()
+            except Stopped:
+                break
+            else:
+                if item is not None:
+                    yield item

@@ -15,5 +15,5 @@ from .pixiv import BasePixivSource, PixivSearchSource, PixivUserSource, PixivRan
 from .sankaku import SankakuSource, PostOrder, Rating, FileType
 from .video import VideoSource
 from .wallhaven import WallHavenSource
-from .web import WebDataSource
+from .web import WebDataSource, BaseWebDataSource, ParallelWebDataSource
 from .zerochan import ZerochanSource
