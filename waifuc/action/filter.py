@@ -1,4 +1,4 @@
-from typing import List, Optional, Literal
+from typing import List, Optional, Literal, Union
 
 from imgutils.detect import detect_faces, detect_heads, detect_person
 from imgutils.validate import is_monochrome, anime_classify, anime_rating
@@ -46,7 +46,7 @@ class RatingFilterAction(FilterAction):
 
 
 class FaceCountAction(FilterAction):
-    def __init__(self, count: int, level: str = 's', version: str = 'v1.4',
+    def __init__(self, count: Union[int, range], level: str = 's', version: str = 'v1.4',
                  conf_threshold: float = 0.25, iou_threshold: float = 0.7):
         self.count = count
         self.level = level
@@ -57,11 +57,15 @@ class FaceCountAction(FilterAction):
     def check(self, item: ImageItem) -> bool:
         detection = detect_faces(item.image, self.level, self.version,
                                  conf_threshold=self.conf_threshold, iou_threshold=self.iou_threshold)
-        return len(detection) == self.count
+        if isinstance(self.count, range):
+            return len(detection) in self.count
+        else:
+            return len(detection) == self.count
 
 
 class HeadCountAction(FilterAction):
-    def __init__(self, count: int, level: str = 's', conf_threshold: float = 0.3, iou_threshold: float = 0.7):
+    def __init__(self, count: Union[int, range], level: str = 's',
+                 conf_threshold: float = 0.3, iou_threshold: float = 0.7):
         self.count = count
         self.level = level
         self.conf_threshold = conf_threshold
@@ -73,7 +77,10 @@ class HeadCountAction(FilterAction):
             conf_threshold=self.conf_threshold,
             iou_threshold=self.iou_threshold
         )
-        return len(detection) == self.count
+        if isinstance(self.count, range):
+            return len(detection) in self.count
+        else:
+            return len(detection) == self.count
 
 
 class PersonRatioAction(FilterAction):
