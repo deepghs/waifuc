@@ -1,5 +1,7 @@
 import abc
+import os
 from concurrent.futures import Executor, ThreadPoolExecutor
+from queue import Queue, Full, Empty
 from threading import Lock, Event
 
 from .idorder import IDOrder
@@ -27,7 +29,7 @@ class ParallelModule(abc.ABC):
 class SerializableParallelModule(ParallelModule):
     def __init__(self, max_workers: int = None):
         self._executor_value = None
-        self._max_workers = max_workers
+        self._max_workers = max_workers or os.cpu_count()
 
         # states
         self._current_task_id = -1
@@ -110,3 +112,78 @@ class SerializableParallelModule(ParallelModule):
                 retval = self._retvals[current]
                 del self._retvals[current]
                 return retval
+
+
+class NonSerializableParallelModule(ParallelModule):
+
+    def __init__(self, max_workers: int = None):
+        self._executor_value = None
+        self._max_workers = max_workers or os.cpu_count()
+        self._queue = Queue(maxsize=self._max_workers)
+
+        # global signals
+        self._stop_event = Event()
+        self._global_lock = Lock()
+
+    @property
+    def _executor(self) -> Executor:
+        if self._executor_value is None:
+            self._executor_value = ThreadPoolExecutor(max_workers=self._max_workers)
+        return self._executor_value
+
+    def _func_wrapper(self, func, *args, **kwargs):
+        event = Event()
+
+        def _new_func():
+            event.set()
+            if self._stop_event.is_set():
+                return
+
+            retval = func(*args, **kwargs)
+
+            while True:
+                if self._stop_event.is_set():
+                    return
+                try:
+                    self._queue.put(retval, block=True, timeout=1.0)
+                except Full:
+                    pass
+                else:
+                    break
+
+        return _new_func, event
+
+    def submit_task(self, func, *args, **kwargs):
+        with self._global_lock:
+            if self._stop_event.is_set():
+                raise Stopped('Stopped. New tasks no longer available.')
+
+            func, start_event = self._func_wrapper(func, *args, **kwargs)
+            self._executor.submit(func)
+
+        start_event.wait()
+
+    def shutdown(self):
+        with self._global_lock:
+            self._executor.shutdown(wait=False)
+            self._stop_event.set()
+
+    def join(self):
+        self._stop_event.wait()
+        self._executor.shutdown(wait=True)
+
+    def next_value(self):
+        with self._global_lock:
+            if self._stop_event.is_set():
+                raise Stopped('Stopped. No more values available.')
+
+        while True:
+            if self._stop_event.is_set():
+                raise Stopped('Stopped. No more values available.')
+
+            try:
+                value = self._queue.get(block=True, timeout=1.0)
+            except Empty:
+                pass
+            else:
+                return value

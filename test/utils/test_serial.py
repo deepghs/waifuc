@@ -33,7 +33,7 @@ def send_20_nums(serial):
                 break
 
         event.set()
-        time.sleep(0.5)
+        time.sleep(1.0)
         serial.shutdown()
         serial.join()
 
