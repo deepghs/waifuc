@@ -12,16 +12,16 @@ class Stopped(Exception):
 
 class ParallelModule(abc.ABC):
     def submit_task(self, func, *args, **kwargs):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def shutdown(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def join(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def next_value(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
 
 class SerializableParallelModule(ParallelModule):
