@@ -54,7 +54,7 @@ class HeadCutOutAction(BaseAction):
 
 
 class HeadCoverAction(ProcessAction):
-    def __init__(self, color: str = 'black', scale: float = 1.2, level: str = 's', max_infer_size=640,
+    def __init__(self, color: str = 'black', scale: float = 0.8, level: str = 's', max_infer_size=640,
                  conf_threshold: float = 0.3, iou_threshold: float = 0.7):
         self.color = color
         self.scale = scale
