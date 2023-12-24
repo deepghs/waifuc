@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Prevent Waifuc from Using GPU &mdash; waifuc 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c9d0a6ec" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="使用须知" href="../../tutorials-CN/installation/index.html" />
+    <link rel="prev" title="Extracting Character Images from Videos" href="../crawl_videos/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            waifuc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">Training a LoRA for My Waifu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_images/index.html">Crawling Some Images From Websites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_images/index.html">Process Crawled or Local Images and Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_videos/index.html">Extracting Character Images from Videos</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Prevent Waifuc from Using GPU</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#preventing-gpu-usage-in-waifuc">Preventing GPU Usage in Waifuc</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#minimum-hardware-requirements-for-waifuc">Minimum Hardware Requirements for Waifuc</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">waifuc.config</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">waifuc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How to Prevent Waifuc from Using GPU</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/device/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+    
+    
+  <section id="how-to-prevent-waifuc-from-using-gpu">
+<h1>How to Prevent Waifuc from Using GPU<a class="headerlink" href="#how-to-prevent-waifuc-from-using-gpu" title="Permalink to this heading"></a></h1>
+<p>(Chinese Doc：<a class="reference external" href="https://deepghs.github.io/waifuc/main/tutorials-CN/device/index.html">https://deepghs.github.io/waifuc/main/tutorials-CN/device/index.html</a> )</p>
+<section id="preventing-gpu-usage-in-waifuc">
+<h2>Preventing GPU Usage in Waifuc<a class="headerlink" href="#preventing-gpu-usage-in-waifuc" title="Permalink to this heading"></a></h2>
+<p>In reality, many actions in Waifuc are based on <a class="reference external" href="https://en.wikipedia.org/wiki/Open_Neural_Network_Exchange">ONNX</a> models. Therefore, <strong>when waifuc detects the presence of available CUDA in the environment, it prioritizes using the GPU</strong> for model-related computations to enhance efficiency.</p>
+<p>However, in some cases, we may not want Waifuc to use the GPU (for example, when running a1111’s stable diffusion webui while processing data). In such cases, <strong>you can set the ONNX_MODE environment variable to force it to use the CPU for execution</strong>.</p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span><span class="c1"># Linux</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">ONNX_MODE</span><span class="o">=</span>cpu
+
+<span class="c1"># Windows, CMD</span>
+<span class="nb">set</span><span class="w"> </span><span class="nv">ONNX_MODE</span><span class="o">=</span>cpu
+</pre></div>
+</div>
+</section>
+<section id="minimum-hardware-requirements-for-waifuc">
+<h2>Minimum Hardware Requirements for Waifuc<a class="headerlink" href="#minimum-hardware-requirements-for-waifuc" title="Permalink to this heading"></a></h2>
+<p>As demonstrated above, it’s evident that <strong>Waifuc can operate normally even without a GPU</strong>, and its performance is completely acceptable.</p>
+<p>Based on our tests, <strong>Waifuc can run successfully in cloud environments with only 2 CPU cores and 6GB of memory, without a GPU</strong>. Examples of such environments include GitHub Actions and Huggingface Space. The adaptability of Waifuc to lower hardware configurations in these free-running environments allowed us to complete the scraping of datasets for over a thousand anime waifus without spending a penny.</p>
+<p>Therefore, <strong>Waifuc can practically be considered to run smoothly on almost all desktops or laptops</strong>.</p>
+</section>
+</section>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../crawl_videos/index.html" class="btn btn-neutral float-left" title="Extracting Character Images from Videos" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../tutorials-CN/installation/index.html" class="btn btn-neutral float-right" title="使用须知" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, narugo1992.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev/truncated
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">dev/truncated</a></dd>
+                        <dd><a href="../../../count/tutorials/device/index.html">dev/count</a></dd>
+                        <dd><a href="../../../head/tutorials/device/index.html">dev/head</a></dd>
+                        <dd><a href="../../../parallel/tutorials/device/index.html">dev/parallel</a></dd>
+                        <dd><a href="../../../safety/tutorials/device/index.html">dev/safety</a></dd>
+                        <dd><a href="../../../save/tutorials/device/index.html">dev/save</a></dd>
+                        <dd><a href="../../../tagfilter/tutorials/device/index.html">dev/tagfilter</a></dd>
+                        <dd><a href="../../../../main/tutorials/device/index.html">main</a></dd>
+                </dl>
+        </div>
+    </div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
