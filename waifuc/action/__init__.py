@@ -9,5 +9,6 @@ from .filename import FileExtAction, FileOrderAction
 from .filter import NoMonochromeAction, OnlyMonochromeAction, ClassFilterAction, RatingFilterAction, FaceCountAction, \
     HeadCountAction, PersonRatioAction, MinSizeFilterAction, MinAreaFilterAction
 from .lpips import FilterSimilarAction
+from .safety import SafetyAction
 from .split import PersonSplitAction, ThreeStageSplitAction
 from .tagging import TaggingAction, TagFilterAction
