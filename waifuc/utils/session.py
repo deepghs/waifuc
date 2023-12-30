@@ -49,6 +49,10 @@ def get_requests_session(max_retries: int = 5, timeout: int = DEFAULT_TIMEOUT,
         adapter = TimeoutHTTPAdapter(max_retries=retries, timeout=timeout)
         session.mount('http://', adapter)
         session.mount('https://', adapter)
+    else:
+        if timeout is not None:
+            session.timeout = timeout
+
     session.headers.update({
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                       "(KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
@@ -65,8 +69,8 @@ def srequest(session: Session, method, url, *, max_retries: int = 5,
         try:
             resp = session.request(method, url, **kwargs)
         except RequestException as err:
+            warnings.warn(f'Requests error: {err!r}, sleep for {sleep_time!r}s ...')
             time.sleep(sleep_time)
-            warnings.warn(f'Requests error: {err!r} ...')
         else:
             break
 
