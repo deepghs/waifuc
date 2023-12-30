@@ -8,6 +8,8 @@ from .count import SliceSelectAction, FirstNSelectAction
 from .filename import FileExtAction, FileOrderAction
 from .filter import NoMonochromeAction, OnlyMonochromeAction, ClassFilterAction, RatingFilterAction, FaceCountAction, \
     HeadCountAction, PersonRatioAction, MinSizeFilterAction, MinAreaFilterAction
+from .head import HeadCoverAction, HeadCutOutAction
 from .lpips import FilterSimilarAction
+from .safety import SafetyAction
 from .split import PersonSplitAction, ThreeStageSplitAction
 from .tagging import TaggingAction, TagFilterAction

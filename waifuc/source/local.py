@@ -3,6 +3,7 @@ import os
 import pathlib
 import random
 import re
+import warnings
 from typing import Iterator
 
 from PIL import UnidentifiedImageError
@@ -41,6 +42,9 @@ class LocalSource(RootDataSource):
                 origin_item = ImageItem.load_from_image(file)
                 origin_item.image.load()
             except UnidentifiedImageError:
+                continue
+            except OSError:
+                warnings.warn(f'File {file} is truncated or corrupted, skipped.')
                 continue
 
             meta = origin_item.meta or {
