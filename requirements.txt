@@ -3,7 +3,7 @@ pillow
 numpy
 tqdm
 pandas
-dghs-imgutils>=0.3.1
+dghs-imgutils>=0.3.2
 requests
 pixivpy3
 cloudscraper
