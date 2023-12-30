@@ -1,10 +1,14 @@
 import os
 from contextlib import contextmanager
 
-import requests
 from tqdm.auto import tqdm
 
-from .session import get_requests_session, srequest
+from .session import get_requests_session, srequest, USE_REQUESTS
+
+if USE_REQUESTS:
+    from requests.exceptions import HTTPError
+else:
+    from curl_cffi.requests.errors import RequestsError as HTTPError
 
 
 class _FakeClass:
@@ -41,7 +45,7 @@ def download_file(url, filename, expected_size: int = None, desc=None, session=N
     actual_size = os.path.getsize(filename)
     if expected_size is not None and actual_size != expected_size:
         os.remove(filename)
-        raise requests.exceptions.HTTPError(f"Downloaded file is not of expected size, "
-                                            f"{expected_size} expected but {actual_size} found.")
+        raise HTTPError(f"Downloaded file is not of expected size, "
+                        f"{expected_size} expected but {actual_size} found.")
 
     return filename

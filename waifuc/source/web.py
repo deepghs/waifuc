@@ -2,14 +2,18 @@ import os
 import warnings
 from typing import Iterator, Tuple, Union
 
-import requests
 from PIL import UnidentifiedImageError, Image
 from PIL.Image import DecompressionBombError
 from hbutils.system import urlsplit, TemporaryDirectory
 
 from .base import RootDataSource
 from ..model import ImageItem
-from ..utils import get_requests_session, download_file
+from ..utils import get_requests_session, download_file, USE_REQUESTS
+
+if USE_REQUESTS:
+    import requests
+else:
+    from curl_cffi import requests
 
 
 class NoURL(Exception):
