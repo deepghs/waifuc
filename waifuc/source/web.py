@@ -12,8 +12,10 @@ from ..utils import get_requests_session, download_file, USE_REQUESTS
 
 if USE_REQUESTS:
     import requests
+    from requests.exceptions import HTTPError
 else:
     from curl_cffi import requests
+    from curl_cffi.requests.errors import RequestsError as HTTPError
 
 
 class NoURL(Exception):
@@ -42,11 +44,14 @@ class WebDataSource(RootDataSource):
                     )
                     image = Image.open(td_file)
                     image.load()
+                except HTTPError as err:
+                    warnings.warn(f'Skipped due to download error: {err!r}')
+                    continue
                 except UnidentifiedImageError:
                     warnings.warn(f'{self.group_name.capitalize()} resource {id_} unidentified as image, skipped.')
                     continue
                 except (IOError, DecompressionBombError) as err:
-                    warnings.warn(f'Skipped due to error: {err!r}')
+                    warnings.warn(f'Skipped due to IO error: {err!r}')
                     continue
 
                 meta = {**meta, 'url': url}
