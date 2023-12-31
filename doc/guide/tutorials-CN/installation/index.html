@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>使用须知 &mdash; waifuc 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c9d0a6ec" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="我想给我老婆炼丹" href="../quick_start/index.html" />
+    <link rel="prev" title="How to Prevent Waifuc from Using GPU" href="../../tutorials/device/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            waifuc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Training a LoRA for My Waifu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_images/index.html">Crawling Some Images From Websites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/process_images/index.html">Process Crawled or Local Images and Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_videos/index.html">Extracting Character Images from Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/device/index.html">How to Prevent Waifuc from Using GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">使用须知</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">这是什么？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">怎么安装？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">能做什么？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">我该怎么使用？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id6">译者留言</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/before_read/index.html">Reading Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/workflow/index.html">Understanding the Waifuc Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/dynamic/index.html">I Need to Dynamically Design the Processing Flow Based on Config Parameters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/customize/index.html">How to Get Creative with Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/ccip/index.html">What is CCIP, and What Makes It Tick?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">waifuc.config</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">waifuc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">使用须知</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials-CN/installation/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+    
+    
+  <section id="id1">
+<h1>使用须知<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="id2">
+<h2>这是什么？<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>如题，这是Python图像工具箱waifuc的中文教程，</p>
+<p>由DeepGHS发布，Narugo1992进行编写，ALT99999进行中文翻译</p>
+<p>(工具链接：<a class="reference external" href="https://github.com/deepghs/waifuc">https://github.com/deepghs/waifuc</a> )</p>
+</section>
+<section id="id3">
+<h2>怎么安装？<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<p>waifuc目前已经由PYPI包管理器进行托管，需要的Python版本为3.8以上</p>
+<p>因此，只需要简单的pip指令即可安装，如下所示：</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/deepghs/waifuc.git@main#egg<span class="o">=</span>waifuc
+</pre></div>
+</div>
+</div></blockquote>
+<p>检查安装是否成功时，可使用pip指令，如下所示：</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>show<span class="w"> </span>waifuc
+</pre></div>
+</div>
+</div></blockquote>
+<p>也可以使用waifuc提供的检查脚本，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.config.meta</span> <span class="kn">import</span> <span class="n">__TITLE__</span><span class="p">,</span> <span class="n">__AUTHOR__</span><span class="p">,</span> <span class="n">__VERSION__</span><span class="p">,</span> <span class="n">__DESCRIPTION__</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">4</span>    <span class="nb">print</span><span class="p">(</span><span class="n">__TITLE__</span><span class="p">,</span> <span class="n">__VERSION__</span><span class="p">)</span>
+<span class="linenos">5</span>    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Developed and maintained by&#39;</span><span class="p">,</span> <span class="n">__AUTHOR__</span><span class="p">)</span>
+<span class="linenos">6</span>    <span class="nb">print</span><span class="p">(</span><span class="n">__DESCRIPTION__</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>当waifuc被成功安装时，其输出结果应该如下所示：</p>
+<blockquote>
+<div><div class="highlight-text notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span>waifuc 0.0.1
+<span class="linenos">2</span>Developed and maintained by narugo1992
+<span class="linenos">3</span>Efficient Train Data Collector for Anime Waifu
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id4">
+<h2>能做什么？<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<p>按工作流来说，waifuc的功能可大致分为三类：</p>
+<ul class="simple">
+<li><p>waifuc集成了大部分<strong>优质图像站的数据源</strong>，你可以便捷且迅速的<strong>从网站爬取图像数据</strong>，此外，也可以<strong>从你本地目录中获取数据</strong></p></li>
+<li><p>waifuc提供了许多<strong>相当实用且相对独立的图像数据处理与筛选操作</strong>，对于上述方式获取的图像数据，你可以<strong>清晰、快速地选择你所需要的操作</strong>并以此<strong>配置出符合预期的处理流程</strong>，就像在游戏中规划一样轻松</p></li>
+<li><p>waifuc有着数种<strong>图像数据导出</strong>，对于处理完毕的上述图像数据，根据流程操作的不同，你<strong>可以选择多样的导出方式</strong>：仅图像、元数据或打标等等</p></li>
+</ul>
+<p>以上三种功能均<strong>支持高自由度的DIY内容</strong>，具体内容会在之后的教程中详细解释</p>
+<p>此外，和大部分图像工具箱不同，waifuc并不依赖GPU性能，即便是<strong>2core6G的GPU也能正常使用waifuc的所有功能，并支持CPU运行模式</strong></p>
+<p>当然，使用GPU会使运行的效率更高</p>
+</section>
+<section id="id5">
+<h2>我该怎么使用？<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<p>对于只是使用waifuc的用户，需要对Python这门编程语言进行基本的学习，主要在于以下两部分内容：</p>
+<ul class="simple">
+<li><p><strong>Python的基本语法</strong></p></li>
+<li><p>Python包管理器<strong>PyPI的使用</strong></p></li>
+</ul>
+</section>
+<section id="id6">
+<h2>译者留言<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>这是结合本人使用经验进行的汉化，因而<strong>并非完全符合原文</strong></p></li>
+<li><p>为符合中文阅读习惯，<strong>对部分内容进行了重新排版</strong></p></li>
+<li><p>本教程原文用语相当直白，<strong>包含外国友人发癫内容</strong></p></li>
+<li><p>但我尽量如实翻译，<strong>欸嘿~</strong></p></li>
+</ul>
+</section>
+</section>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../tutorials/device/index.html" class="btn btn-neutral float-left" title="How to Prevent Waifuc from Using GPU" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../quick_start/index.html" class="btn btn-neutral float-right" title="我想给我老婆炼丹" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2023, narugo1992.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: doc/guide
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">doc/guide</a></dd>
+                        <dd><a href="../../../../dev/count/tutorials-CN/installation/index.html">dev/count</a></dd>
+                        <dd><a href="../../../../dev/curl/tutorials-CN/installation/index.html">dev/curl</a></dd>
+                        <dd><a href="../../../../dev/parallel/tutorials-CN/installation/index.html">dev/parallel</a></dd>
+                        <dd><a href="../../../../dev/save/tutorials-CN/installation/index.html">dev/save</a></dd>
+                        <dd><a href="../../../../dev/tagfilter/tutorials-CN/installation/index.html">dev/tagfilter</a></dd>
+                        <dd><a href="../../../../main/tutorials-CN/installation/index.html">main</a></dd>
+                </dl>
+        </div>
+    </div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
