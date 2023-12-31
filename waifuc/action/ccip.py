@@ -13,9 +13,9 @@ from ..model import ImageItem
 
 class CCIPStatus(IntEnum):
     INIT = 0x1
-    APPROACH = 0x2
-    EVAL = 0x3
-    INIT_WITH_SOURCE = 0x4
+    INIT_WITH_SOURCE = 0x2
+    APPROACH = 0x3
+    INFER = 0x4
 
 
 class CCIPAction(BaseAction):
@@ -112,7 +112,7 @@ class CCIPAction(BaseAction):
                 cnt += 1
             logging.info(f'{plural_word(cnt, "items")} loaded from anchor.')
 
-            self.status = CCIPStatus.EVAL
+            self.status = CCIPStatus.INFER
             yield from self._eval_iter(item)
 
         elif self.status == CCIPStatus.INIT:
@@ -121,7 +121,7 @@ class CCIPAction(BaseAction):
 
             if len(self.items) >= self.min_val_count:
                 if self._try_cluster():
-                    self.status = CCIPStatus.EVAL
+                    self.status = CCIPStatus.INFER
                     yield from self._dump_items()
                 else:
                     self.status = CCIPStatus.APPROACH
@@ -132,10 +132,10 @@ class CCIPAction(BaseAction):
 
             if (len(self.items) - self.min_val_count) % self.step == 0:
                 if self._try_cluster():
-                    self.status = CCIPStatus.EVAL
+                    self.status = CCIPStatus.INFER
                     yield from self._dump_items()
 
-        elif self.status == CCIPStatus.EVAL:
+        elif self.status == CCIPStatus.INFER:
             yield from self._eval_iter(item)
 
         else:
