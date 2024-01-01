@@ -1,0 +1,13 @@
+@startuml
+[*] --> INIT : Start
+[*] --> INIT_WITH_SOURCE : Start\n(With Trusted Images)
+INIT --> APPROACH : Collected Images\nEnough For Clustering Algorithm
+APPROACH --> INFER : Key Features Found
+INIT_WITH_SOURCE --> INFER : Trusted Images Loaded
+INFER --> [*] : Images Run Out
+
+INIT : Featuring Collecting Images
+INIT_WITH_SOURCE: Loading Trusted Images
+APPROACH : Trying to Find Key Features\nWith Clustering Algorithm
+INFER : Filtering Images With Known Features
+@enduml

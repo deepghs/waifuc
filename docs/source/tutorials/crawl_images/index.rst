@@ -274,6 +274,8 @@ This code will not save any metadata files, and you will precisely get 50 images
     :align: center
 
 
+.. _waifuc-not-in-disk:
+
 I Don't Want to Save Images to Disk, How Can I Use Them Directly?
 -------------------------------------------------------------------------------
 
