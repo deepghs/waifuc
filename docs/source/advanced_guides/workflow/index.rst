@@ -39,7 +39,7 @@ Before you whip up those delectable donuts, you need to get your hands on some p
 Depending on your specific situation, you might have various options:
 
 - Mix and make the dough on-site, then fry them into golden-brown donuts (undecorated donuts).
-- Don't overlook the leftover donuts from closing time yesterday; the freezer's a lifesaver.
+- Leftover donuts? Not bad! always the refrigerator works well.
 - Still not enough? Well, you could always "grab" some from your neighbor... like how Jerry often do😏
 
 .. image:: jerry_and_donuts.png
@@ -157,7 +157,7 @@ above because it seems to not quite understand what I meant):
 In simple terms, the ``attach`` method represents the order of operations, and changing the order means
 a significant change in the processing flow – we shouldn't understand the relationship between operations
 in the ``attach`` method as a simple unordered stack. For example, **in the waifuc code example above,**
-**if we move NoMonochromeAction to the end, the entire process will become – first, scaling and tagging,**
+**if we move** ``NoMonochromeAction`` **to the end, the entire process will become – first, scaling and tagging,**
 **and then filtering**. The consequence of this is that a large number of monochrome images will be tagged first
 and then deleted, resulting in significantly slower program execution and unnecessary waste of computing resources.
 
@@ -186,7 +186,7 @@ just like this:
     :linenos:
 
 In reality, when the first ``attach`` is called, a new secondary data source (Secondary Source,
-corresponding to the concept of Primary Source, such as the DanbooruSource at the beginning) has already been generated.
+corresponding to the concept of Primary Source, such as the ``DanbooruSource`` at the beginning) has already been generated.
 This data source is exactly the same as the others, except it produces donuts with the previous icing.
 We just need to process this new data source as usual. In waifuc, this concept is similar.
 For example, the following two code snippets are completely equivalent:
