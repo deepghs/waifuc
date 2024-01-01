@@ -40,7 +40,7 @@ Depending on your specific situation, you might have various options:
 
 - Mix and make the dough on-site, then fry them into golden-brown donuts (undecorated donuts).
 - Don't overlook the leftover donuts from closing time yesterday; the freezer's a lifesaver.
-- Still not enough? Well, you could always "procure" some from your neighbor... 😏
+- Still not enough? Well, you could always "grab" some from your neighbor... like how Jerry often do😏
 
 .. image:: jerry_and_donuts.png
     :align: center
@@ -58,7 +58,7 @@ If we were to draw a parallel between this logic and the waifuc paradigm, it mig
     :language: python
     :linenos:
 
-In a nutshell, you might **acquire images from various sources**, like scraping from Danbooru,
+In a nutshell, you might **acquire images from various sources**, like grabing from Danbooru,
 reading from your hard drive, or extracting frames from videos, and so on.
 However, **they will all be output in a uniform format for downstream processing**.
 For example, the following code illustrates different image data sources,
@@ -102,18 +102,18 @@ To draw a parallel with waifuc's paradigm, the following code snippets provide a
     :language: python
     :linenos:
 
-The final product should look like this (image sponsored by DALL-E):
+The final product should look like this (image provided by DALL-E):
 
 .. image:: donut_choco.png
     :align: center
 
-- Producing some strawberry-flavored donuts with sugar sprinkles
+- Producing some strawberry-flavored donuts with jimmies
 
 .. literalinclude:: donuts_action_2.py
     :language: python
     :linenos:
 
-The final product will look something like this (image sponsored by DALL-E):
+The final product will look something like this (image provided by DALL-E):
 
 .. image:: donut_strawberry.png
     :align: center
@@ -135,7 +135,7 @@ After seeing the above code, you might have a question – what is the relations
 used in the ``attach`` function? Is their order important?
 
 To answer this question, let's continue with the analogy of the donut shop. 
-In the previous content, we tried to make strawberry-flavored donuts with sugar sprinkles. 
+In the previous content, we tried to make strawberry-flavored donuts with jimmies. 
 In the analogous code, we used ``IcingAction`` first and then ``JimmiesAction``, indicating that for donuts, 
 we first apply icing and then sprinkle sugar candies.
 
@@ -156,9 +156,9 @@ above because it seems to not quite understand what I meant):
 
 In simple terms, the ``attach`` method represents the order of operations, and changing the order means
 a significant change in the processing flow – we shouldn't understand the relationship between operations
-in the ``attach`` method as a simple unordered stack. For example, **in the waifuc code example above,
-if we move NoMonochromeAction to the end, the entire process will become – first, scaling and tagging,
-and then filtering**. The consequence of this is that a large number of monochrome images will be tagged first
+in the ``attach`` method as a simple unordered stack. For example, **in the waifuc code example above,**
+**if we move NoMonochromeAction to the end, the entire process will become – first, scaling and tagging,**
+**and then filtering**. The consequence of this is that a large number of monochrome images will be tagged first
 and then deleted, resulting in significantly slower program execution and unnecessary waste of computing resources.
 
 .. literalinclude:: waifuc_action_order.py
@@ -169,7 +169,7 @@ and then deleted, resulting in significantly slower program execution and unnece
 Semi-Finished Products?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Imagine a scenario where you are preparing to make a batch of donuts with sugar sprinkles,
+Imagine a scenario where you are preparing to make a batch of donuts with jimmies,
 and you have already applied the icing. However, you suddenly have to leave for a while due to an unexpected event.
 In a situation like this, what should you do when you come back? It's similar to the following code,
 so what should you do next?

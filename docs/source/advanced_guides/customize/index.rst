@@ -1,4 +1,4 @@
-How to Get Creative with Development
+How to Customize In Waifuc?
 =============================================
 
 .. note::
@@ -97,8 +97,8 @@ It indirectly inherits from the ``BaseDataSource`` class and implements the ``_i
 In the ``_iter_data`` method, you need to continuously iterate and provide resource IDs, image URLs,
 and metadata. The downloading and output as ``ImageItem`` are automatically handled in the ``_iter`` method.
 
-With this structure in place, you can easily implement web scraping for custom websites and use it as a
-data source in waifuc. For example, you can scrape images from the Huggingface repository (in this case,
+With this structure in place, you can easily implement web grabing for custom websites and use it as a
+data source in waifuc. For example, you can grab images from the Huggingface repository (in this case,
 we are using the `deepghs/game_character_skins <https://huggingface.co/datasets/deepghs/game_character_skins>`_
 repository containing character skin data for various popular mobile games):
 
@@ -117,7 +117,7 @@ The result looks like this:
 .. image:: example_huggingface.png
     :align: center
 
-Similarly, you can integrate your existing web scraping scripts for a specific website into waifuc,
+Similarly, you can integrate your existing web grabing scripts for a specific website into waifuc,
 making them usable as a data source for creating high-quality datasets.
 
 
@@ -166,14 +166,14 @@ data items in an iterative manner (although yielding nothing is also allowed). B
 the ``BaseAction`` class and implementing the ``iter`` method, you can build your custom actions.
 
 For example, if you want to randomly select some images from a data source and, for the selected images,
-apply a mirror rotation, you can also add metadata that reflects random values on the final saved images.
-You can achieve this by creating a ``MyRandomAction`` like this:
+randomly select some of them to apply a mirror rotation, you can also add metadata that reflects random values
+on the names of the final saved images. You can achieve this by creating a ``MyRandomAction`` like this:
 
 .. literalinclude:: example_random_def.py
     :language: python
     :linenos:
 
-Once created, you can use it like this:
+Once defined, you can use it like this:
 
 .. literalinclude:: example_random_use.py
     :language: python
@@ -284,14 +284,14 @@ Then you can use it like this:
 .. image:: example_process_1.png
     :align: center
 
-The resulting images might initially seem a bit odd, but they can be improved by using the ``FilterSimilarAction`` in
-combination, like this:
+The resulting images might initially seem not to be so good,
+but they can be improved by using the ``FilterSimilarAction`` in combination, like this:
 
 .. literalinclude:: example_process_use_2.py
     :language: python
     :linenos:
 
-Congratulations, you now have a dataset of Texas with her head, and it's so fluffy you might want to give it a kiss!
+Congratulations, you now have a dataset of Texas with her head, and she is so fluffy you might want to give her a kiss!
 
 .. image:: example_process_2.png
     :align: center
