@@ -83,7 +83,7 @@
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="../dynamic/index.html">I Need to Dynamically Design the Processing Flow</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../customize/index.html">How to Get Creative with Development</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customize/index.html">How to Customize In Waifuc?</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../ccip/index.html">What is CCIP, and What are its Features?</a></li>
 </ul>
 <p class="caption" role="heading"><span class="caption-text">Information</span></p>
@@ -156,7 +156,7 @@ Depending on your specific situation, you might have various options:</p>
 <ul class="simple">
 <li><p>Mix and make the dough on-site, then fry them into golden-brown donuts (undecorated donuts).</p></li>
 <li><p>Don’t overlook the leftover donuts from closing time yesterday; the freezer’s a lifesaver.</p></li>
-<li><p>Still not enough? Well, you could always “procure” some from your neighbor… 😏</p></li>
+<li><p>Still not enough? Well, you could always “grab” some from your neighbor… like how Jerry often do😏</p></li>
 </ul>
 <img alt="../../_images/jerry_and_donuts.png" class="align-center" src="../../_images/jerry_and_donuts.png" />
 <p>Regardless of the scenario, <strong>all you need are the fried donuts</strong>—how the donuts came to be?
@@ -179,7 +179,7 @@ If we were to draw a parallel between this logic and the waifuc paradigm, it mig
 <span class="linenos">10</span><span class="n">grab_source</span> <span class="o">=</span> <span class="n">NeighborSource</span><span class="p">(</span><span class="n">from</span><span class="o">=</span><span class="s2">&quot;Crazy Dave&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>In a nutshell, you might <strong>acquire images from various sources</strong>, like scraping from Danbooru,
+<p>In a nutshell, you might <strong>acquire images from various sources</strong>, like grabing from Danbooru,
 reading from your hard drive, or extracting frames from videos, and so on.
 However, <strong>they will all be output in a uniform format for downstream processing</strong>.
 For example, the following code illustrates different image data sources,
@@ -247,10 +247,10 @@ To draw a parallel with waifuc’s paradigm, the following code snippets provide
 <span class="linenos">11</span>
 </pre></div>
 </div>
-<p>The final product should look like this (image sponsored by DALL-E):</p>
+<p>The final product should look like this (image provided by DALL-E):</p>
 <img alt="../../_images/donut_choco.png" class="align-center" src="../../_images/donut_choco.png" />
 <ul class="simple">
-<li><p>Producing some strawberry-flavored donuts with sugar sprinkles</p></li>
+<li><p>Producing some strawberry-flavored donuts with jimmies</p></li>
 </ul>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">mydonutsstore.action</span> <span class="kn">import</span> <span class="n">IcingAction</span><span class="p">,</span> <span class="n">JimmiesAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">mydonutsstore.source</span> <span class="kn">import</span> <span class="n">FryingSource</span>
@@ -265,7 +265,7 @@ To draw a parallel with waifuc’s paradigm, the following code snippets provide
 <span class="linenos">11</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The final product will look something like this (image sponsored by DALL-E):</p>
+<p>The final product will look something like this (image provided by DALL-E):</p>
 <img alt="../../_images/donut_strawberry.png" class="align-center" src="../../_images/donut_strawberry.png" />
 <p>In simple terms, in waifuc, after going through a series of actions (Action) such as filtering, processing,
 and slicing for images, <strong>you will get a collection of processed images that make up your training dataset</strong>.
@@ -293,7 +293,7 @@ The resulting image data will go through these three processes sequentially.</p>
 <p>After seeing the above code, you might have a question – what is the relationship between the actions
 used in the <code class="docutils literal notranslate"><span class="pre">attach</span></code> function? Is their order important?</p>
 <p>To answer this question, let’s continue with the analogy of the donut shop.
-In the previous content, we tried to make strawberry-flavored donuts with sugar sprinkles.
+In the previous content, we tried to make strawberry-flavored donuts with jimmies.
 In the analogous code, we used <code class="docutils literal notranslate"><span class="pre">IcingAction</span></code> first and then <code class="docutils literal notranslate"><span class="pre">JimmiesAction</span></code>, indicating that for donuts,
 we first apply icing and then sprinkle sugar candies.</p>
 <p>But what if we reverse the order, first sprinkle sugar candies, and then apply icing – obviously,
@@ -318,9 +318,9 @@ above because it seems to not quite understand what I meant):</p>
 <img alt="../../_images/donut_strawberry_failed.png" src="../../_images/donut_strawberry_failed.png" />
 <p>In simple terms, the <code class="docutils literal notranslate"><span class="pre">attach</span></code> method represents the order of operations, and changing the order means
 a significant change in the processing flow – we shouldn’t understand the relationship between operations
-in the <code class="docutils literal notranslate"><span class="pre">attach</span></code> method as a simple unordered stack. For example, <strong>in the waifuc code example above,
-if we move NoMonochromeAction to the end, the entire process will become – first, scaling and tagging,
-and then filtering</strong>. The consequence of this is that a large number of monochrome images will be tagged first
+in the <code class="docutils literal notranslate"><span class="pre">attach</span></code> method as a simple unordered stack. For example, <strong>in the waifuc code example above,</strong>
+<strong>if we move NoMonochromeAction to the end, the entire process will become – first, scaling and tagging,</strong>
+<strong>and then filtering</strong>. The consequence of this is that a large number of monochrome images will be tagged first
 and then deleted, resulting in significantly slower program execution and unnecessary waste of computing resources.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span><span class="p">,</span> <span class="n">AlignMinSizeAction</span><span class="p">,</span> <span class="n">TaggingAction</span>
 <span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
@@ -342,7 +342,7 @@ and then deleted, resulting in significantly slower program execution and unnece
 </section>
 <section id="semi-finished-products">
 <h3>Semi-Finished Products?<a class="headerlink" href="#semi-finished-products" title="Permalink to this heading"></a></h3>
-<p>Imagine a scenario where you are preparing to make a batch of donuts with sugar sprinkles,
+<p>Imagine a scenario where you are preparing to make a batch of donuts with jimmies,
 and you have already applied the icing. However, you suddenly have to leave for a while due to an unexpected event.
 In a situation like this, what should you do when you come back? It’s similar to the following code,
 so what should you do next?</p>

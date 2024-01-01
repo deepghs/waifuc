@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>How to Get Creative with Development &mdash; waifuc 0.0.1 documentation</title>
+  <title>How to Customize In Waifuc? &mdash; waifuc 0.0.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
@@ -73,7 +73,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../before_read/index.html">Reading Instructions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../workflow/index.html">Understanding the Waifuc Workflow</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../dynamic/index.html">I Need to Dynamically Design the Processing Flow</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Get Creative with Development</a><ul>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Customize In Waifuc?</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#framework-approach">Framework Approach</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#custom-sources">Custom Sources</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#basic-data-sources">Basic Data Sources</a></li>
@@ -115,7 +115,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">How to Get Creative with Development</li>
+      <li class="breadcrumb-item active">How to Customize In Waifuc?</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../../_sources/advanced_guides/customize/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -127,8 +127,8 @@
              
     
     
-  <section id="how-to-get-creative-with-development">
-<h1>How to Get Creative with Development<a class="headerlink" href="#how-to-get-creative-with-development" title="Permalink to this heading"></a></h1>
+  <section id="how-to-customize-in-waifuc">
+<h1>How to Customize In Waifuc?<a class="headerlink" href="#how-to-customize-in-waifuc" title="Permalink to this heading"></a></h1>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>To enhance your reading experience in this chapter,
@@ -350,8 +350,8 @@ Its basic structure is defined as follows:</p>
 <p>It indirectly inherits from the <code class="docutils literal notranslate"><span class="pre">BaseDataSource</span></code> class and implements the <code class="docutils literal notranslate"><span class="pre">_iter</span></code> method.
 In the <code class="docutils literal notranslate"><span class="pre">_iter_data</span></code> method, you need to continuously iterate and provide resource IDs, image URLs,
 and metadata. The downloading and output as <code class="docutils literal notranslate"><span class="pre">ImageItem</span></code> are automatically handled in the <code class="docutils literal notranslate"><span class="pre">_iter</span></code> method.</p>
-<p>With this structure in place, you can easily implement web scraping for custom websites and use it as a
-data source in waifuc. For example, you can scrape images from the Huggingface repository (in this case,
+<p>With this structure in place, you can easily implement web grabing for custom websites and use it as a
+data source in waifuc. For example, you can grab images from the Huggingface repository (in this case,
 we are using the <a class="reference external" href="https://huggingface.co/datasets/deepghs/game_character_skins">deepghs/game_character_skins</a>
 repository containing character skin data for various popular mobile games):</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os.path</span>
@@ -394,7 +394,7 @@ repository containing character skin data for various popular mobile games):</p>
 </div>
 <p>The result looks like this:</p>
 <img alt="../../_images/example_huggingface.png" class="align-center" src="../../_images/example_huggingface.png" />
-<p>Similarly, you can integrate your existing web scraping scripts for a specific website into waifuc,
+<p>Similarly, you can integrate your existing web grabing scripts for a specific website into waifuc,
 making them usable as a data source for creating high-quality datasets.</p>
 </section>
 <section id="about-metadata">
@@ -446,8 +446,8 @@ in a straightforward manner.</p>
 data items in an iterative manner (although yielding nothing is also allowed). By inheriting from
 the <code class="docutils literal notranslate"><span class="pre">BaseAction</span></code> class and implementing the <code class="docutils literal notranslate"><span class="pre">iter</span></code> method, you can build your custom actions.</p>
 <p>For example, if you want to randomly select some images from a data source and, for the selected images,
-apply a mirror rotation, you can also add metadata that reflects random values on the final saved images.
-You can achieve this by creating a <code class="docutils literal notranslate"><span class="pre">MyRandomAction</span></code> like this:</p>
+randomly select some of them to apply a mirror rotation, you can also add metadata that reflects random values
+on the names of the final saved images. You can achieve this by creating a <code class="docutils literal notranslate"><span class="pre">MyRandomAction</span></code> like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">copy</span>
 <span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">random</span>
 <span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
@@ -486,7 +486,7 @@ You can achieve this by creating a <code class="docutils literal notranslate"><s
 <span class="linenos">36</span>        <span class="k">pass</span>
 </pre></div>
 </div>
-<p>Once created, you can use it like this:</p>
+<p>Once defined, you can use it like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
 <span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
 <span class="linenos">3</span>
@@ -653,8 +653,8 @@ create a dataset for an AI model that recognizes heads, you can create a <code c
 </pre></div>
 </div>
 <img alt="../../_images/example_process_1.png" class="align-center" src="../../_images/example_process_1.png" />
-<p>The resulting images might initially seem a bit odd, but they can be improved by using the <code class="docutils literal notranslate"><span class="pre">FilterSimilarAction</span></code> in
-combination, like this:</p>
+<p>The resulting images might initially seem not to be so good,
+but they can be improved by using the <code class="docutils literal notranslate"><span class="pre">FilterSimilarAction</span></code> in combination, like this:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FilterSimilarAction</span>
 <span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
 <span class="linenos">3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
@@ -666,7 +666,7 @@ combination, like this:</p>
 <span class="linenos">9</span><span class="p">)[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;test_texas_head&#39;</span><span class="p">))</span>
 </pre></div>
 </div>
-<p>Congratulations, you now have a dataset of Texas with her head, and it’s so fluffy you might want to give it a kiss!</p>
+<p>Congratulations, you now have a dataset of Texas with her head, and she is so fluffy you might want to give her a kiss!</p>
 <img alt="../../_images/example_process_2.png" class="align-center" src="../../_images/example_process_2.png" />
 </section>
 </section>

@@ -53,7 +53,7 @@ The image below visually demonstrates CCIP's capabilities
 Character Dataset Filtering
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Clearly, CCIP is essential for cleaning up irrelevant characters in web data. Anyone who has scraped images
+Clearly, CCIP is essential for cleaning up irrelevant characters in web data. Anyone who has grabed images
 from Danbooru should be familiar with the experience that **web data always contains a lot of noise,**
 **and in most cases, it cannot be effectively removed using tags**.
 However, CCIP addresses this problem, achieving a level of dataset purity that is almost comparable to manually
