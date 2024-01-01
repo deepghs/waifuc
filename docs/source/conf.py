@@ -111,6 +111,7 @@ extensions = [
     "sphinx_multiversion",
     'nbsphinx',
     'sphinx_toolbox.collapse',
+    "code_include.extension",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

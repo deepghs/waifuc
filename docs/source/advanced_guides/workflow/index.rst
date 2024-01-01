@@ -1,3 +1,5 @@
+.. _waifuc-workflow:
+
 Understanding the Waifuc Workflow
 =============================================================
 
