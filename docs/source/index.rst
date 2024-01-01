@@ -31,6 +31,16 @@ configuration file's structure and their versions.
 
 .. toctree::
     :maxdepth: 2
+    :caption: Advanced Guides
+
+    advanced_guides/before_read/index
+    advanced_guides/workflow/index
+    advanced_guides/dynamic/index
+    advanced_guides/customize/index
+    advanced_guides/ccip/index
+
+.. toctree::
+    :maxdepth: 2
     :caption: Best Practice
 
 .. toctree::
