@@ -24,7 +24,7 @@ Minimum Hardware Requirements for Waifuc
 
 As demonstrated above, it's evident that **Waifuc can operate normally even without a GPU**, and its performance is completely acceptable.
 
-Based on our tests, **Waifuc can run successfully in cloud environments with only 2 CPU cores and 6GB of memory, without a GPU**. Examples of such environments include GitHub Actions and Huggingface Space. The adaptability of Waifuc to lower hardware configurations in these free-running environments allowed us to complete the scraping of datasets for over a thousand anime waifus without spending a penny.
+Based on our tests, **Waifuc can run successfully in cloud environments with only 2 CPU cores and 6GB of memory, without a GPU**. Examples of such environments include GitHub Actions and Huggingface Space. The adaptability of Waifuc to lower hardware configurations in these free-running environments allowed us to complete the grabing of datasets for over a thousand anime waifus without spending a penny.
 
 Therefore, **Waifuc can practically be considered to run smoothly on almost all desktops or laptops**.
 
