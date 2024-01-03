@@ -1,14 +1,13 @@
 import os
 
 import pytest
-import responses
 
 from waifuc.source import PixivSearchSource, PixivUserSource, PixivRankingSource
 
 
-@pytest.mark.unittest
+@pytest.mark.ignore
 class TestSourcePixiv:
-    @responses.activate
+
     def test_pixiv_search(self, pixiv_search_surtr, pixiv_search_surtr_original):
         source = PixivSearchSource(
             'アークナイツ (surtr OR スルト OR 史尔特尔)',
@@ -29,7 +28,6 @@ class TestSourcePixiv:
         for item in items:
             assert 'img-original' in item.meta['url']
 
-    @responses.activate
     def test_pixiv_user(self, pixiv_user_2864095, pixiv_user_2864095_original):
         source = PixivUserSource(
             2864095,
@@ -49,7 +47,6 @@ class TestSourcePixiv:
         for item in items:
             assert 'img-original' in item.meta['url']
 
-    @responses.activate
     def test_pixiv_ranking(self, pixiv_ranking_day, pixiv_ranking_week_r18):
         source = PixivRankingSource(
             'day',

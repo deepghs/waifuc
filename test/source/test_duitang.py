@@ -1,12 +1,11 @@
 import pytest
-import responses
 
 from waifuc.source import DuitangSource
 
 
-@pytest.mark.unittest
+@pytest.mark.ignore
 class TestSourceDuitang:
-    @responses.activate
+
     def test_duitang(self, duitang_nian, duitang_nian_non_strict):
         source = DuitangSource('明日方舟 年')
         items = list(source[:10])

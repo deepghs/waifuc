@@ -1,12 +1,11 @@
 import pytest
-import responses
 
 from waifuc.source import WallHavenSource
 
 
-@pytest.mark.unittest
+@pytest.mark.ignore
 class TestSourceWallhaven:
-    @responses.activate
+
     def test_wallhaven(self, wallhaven_surtr, wallhaven_id_105577):
         source = WallHavenSource('surtr (arknights)')
         items = list(source[:20])

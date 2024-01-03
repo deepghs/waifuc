@@ -6,7 +6,7 @@ from hbutils.system import urlsplit
 
 from .web import NoURL, WebDataSource
 from ..config.meta import __TITLE__, __VERSION__
-from ..utils import get_requests_session, srequest, USE_REQUESTS
+from ..utils import get_requests_session, srequest
 
 _DanbooruSiteTyping = Literal['konachan', 'yandere', 'danbooru', 'safebooru', 'lolibooru']
 
@@ -22,11 +22,7 @@ class DanbooruLikeSource(WebDataSource):
             'Content-Type': 'application/json; charset=utf-8',
         })
         if username and api_key:
-            if USE_REQUESTS:
-                from requests.auth import HTTPBasicAuth
-                self.auth = HTTPBasicAuth(username, api_key)
-            else:
-                self.auth = (username, api_key)
+            self.auth = (username, api_key)
         else:
             self.auth = None
         self.site_name, self.site_url = site_name, site_url

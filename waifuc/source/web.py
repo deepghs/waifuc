@@ -2,20 +2,14 @@ import os
 import warnings
 from typing import Iterator, Tuple, Union
 
+import httpx
 from PIL import UnidentifiedImageError, Image
 from PIL.Image import DecompressionBombError
 from hbutils.system import urlsplit, TemporaryDirectory
 
 from .base import RootDataSource
 from ..model import ImageItem
-from ..utils import get_requests_session, download_file, USE_REQUESTS
-
-if USE_REQUESTS:
-    import requests
-    from requests.exceptions import HTTPError
-else:
-    from curl_cffi import requests
-    from curl_cffi.requests.errors import RequestsError as HTTPError
+from ..utils import get_requests_session, download_file
 
 
 class NoURL(Exception):
@@ -23,7 +17,7 @@ class NoURL(Exception):
 
 
 class WebDataSource(RootDataSource):
-    def __init__(self, group_name: str, session: requests.Session = None, download_silent: bool = True):
+    def __init__(self, group_name: str, session: httpx.Client = None, download_silent: bool = True):
         self.download_silent = download_silent
         self.session = session or get_requests_session()
         self.group_name = group_name
@@ -44,7 +38,7 @@ class WebDataSource(RootDataSource):
                     )
                     image = Image.open(td_file)
                     image.load()
-                except HTTPError as err:
+                except httpx.HTTPError as err:
                     warnings.warn(f'Skipped due to download error: {err!r}')
                     continue
                 except UnidentifiedImageError:

@@ -1,11 +1,11 @@
 import os.path
-import zipfile
 from functools import wraps
 from typing import Optional
 
 from hbutils.system import TemporaryDirectory
+from hfutils.operate import upload_directory_as_archive
 from huggingface_hub import HfApi
-from responses import _recorder
+from pytest_httpx_recorder.recorder import ResRecorder
 
 _KNOWN_RECORDERS = {}
 _REMOTE_REPOSITORY = 'deepghs/waifuc_unittest'
@@ -19,24 +19,17 @@ def resp_recorder(name: Optional[str] = None):
         @wraps(func)
         def _new_func(*args, **kwargs):
             with TemporaryDirectory() as td:
-                file_path = os.path.join(td, f'{_name}.yaml')
-                f = _recorder.record(file_path=file_path)(func)
-                retval = f(*args, **kwargs)
+                recorder = ResRecorder()
+                with recorder.record():
+                    retval = func(*args, **kwargs)
 
-                with TemporaryDirectory() as ztd:
-                    zip_file = os.path.join(ztd, f'{_name}.zip')
-                    with zipfile.ZipFile(zip_file, 'w') as zf:
-                        for root, dirs, files in os.walk(td):
-                            for file in files:
-                                filepath = os.path.join(td, root, file)
-                                zf.write(filepath, os.path.relpath(filepath, td))
-
-                    hf_client.upload_file(
-                        path_or_fileobj=zip_file,
-                        path_in_repo=f'responses/{_name}.zip',
-                        repo_id=_REMOTE_REPOSITORY,
-                        repo_type='dataset'
-                    )
+                recorder.to_resset().save(td)
+                upload_directory_as_archive(
+                    local_directory=td,
+                    repo_id=_REMOTE_REPOSITORY,
+                    repo_type='dataset',
+                    archive_in_repo=f'responses_httpx/{_name}.zip',
+                )
 
             return retval
 

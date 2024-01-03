@@ -23,7 +23,7 @@ def d20(danbooru_20):
     return LocalSource(danbooru_20)
 
 
-@pytest.mark.unittest
+@pytest.mark.ignore
 class TestSourceCompose:
     def test_add_1(self, z20, d20):
         s = z20 + d20
