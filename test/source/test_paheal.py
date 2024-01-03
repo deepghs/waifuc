@@ -3,9 +3,8 @@ import pytest
 from waifuc.source import PahealSource
 
 
-@pytest.mark.ignore
+@pytest.mark.unittest
 class TestSourcePaheal:
-
     def test_paheal(self, paheal_surtr):
         source = PahealSource(['surtr', 'arknights'])
         items = list(source[:20])

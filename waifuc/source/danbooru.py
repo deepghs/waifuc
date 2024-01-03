@@ -5,7 +5,6 @@ from typing import Optional, Iterator, List, Tuple, Union, Literal
 from hbutils.system import urlsplit
 
 from .web import NoURL, WebDataSource
-from ..config.meta import __TITLE__, __VERSION__
 from ..utils import get_requests_session, srequest
 
 _DanbooruSiteTyping = Literal['konachan', 'yandere', 'danbooru', 'safebooru', 'lolibooru']
@@ -18,7 +17,6 @@ class DanbooruLikeSource(WebDataSource):
                  group_name: Optional[str] = None):
         WebDataSource.__init__(self, group_name or site_name, None, download_silent)
         self.session = get_requests_session(headers={
-            "User-Agent": f"{__TITLE__}/{__VERSION__}",
             'Content-Type': 'application/json; charset=utf-8',
         })
         if username and api_key:

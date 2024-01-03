@@ -17,16 +17,12 @@ class TestSourceDanbooru:
         with open('test_k.py', 'w') as f:
             print(items[0].meta['tags'], file=f)
         assert items[0].meta['tags'] == pytest.approx({
-            '1girl': 1.0, '2024': 1.0, 'absurdres': 1.0, 'arm_at_side': 1.0, 'armlet': 1.0, 'bangle': 1.0,
-            'bare_shoulders': 1.0, 'black_hair': 1.0, 'blue_eyes': 1.0, 'blush': 1.0, 'bracelet': 1.0, 'breasts': 1.0,
-            'china_dress': 1.0, 'chinese_clothes': 1.0, 'cleavage_cutout': 1.0, 'closed_mouth': 1.0,
-            'clothing_cutout': 1.0, 'commentary_request': 1.0, 'dragon_print': 1.0, 'dress': 1.0, 'hand_up': 1.0,
-            'happy_new_year': 1.0, 'highres': 1.0, 'jewelry': 1.0, 'knee_up': 1.0, 'large_breasts': 1.0, 'legs': 1.0,
-            'light_smile': 1.0, 'long_hair': 1.0, 'looking_at_viewer': 1.0, 'navel': 1.0, 'navel_cutout': 1.0,
-            'original': 1.0, 'oyaman': 1.0, 'panties': 1.0, 'pantyshot': 1.0, 'ponytail': 1.0, 'red_dress': 1.0,
-            'red_footwear': 1.0, 'side_slit': 1.0, 'sideboob': 1.0, 'sleeveless': 1.0, 'sleeveless_dress': 1.0,
-            'solo': 1.0, 'standing': 1.0, 'standing_on_one_leg': 1.0, 'thighs': 1.0, 'translation_request': 1.0,
-            'twitter_username': 1.0, 'underwear': 1.0, 'white_panties': 1.0
+            '1girl': 1.0, 'absurdres': 1.0, 'bikini': 1.0, 'bird': 1.0, 'black_bikini': 1.0, 'breasts': 1.0,
+            'curly_hair': 1.0, 'day': 1.0, 'eyewear_on_head': 1.0, 'floating': 1.0, 'floating_object': 1.0,
+            'green_eyes': 1.0, 'green_hair': 1.0, 'hat': 1.0, 'highres': 1.0, 'karikarisuru': 1.0, 'ocean': 1.0,
+            'one-punch_man': 1.0, 'sarong': 1.0, 'see-through_sarong': 1.0, 'side-tie_bikini_bottom': 1.0,
+            'small_breasts': 1.0, 'solo': 1.0, 'straw_hat': 1.0, 'string_bikini': 1.0, 'sunglasses': 1.0,
+            'swimsuit': 1.0, 'tatsumaki': 1.0, 'telekinesis': 1.0
         })
         assert 'danbooru' in items[0].meta
 

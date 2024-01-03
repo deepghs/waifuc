@@ -72,7 +72,7 @@ class ZerochanSource(WebDataSource):
                     'Accept-Encoding': 'gzip, deflate, br',
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                allow_redirects=False,
+                follow_redirects=False,
             )
             if resp.status_code != 303:
                 raise ConnectionError('Username or password wrong, failed to login to zerochan.net.')
@@ -128,7 +128,7 @@ class ZerochanSource(WebDataSource):
 
         for url in url_fallbacks:
             resp = srequest(self.session, 'HEAD', url, raise_for_status=False)
-            if resp.ok:
+            if resp.status_code // 100 == 2:
                 return url
         else:
             return urls['medium']
@@ -142,7 +142,7 @@ class ZerochanSource(WebDataSource):
             while True:
                 resp = srequest(self.session, 'GET', _base_url,
                                 params={**self._params, 'p': str(page), 'l': '200'},
-                                allow_redirects=False, raise_for_status=False)
+                                follow_redirects=False, raise_for_status=False)
                 if resp.status_code // 100 == 3:
                     _base_url = urljoin(_base_url, resp.headers['Location'])
                 elif resp.status_code in {403, 404}:

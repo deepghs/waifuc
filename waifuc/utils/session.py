@@ -19,12 +19,6 @@ def get_requests_session(timeout: int = DEFAULT_TIMEOUT, headers: Optional[Dict[
     return session
 
 
-# retries = Retry(
-#     total=max_retries, backoff_factor=1,
-#     status_forcelist=[413, 429, 500, 501, 502, 503, 504, 505, 506, 507, 509, 510, 511],
-#     allowed_methods=["HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS", "TRACE"],
-# )
-
 RETRY_ALLOWED_METHODS = ["HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS", "TRACE"]
 RETRY_STATUS_FORCELIST = [413, 429, 500, 501, 502, 503, 504, 505, 506, 507, 509, 510, 511]
 
@@ -43,12 +37,14 @@ def srequest(session: httpx.Client, method, url, *, max_retries: int = 5,
             resp = session.request(method, url, **kwargs)
         except httpx.HTTPStatusError as err:
             if _should_retry(err.response):
-                warnings.warn(f'Requests {err.response.status_code} ({i}/{max_retries}), sleep for {sleep_time!r}s ...')
+                warnings.warn(f'Requests {err.response.status_code} ({i + 1}/{max_retries}), '
+                              f'sleep for {sleep_time!r}s ...')
                 time.sleep(sleep_time)
             else:
                 raise
         except httpx.HTTPError as err:
-            warnings.warn(f'Requests error ({i}/{max_retries}): {err!r}, sleep for {sleep_time!r}s ...')
+            warnings.warn(f'Requests error ({i + 1}/{max_retries}): {err!r}, '
+                          f'sleep for {sleep_time!r}s ...')
             time.sleep(sleep_time)
         else:
             break

@@ -3,7 +3,7 @@ import pytest
 from waifuc.source import ZerochanSource
 
 
-@pytest.mark.ignore
+@pytest.mark.unittest
 class TestSourceZerochan:
 
     def test_zerochan(self, zerochan_surtr):

@@ -3,7 +3,7 @@ import pytest
 from waifuc.source import Huashi6Source
 
 
-@pytest.mark.ignore
+@pytest.mark.unittest
 class TestSourceHuashi6:
 
     def test_huashi6(self, huashi6_nian):

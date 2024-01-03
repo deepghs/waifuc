@@ -3,7 +3,7 @@ import pytest
 from waifuc.source import DuitangSource
 
 
-@pytest.mark.ignore
+@pytest.mark.unittest
 class TestSourceDuitang:
 
     def test_duitang(self, duitang_nian, duitang_nian_non_strict):

@@ -32,5 +32,12 @@ def record(record_all, websites):
         record_site(site)
 
 
+@cli.command('list', context_settings={**GLOBAL_CONTEXT_SETTINGS},
+               help='List existing sites.')
+def list_():
+    for site in sorted(_KNOWN_RECORDERS.keys()):
+        print(site)
+
+
 if __name__ == '__main__':
     cli()

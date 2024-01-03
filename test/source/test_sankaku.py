@@ -3,9 +3,8 @@ import pytest
 from waifuc.source import SankakuSource, PostOrder, FileType
 
 
-@pytest.mark.ignore
+@pytest.mark.unittest
 class TestSourceSankaku:
-
     def test_sankaku(self, sankaku_surtr, sankaku_2dogs, sankaku_texas_yuri):
         source = SankakuSource(
             ['surtr_(arknights)', 'solo'],

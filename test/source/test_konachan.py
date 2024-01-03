@@ -4,9 +4,8 @@ from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, Lolibo
     GelbooruSource, XbooruSource, SafebooruOrgSource, TBIBSource
 
 
-@pytest.mark.ignore
+@pytest.mark.unittest
 class TestSourceKonachan:
-
     def test_konachan(self, konachan_surtr, konachan_2dogs):
         source = KonachanSource(['surtr_(arknights)'])
         items = list(source[:15])
