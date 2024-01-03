@@ -27,7 +27,7 @@ def list_datasources():
 def list_responses():
     return [
         os.path.splitext(os.path.basename(item))[0]
-        for item in hf_fs.glob(f'datasets/{_REPOSITORY}/responses/*.zip')
+        for item in hf_fs.glob(f'datasets/{_REPOSITORY}/responses_httpx/*.zip')
     ]
 
 

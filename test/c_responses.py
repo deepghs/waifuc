@@ -4,18 +4,6 @@ from .responses import mock_responses_from_hf
 
 
 @pytest.fixture()
-def anime_pictures_2girls(httpx_mock):
-    with mock_responses_from_hf('anime_pictures_2girls', httpx_mock):
-        yield
-
-
-@pytest.fixture()
-def anime_pictures_surtr(httpx_mock):
-    with mock_responses_from_hf('anime_pictures_surtr', httpx_mock):
-        yield
-
-
-@pytest.fixture()
 def atfbooru(httpx_mock):
     with mock_responses_from_hf('atfbooru', httpx_mock):
         yield
@@ -136,42 +124,6 @@ def paheal_surtr(httpx_mock):
 
 
 @pytest.fixture()
-def pixiv_ranking_day(httpx_mock):
-    with mock_responses_from_hf('pixiv_ranking_day', httpx_mock):
-        yield
-
-
-@pytest.fixture()
-def pixiv_ranking_week_r18(httpx_mock):
-    with mock_responses_from_hf('pixiv_ranking_week_r18', httpx_mock):
-        yield
-
-
-@pytest.fixture()
-def pixiv_search_surtr(httpx_mock):
-    with mock_responses_from_hf('pixiv_search_surtr', httpx_mock):
-        yield
-
-
-@pytest.fixture()
-def pixiv_search_surtr_original(httpx_mock):
-    with mock_responses_from_hf('pixiv_search_surtr_original', httpx_mock):
-        yield
-
-
-@pytest.fixture()
-def pixiv_user_2864095(httpx_mock):
-    with mock_responses_from_hf('pixiv_user_2864095', httpx_mock):
-        yield
-
-
-@pytest.fixture()
-def pixiv_user_2864095_original(httpx_mock):
-    with mock_responses_from_hf('pixiv_user_2864095_original', httpx_mock):
-        yield
-
-
-@pytest.fixture()
 def rule34_2dogs(httpx_mock):
     with mock_responses_from_hf('rule34_2dogs', httpx_mock):
         yield
@@ -228,18 +180,6 @@ def tbib_2dogs(httpx_mock):
 @pytest.fixture()
 def tbib_surtr(httpx_mock):
     with mock_responses_from_hf('tbib_surtr', httpx_mock):
-        yield
-
-
-@pytest.fixture()
-def wallhaven_id_105577(httpx_mock):
-    with mock_responses_from_hf('wallhaven_id_105577', httpx_mock):
-        yield
-
-
-@pytest.fixture()
-def wallhaven_surtr(httpx_mock):
-    with mock_responses_from_hf('wallhaven_surtr', httpx_mock):
         yield
 
 
