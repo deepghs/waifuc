@@ -20,6 +20,9 @@ class DerpibooruLikeSource(WebDataSource):
         self.site_name = site_name
         self.site_url = site_url
 
+    def _args(self):
+        return [self.tags]
+
     def _params(self, page):
         params = {
             'q': ' '.join(self.tags),

@@ -62,16 +62,25 @@ class BaseDataSource:
             return exporter.export_from(iter(self))
 
 
-class RootDataSource(BaseDataSource):
+class NamedDataSource(BaseDataSource):
+    def _args(self):
+        return None
+
+    def __str__(self):
+        return f'{self.__class__.__name__}({", ".join(map(repr, self._args() or []))})'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} {", ".join(map(repr, self._args() or []))}>'
+
     def _iter(self) -> Iterator[ImageItem]:
         raise NotImplementedError  # pragma: no cover
 
     def _iter_from(self) -> Iterator[ImageItem]:
         names = get_task_names()
         if names:
-            desc = f'{self.__class__.__name__} - {".".join(names)}'
+            desc = f'{self} - {".".join(names)}'
         else:
-            desc = f'{self.__class__.__name__}'
+            desc = f'{self}'
         for item in tqdm(self._iter(), desc=desc):
             yield item
 

@@ -9,15 +9,18 @@ from typing import Iterator
 from PIL import UnidentifiedImageError
 from imgutils.data import load_image
 
-from .base import RootDataSource
+from .base import NamedDataSource
 from ..model import ImageItem
 
 
-class LocalSource(RootDataSource):
+class LocalSource(NamedDataSource):
     def __init__(self, directory: str, recursive: bool = True, shuffle: bool = False):
         self.directory = directory
         self.recursive = recursive
         self.shuffle = shuffle
+
+    def _args(self):
+        return [self.directory]
 
     def _iter_files(self):
         if self.recursive:
@@ -55,7 +58,7 @@ class LocalSource(RootDataSource):
             yield ImageItem(origin_item.image, meta)
 
 
-class LocalTISource(RootDataSource):
+class LocalTISource(NamedDataSource):
     def __init__(self, directory: str):
         self.directory = directory
 

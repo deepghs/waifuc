@@ -62,6 +62,9 @@ class WallHavenSource(WebDataSource):
         self.min_size = min_size
         self.select = select
 
+    def _args(self):
+        return [self.query]
+
     def _select_url(self, data):
         if self.select == 'original':
             return data['path']

@@ -21,6 +21,9 @@ class DuitangSource(WebDataSource):
         self.page_size: int = page_size
         self.strict = strict
 
+    def _args(self):
+        return [self.keyword]
+
     def _check_title(self, title):
         if not self.strict:
             return True

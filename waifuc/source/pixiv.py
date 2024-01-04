@@ -100,6 +100,9 @@ class PixivSearchSource(BasePixivSource):
         self.filter = filter
         self.req_auth = req_auth
 
+    def _args(self):
+        return [self.word]
+
     def _iter_illustration(self) -> Iterator[dict]:
         offset = 0
         while True:
@@ -127,6 +130,9 @@ class PixivUserSource(BasePixivSource):
         self.filter = filter
         self.req_auth = req_auth
 
+    def _args(self):
+        return [self.user_id]
+
     def _iter_illustration(self) -> Iterator[dict]:
         offset = 0
         while True:
@@ -152,6 +158,9 @@ class PixivRankingSource(BasePixivSource):
         self.filter = filter
         self.date = date
         self.req_auth = req_auth
+
+    def _args(self):
+        return [self.mode]
 
     def _iter_illustration(self) -> Iterator[dict]:
         offset = 0

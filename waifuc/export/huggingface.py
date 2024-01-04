@@ -1,6 +1,6 @@
 import os
 import zipfile
-from typing import Type, Optional, Mapping, Any
+from typing import Type, Optional, Mapping, Any, List
 
 from hbutils.system import TemporaryDirectory
 from huggingface_hub import HfApi
@@ -22,6 +22,9 @@ class HuggingFaceExporter(BaseExporter):
         self._tempdir: Optional[TemporaryDirectory] = None
         self._exporter: Optional[LocalDirectoryExporter] = None
         self.hf_token = hf_token or os.environ.get('HF_TOKEN')
+
+    def _args(self) -> Optional[List[str]]:
+        return [self.repository, self.repo_type]
 
     def pre_export(self):
         self._tempdir = TemporaryDirectory()

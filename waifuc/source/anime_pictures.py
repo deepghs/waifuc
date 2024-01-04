@@ -52,6 +52,12 @@ class AnimePicturesSource(WebDataSource):
         self.select = select
         self.kwargs = kwargs
 
+    def _args(self):
+        params = self._params(1)
+        tag_text = params.get('search_tag') or ''
+        denied_tag_text = params.get('denied_tags') or ''
+        return [tag_text, denied_tag_text]
+
     def _params(self, page):
         params = {
             'order_by': self.order_by.value,

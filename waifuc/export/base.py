@@ -1,6 +1,6 @@
 import logging
 import os.path
-from typing import Iterator, Optional, Mapping, Any
+from typing import Iterator, Optional, Mapping, Any, List
 
 from hbutils.system import remove
 from tqdm.auto import tqdm
@@ -12,6 +12,15 @@ from ..utils import get_task_names
 class BaseExporter:
     def __init__(self, ignore_error_when_export: bool = False):
         self.ignore_error_when_export = ignore_error_when_export
+
+    def _args(self) -> Optional[List[str]]:
+        return None
+
+    def __str__(self):
+        return f'{self.__class__.__name__}({", ".join(map(repr, self._args() or []))})'
+
+    def __repr__(self):
+        return f'<{self.__class__.__name__} {", ".join(map(repr, self._args() or []))}>'
 
     def pre_export(self):
         raise NotImplementedError  # pragma: no cover
@@ -26,9 +35,9 @@ class BaseExporter:
         self.pre_export()
         names = get_task_names()
         if names:
-            desc = f'{self.__class__.__name__} - {".".join(names)}'
+            desc = f'{self} - {".".join(names)}'
         else:
-            desc = f'{self.__class__.__name__}'
+            desc = f'{self}'
         for item in tqdm(items, desc=desc):
             try:
                 self.export_item(item)
@@ -48,6 +57,9 @@ class LocalDirectoryExporter(BaseExporter):
         BaseExporter.__init__(self, ignore_error_when_export)
         self.output_dir = output_dir
         self.clear = clear
+
+    def _args(self) -> Optional[List[str]]:
+        return [self.output_dir]
 
     def pre_export(self):
         if self.clear and os.path.exists(self.output_dir):
