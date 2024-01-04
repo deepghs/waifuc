@@ -15,6 +15,8 @@ where>=1.0.2
 pytest-image-diff>=0.0.11
 matplotlib
 natsort
-git+https://github.com/narugo1992/responses.git@dev/binary
+pytest_httpx_recorder
 click>=8.0.0
 gchar>=0.1.0
+hfutils>=0.0.4
+pytest_httpx

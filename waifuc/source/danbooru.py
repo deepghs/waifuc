@@ -3,10 +3,8 @@ import re
 from typing import Optional, Iterator, List, Tuple, Union, Literal
 
 from hbutils.system import urlsplit
-from requests.auth import HTTPBasicAuth
 
 from .web import NoURL, WebDataSource
-from ..config.meta import __TITLE__, __VERSION__
 from ..utils import get_requests_session, srequest
 
 _DanbooruSiteTyping = Literal['konachan', 'yandere', 'danbooru', 'safebooru', 'lolibooru']
@@ -19,10 +17,12 @@ class DanbooruLikeSource(WebDataSource):
                  group_name: Optional[str] = None):
         WebDataSource.__init__(self, group_name or site_name, None, download_silent)
         self.session = get_requests_session(headers={
-            "User-Agent": f"{__TITLE__}/{__VERSION__}",
             'Content-Type': 'application/json; charset=utf-8',
         })
-        self.auth = HTTPBasicAuth(username, api_key) if username and api_key else None
+        if username and api_key:
+            self.auth = (username, api_key)
+        else:
+            self.auth = None
         self.site_name, self.site_url = site_name, site_url
         self.tags = tags
         self.min_size = min_size

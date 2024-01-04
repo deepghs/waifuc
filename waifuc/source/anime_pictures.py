@@ -32,6 +32,7 @@ class Period(str, Enum):
 
 
 class AnimePicturesSource(WebDataSource):
+    __api_root__ = 'https://api.anime-pictures.net'
     __root__ = 'https://anime-pictures.net'
 
     def __init__(self, tags: List[str], tag_mode: Literal['or', 'and'] = 'and',
@@ -85,7 +86,7 @@ class AnimePicturesSource(WebDataSource):
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         page = 0
         while True:
-            resp = srequest(self.session, 'GET', f'{self.__root__}/api/v3/posts', params=self._params(page))
+            resp = srequest(self.session, 'GET', f'{self.__api_root__}/api/v3/posts', params=self._params(page))
             resp.raise_for_status()
 
             posts = resp.json()['posts']

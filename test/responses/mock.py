@@ -1,26 +1,22 @@
-import glob
-import os.path
-import zipfile
 from contextlib import contextmanager
 
-import responses
 from hbutils.system import TemporaryDirectory
+from hfutils.archive import archive_unpack
 from huggingface_hub import hf_hub_download
+from pytest_httpx_recorder.recorder import ResSet
 
 from .base import _REMOTE_REPOSITORY
 
 
 @contextmanager
-def mock_responses_from_hf(name):
+def mock_responses_from_hf(name, httpx_mock):
     with TemporaryDirectory() as td:
-        zip_file = hf_hub_download(_REMOTE_REPOSITORY, filename=f'responses/{name}.zip', repo_type='dataset')
-        with zipfile.ZipFile(zip_file, 'r') as zf:
-            zf.extractall(td)
+        archive_unpack(hf_hub_download(
+            repo_id=_REMOTE_REPOSITORY,
+            repo_type='dataset',
+            filename=f'responses_httpx/{name}.zip'
+        ), td, silent=True)
 
-        yaml_files = glob.glob(os.path.join(td, '*.yaml'))
-        assert len(yaml_files) == 1
-        responses._add_from_file(yaml_files[0])
-        try:
+        resset = ResSet.load(td)
+        with resset.mock_context(httpx_mock):
             yield
-        finally:
-            responses.reset()

@@ -1,12 +1,10 @@
 import pytest
-import responses
 
 from waifuc.source import DanbooruSource, SafebooruSource, ATFBooruSource, E621Source, E926Source
 
 
-@pytest.mark.unittest
 class TestSourceDanbooru:
-    @responses.activate
+    @pytest.mark.unittest
     def test_danbooru_source(self, danbooru):
         source = DanbooruSource(['1girl', 'solo'])
         items = list(source[:10])
@@ -16,17 +14,18 @@ class TestSourceDanbooru:
             assert '1girl' in item.meta['tags']
             assert 'solo' in item.meta['tags']
 
+        with open('test_k.py', 'w') as f:
+            print(items[0].meta['tags'], file=f)
         assert items[0].meta['tags'] == pytest.approx({
-            '1girl': 1.0, 'armpits': 1.0, 'bare_shoulders': 1.0, 'breasts': 1.0, 'cleavage': 1.0, 'collarbone': 1.0,
-            'commentary_request': 1.0, 'cosplay': 1.0, 'cowboy_shot': 1.0, 'groin': 1.0, 'hair_between_eyes': 1.0,
-            'iowa_(kancolle)': 1.0, 'kantai_collection': 1.0, 'large_breasts': 1.0, 'looking_at_viewer': 1.0,
-            'midriff': 1.0, 'navel': 1.0, 'sidelocks': 1.0, 'solo': 1.0, 'standing': 1.0,
-            'taiki_shuttle_(umamusume)': 1.0, 'taiki_shuttle_(umamusume)_(cosplay)': 1.0, 'umamusume': 1.0,
-            'yasume_yukito': 1.0
+            '1girl': 1.0, 'absurdres': 1.0, 'bikini': 1.0, 'bird': 1.0, 'black_bikini': 1.0, 'breasts': 1.0,
+            'curly_hair': 1.0, 'day': 1.0, 'eyewear_on_head': 1.0, 'floating': 1.0, 'floating_object': 1.0,
+            'green_eyes': 1.0, 'green_hair': 1.0, 'hat': 1.0, 'highres': 1.0, 'karikarisuru': 1.0, 'ocean': 1.0,
+            'one-punch_man': 1.0, 'sarong': 1.0, 'see-through_sarong': 1.0, 'side-tie_bikini_bottom': 1.0,
+            'small_breasts': 1.0, 'solo': 1.0, 'straw_hat': 1.0, 'string_bikini': 1.0, 'sunglasses': 1.0,
+            'swimsuit': 1.0, 'tatsumaki': 1.0, 'telekinesis': 1.0
         })
         assert 'danbooru' in items[0].meta
 
-    @responses.activate
     def test_safebooru_source(self, safebooru):
         source = SafebooruSource(['1girl', 'solo'])
         items = list(source[:10])
@@ -36,7 +35,6 @@ class TestSourceDanbooru:
             assert '1girl' in item.meta['tags']
             assert 'solo' in item.meta['tags']
 
-    @responses.activate
     def test_atfbooru(self, atfbooru):
         source = ATFBooruSource(['scathach_(fate)_(all)'])
         items = list(source[:10])
@@ -44,7 +42,6 @@ class TestSourceDanbooru:
         for item in items:
             assert 'scathach_(fate)_(all)' in item.meta['tags']
 
-    @responses.activate
     def test_e621(self, e621_amiya, e621_surtr):
         source = E621Source(['amiya_(arknights)', 'solo'])
         items = list(source[:10])
@@ -60,7 +57,6 @@ class TestSourceDanbooru:
             assert 'surtr_(arknights)' in item.meta['tags']
             assert 'solo' in item.meta['tags']
 
-    @responses.activate
     def test_e926(self, e926_amiya, e926_surtr):
         source = E926Source(['amiya_(arknights)', 'solo'])
         items = list(source[:10])

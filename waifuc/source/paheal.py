@@ -2,12 +2,11 @@ import os
 import re
 from typing import Optional, List, Iterator, Tuple, Union
 
-import requests
 import xmltodict
 from hbutils.system import urlsplit
 
 from .web import WebDataSource, NoURL
-from ..utils import get_requests_session
+from ..utils import get_requests_session, srequest
 
 
 class PahealSource(WebDataSource):
@@ -60,8 +59,8 @@ class PahealSource(WebDataSource):
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         page = 1
         while True:
-            resp = requests.get('https://rule34.paheal.net/api/danbooru/find_posts/index.xml',
-                                params=self._params(page))
+            resp = srequest(self.session, 'GET', 'https://rule34.paheal.net/api/danbooru/find_posts/index.xml',
+                            params=self._params(page))
             resp.raise_for_status()
             posts = xmltodict.parse(resp.text)['posts']['tag']
 
