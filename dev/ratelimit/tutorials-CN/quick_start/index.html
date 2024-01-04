@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我想给我老婆炼丹 &mdash; waifuc 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c9d0a6ec" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="我想从网站上爬取一些数据" href="../crawl_images/index.html" />
+    <link rel="prev" title="使用须知" href="../installation/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            waifuc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Training a LoRA for My Waifu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_images/index.html">Crawling Some Images From Websites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/process_images/index.html">Process Crawled or Local Images and Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_videos/index.html">Extracting Character Images from Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/device/index.html">How to Prevent Waifuc from Using GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">使用须知</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">我想给我老婆炼丹</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">我该怎么做？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id3">上文提供的代码是如何运行的？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">好消息！</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/before_read/index.html">Reading Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/workflow/index.html">Understanding the Waifuc Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/dynamic/index.html">I Need to Dynamically Design the Processing Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/customize/index.html">How to Customize In Waifuc?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/ccip/index.html">What is CCIP, and What are its Features?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">waifuc.config</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">waifuc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">我想给我老婆炼丹</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials-CN/quick_start/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+    
+    
+  <section id="id1">
+<h1>我想给我老婆炼丹<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<p>在本教程开始之前，你需要完成如下内容：</p>
+<ol class="arabic">
+<li><p>首先，<strong>安装Python并掌握基本用法</strong></p>
+<p>(<strong>Python3</strong>教程，外部链接详见：</p>
+<p>中文：<a class="reference external" href="https://www.runoob.com/python3/python3-tutorial.html">https://www.runoob.com/python3/python3-tutorial.html</a></p>
+<p>英文：<a class="reference external" href="https://python.swaroopch.com/">https://python.swaroopch.com/</a> )</p>
+</li>
+<li><p>之后，<strong>完成waifuc库安装</strong></p>
+<p>(本项目安装详见：<a class="reference external" href="https://deepghs.github.io/waifuc/main/tutorials-CN/installation/index.html">https://deepghs.github.io/waifuc/main/tutorials-CN/installation/index.html</a> )</p>
+</li>
+</ol>
+<section id="id2">
+<h2>我该怎么做？<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<ol class="arabic">
+<li><p>第一步，找到你一见钟情的老婆，<strong>记住她的名字和出处</strong></p>
+<p>比如，Narugo的老婆是下面这位红发的恶魔女孩</p>
+<p><strong>她叫史尔特尔</strong><code class="docutils literal notranslate"><span class="pre">Surtr</span></code>，<strong>出处为明日方舟</strong><code class="docutils literal notranslate"><span class="pre">Arknights</span></code></p>
+<blockquote>
+<div><img alt="../../_images/surtr.png" class="align-center" src="../../_images/surtr.png" />
+</div></blockquote>
+</li>
+<li><p><strong>在图像站上，找到她对应的人物关键词</strong></p>
+<p>例如对于史尔特尔，可以在<a class="reference external" href="https://danbooru.donmai.us/">Danbooru</a>上找到她的关键词<code class="docutils literal notranslate"><span class="pre">surtr_(arknights)</span></code></p>
+<blockquote>
+<div><img alt="../../_images/danbooru_surtr.png" class="align-center" src="../../_images/danbooru_surtr.png" />
+</div></blockquote>
+</li>
+<li><p>接着，创建一个名为<code class="docutils literal notranslate"><span class="pre">crawl.py</span></code>的Python程序文件，将以下代码粘贴进去并保存：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span><span class="p">,</span> <span class="n">FilterSimilarAction</span><span class="p">,</span> \
+<span class="linenos"> 2</span>    <span class="n">TaggingAction</span><span class="p">,</span> <span class="n">PersonSplitAction</span><span class="p">,</span> <span class="n">FaceCountAction</span><span class="p">,</span> <span class="n">FirstNSelectAction</span><span class="p">,</span> \
+<span class="linenos"> 3</span>    <span class="n">CCIPAction</span><span class="p">,</span> <span class="n">ModeConvertAction</span><span class="p">,</span> <span class="n">ClassFilterAction</span><span class="p">,</span> <span class="n">RandomFilenameAction</span><span class="p">,</span> <span class="n">AlignMinSizeAction</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">TextualInversionExporter</span>
+<span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 8</span>    <span class="c1"># 将关键词传入，如：&#39;surtr_(arknights)&#39;</span>
+<span class="linenos"> 9</span>    <span class="c1"># 注意：对于Danbooru，这里若将&#39;solo&#39;与&#39;surtr_(arknights)&#39;关键词一同传入，</span>
+<span class="linenos">10</span>    <span class="c1"># 如：[&#39;surtr_(arknights)&#39;，&#39;solo&#39;]，会使爬取结果更符合预期的单人图像</span>
+<span class="linenos">11</span>    <span class="c1"># 但并非必须，因为在接下来的流水线中我们会将包含的多人图像处理为单人图像</span>
+<span class="linenos">12</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;surtr_(arknights)&#39;</span><span class="p">])</span>
+<span class="linenos">13</span>
+<span class="linenos">14</span>    <span class="c1"># 爬取图像，处理它们，然后以给定的格式保存到目录中</span>
+<span class="linenos">15</span>    <span class="n">s</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">16</span>        <span class="c1"># 以RGB色彩模式加载图像并将透明背景替换为白色背景</span>
+<span class="linenos">17</span>        <span class="n">ModeConvertAction</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">),</span>
+<span class="linenos">18</span>
+<span class="linenos">19</span>        <span class="c1"># 图像预过滤</span>
+<span class="linenos">20</span>        <span class="n">NoMonochromeAction</span><span class="p">(),</span>  <span class="c1"># 丢弃单色、灰度或素描等单色图像</span>
+<span class="linenos">21</span>        <span class="n">ClassFilterAction</span><span class="p">([</span><span class="s1">&#39;illustration&#39;</span><span class="p">,</span> <span class="s1">&#39;bangumi&#39;</span><span class="p">]),</span>  <span class="c1"># 丢弃漫画或3D图像</span>
+<span class="linenos">22</span>        <span class="c1"># RatingFilterAction([&#39;safe&#39;, &#39;r15&#39;]),  # 可选，丢弃非全年龄或R15的图像</span>
+<span class="linenos">23</span>        <span class="n">FilterSimilarAction</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">),</span>  <span class="c1"># 丢弃相似或重复的图像</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span>        <span class="c1"># 人像处理</span>
+<span class="linenos">26</span>        <span class="n">FaceCountAction</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>  <span class="c1"># 丢弃没有人脸或有多个人脸的图像</span>
+<span class="linenos">27</span>        <span class="n">PersonSplitAction</span><span class="p">(),</span>  <span class="c1"># 将多人图像中每个人物裁出</span>
+<span class="linenos">28</span>        <span class="n">FaceCountAction</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>  <span class="c1"># 丢弃裁出内容中没有人脸或有多个人脸的图像</span>
+<span class="linenos">29</span>
+<span class="linenos">30</span>        <span class="c1"># CCIP，丢弃内容为非指定角色的图像</span>
+<span class="linenos">31</span>        <span class="n">CCIPAction</span><span class="p">(),</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span>        <span class="c1"># 将短边大于800像素的图像等比例调整至短边为800像素</span>
+<span class="linenos">34</span>        <span class="n">AlignMinSizeAction</span><span class="p">(</span><span class="mi">800</span><span class="p">),</span>
+<span class="linenos">35</span>
+<span class="linenos">36</span>        <span class="c1"># 使用wd14 v2进行标注，如果不需要角色标注，将character_threshold设置为1.01</span>
+<span class="linenos">37</span>        <span class="n">TaggingAction</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="linenos">38</span>
+<span class="linenos">39</span>        <span class="n">FilterSimilarAction</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">),</span>  <span class="c1"># 再次丢弃相似或重复的图像</span>
+<span class="linenos">40</span>        <span class="n">FirstNSelectAction</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>  <span class="c1"># 当已有200张图像到达此步骤时，停止后继图像处理</span>
+<span class="linenos">41</span>        <span class="c1"># MirrorAction(),  # 可选，镜像处理图像进行数据增强</span>
+<span class="linenos">42</span>        <span class="n">RandomFilenameAction</span><span class="p">(</span><span class="n">ext</span><span class="o">=</span><span class="s1">&#39;.png&#39;</span><span class="p">),</span>  <span class="c1"># 随机重命名图像</span>
+<span class="linenos">43</span>    <span class="p">)</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">44</span>        <span class="c1"># 保存到/data/surtr_dataset目录，可自行更改</span>
+<span class="linenos">45</span>        <span class="n">TextualInversionExporter</span><span class="p">(</span><span class="s1">&#39;/data/surtr_dataset&#39;</span><span class="p">)</span>
+<span class="linenos">46</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>执行以下的命令来运行上一步的程序：</p>
+<blockquote>
+<div><div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>crawl.py
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+<li><p>等待程序运行完毕，打开为其指定的<code class="docutils literal notranslate"><span class="pre">./data/surtr_dataset</span></code>文件夹，你将看到包含200图的史尔特尔数据集，且已经完成了标注，即与图像同名的txt文件</p>
+<blockquote>
+<div><img alt="../../_images/danbooru_crawled.png" class="align-center" src="../../_images/danbooru_crawled.png" />
+</div></blockquote>
+</li>
+<li><p>按照以上内容如法炮制，仅需稍作等待，我们便可以轻易地得到任何想要的角色数据集</p></li>
+</ol>
+</section>
+<section id="id3">
+<h2>上文提供的代码是如何运行的？<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h2>
+<p>在上文中，我们使用waifuc搭建了一条图像从爬取到输出的完整流水线。流水线分为三个部分，同时也对应了waifuc的三个主要组件：</p>
+<ul>
+<li><p>数据源组件<code class="docutils literal notranslate"><span class="pre">Source</span></code>，<strong>加载图像数据加入流水线</strong></p>
+<p>在本例中使用：</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">DanbooruSource</span></code>，<strong>从Danbooru图像站爬取图像数据并加入流水线</strong></p>
+<blockquote>
+<div><p>在Danbooru上按照关键词 <code class="docutils literal notranslate"><span class="pre">surtr_(arknights)</span></code> 进行检索并爬取</p>
+</div></blockquote>
+</li>
+</ul>
+</li>
+<li><p>图像操作组件<code class="docutils literal notranslate"><span class="pre">Action</span></code>，<strong>对图像进行处理与筛选</strong></p>
+<p>在本例中使用：</p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">ModeConvertAction</span></code>，<strong>对图像进行格式转换处理</strong></p>
+<blockquote>
+<div><p>本例中转换为RGB色彩格式，并对透明背景的图添加白色背景</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">NoMonochromeAction</span></code>，<strong>对图像进行单色图过滤</strong></p>
+<blockquote>
+<div><p>过滤掉黑白图、线稿、单色漫画等</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">ClassFilterAction</span></code>，<strong>对图像进行类型过滤</strong></p>
+<blockquote>
+<div><p>本例中只保留<strong>插画</strong><code class="docutils literal notranslate"><span class="pre">illustration</span></code>和<strong>番剧截图</strong><code class="docutils literal notranslate"><span class="pre">bangumi</span></code>两种图像
+<strong>漫画</strong><code class="docutils literal notranslate"><span class="pre">comic</span></code>和<strong>恋活、MMD等</strong><code class="docutils literal notranslate"><span class="pre">3D</span></code>图像将被过滤</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FilterSimilarAction</span></code>，<strong>对图像进行相似过滤</strong></p>
+<blockquote>
+<div><p>过滤掉相似度高的图像</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FaceCountAction</span></code>，<strong>对图像进行人像数量过滤</strong></p>
+<blockquote>
+<div><p>本例中只保留单一人像的图像，无人像或多人像的图像将被过滤</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">PersonSplitAction</span></code>，<strong>对图像进行人物拆分处理</strong></p>
+<blockquote>
+<div><p>将图像中的所有人物以单一人物为单位裁出为多个图像</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code>，<strong>对图像进行人物相关过滤</strong></p>
+<blockquote>
+<div><p>本例中将过滤掉非surtr角色的图像</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AlignMinSizeAction</span></code>，<strong>对图像进行压缩处理</strong></p>
+<blockquote>
+<div><p>本例中将短边长度超过800像素的图像等比例缩放至短边为800像素</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TaggingAction</span></code>，<strong>对图像使用wd14v2 tagger进行打标处理</strong></p>
+<blockquote>
+<div><p>本例中由于爬取的图像来自Danbooru，本身包含提示词信息，因此需要将<code class="docutils literal notranslate"><span class="pre">force</span></code>设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>来让打标器重新打标</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">FirstNSelectAction</span></code>，<strong>对图像进行取前N个处理</strong></p>
+<blockquote>
+<div><p>当到达这一步的图像达到设置数量时，终止之前的所有操作</p>
+<p>本例中设置数量为200，满足时将停止继续对后续图像的爬取和操作</p>
+</div></blockquote>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">RandomFilenameAction</span></code>，<strong>对图像进行随机命名处理</strong></p>
+<blockquote>
+<div><p>本例中将图像进行随机重命名，并使用<code class="docutils literal notranslate"><span class="pre">.png</span></code>作为图像保存为图像文件时的扩展名</p>
+</div></blockquote>
+</li>
+</ul>
+</li>
+<li><p>图像导出组件<code class="docutils literal notranslate"><span class="pre">Exporter</span></code>，<strong>将图像以指定形式导出至目录</strong></p>
+<blockquote>
+<div><p>在本例中使用：</p>
+</div></blockquote>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">TextualInversionExporter</span></code>，<strong>将图像以图像文件+标注格式导出至目录</strong></p>
+<blockquote>
+<div><p>以图像文件+txt标注文件形式保存处理完毕的图像到指定路径</p>
+<p>本例中保存至<code class="docutils literal notranslate"><span class="pre">./data/surtr_dataset</span></code>路径</p>
+</div></blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<p>感谢Narugo保留的PlantUML源代码，汉化流程图如下：</p>
+<blockquote>
+<div><img alt="../../_images/sample_workflow.puml.svg" class="align-center" src="../../_images/sample_workflow.puml.svg" /></div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>对以上内容的补充：</p>
+<ul>
+<li><p><strong>可通过替换</strong> <code class="docutils literal notranslate"><span class="pre">Source</span></code><strong>中的其他数据源来从其他的网站爬取图像数据</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Source</span></code>支持大部分图像站的数据源，包括<strong>Pixiv、Sankaku、Rule34、AnimePictures、Zerochan、Konachan、堆糖（duitang）、触站（huashi6）</strong>等</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>可通过</strong><code class="docutils literal notranslate"><span class="pre">Source</span></code><strong>中的</strong><code class="docutils literal notranslate"><span class="pre">LocalSource</span></code><strong>数据源加载本地目录来获取图像数据</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Source</span></code>中的<code class="docutils literal notranslate"><span class="pre">LocalSource</span></code>数据源可用来加载指定的本地目录，以获取图像数据</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>可通过增减、排序</strong><code class="docutils literal notranslate"><span class="pre">Action</span></code><strong>中的操作根据具体需求来构建工作流程</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p>waifuc支持调用<code class="docutils literal notranslate"><span class="pre">Source</span></code>的<code class="docutils literal notranslate"><span class="pre">attach</span></code>方法，以增减、排序的模块化方式为图像添加<code class="docutils literal notranslate"><span class="pre">Action</span></code>中的操作，有相当高的自由度与灵活性</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p><strong>可通过</strong><code class="docutils literal notranslate"><span class="pre">Exporter</span></code><strong>中的其他导出来将图像以其他形式导出</strong></p>
+<blockquote>
+<div><ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Exporter</span></code>提供了数种导出，以适应不同情况的使用需求</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div>
+</section>
+<section id="id4">
+<h2>好消息！<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<p>上面的例子中，需要用户先从图像站上获取需要的关键词，才能进行检索——这简直太“繁琐”了！DeepGHS也觉得，这样太麻烦了，甚至还需要用户进行手动操作！</p>
+<p>不过好消息是，DeepGHS团队已经一定程度上解决了这个问题——团队提供了一个<strong>额外的、支持多语言输入的、可以直接使用角色名字的数据源</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">gchar</span></code>为<code class="docutils literal notranslate"><span class="pre">Source</span></code>的扩展包，包含了<strong>一个预置的角色数据库，对目前主流二游的所有角色支持：</strong></dt><dd><ul class="simple">
+<li><p><strong>中/日/英官方名称检索</strong></p></li>
+<li><p><strong>神秘网友援助的别名/外号检索</strong></p></li>
+</ul>
+</dd>
+</dl>
+<p>具体支持列表详见：<a class="reference external" href="https://narugo1992.github.io/gchar/main/best_practice/supported/index.html#supported-games-and-sites">https://narugo1992.github.io/gchar/main/best_practice/supported/index.html#supported-games-and-sites</a></p>
+</div>
+<p>这个包通过如下命令进行安装：</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/deepghs/waifuc.git@main#egg<span class="o">=</span>waifuc<span class="o">[</span>gchar<span class="o">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p><code class="docutils literal notranslate"><span class="pre">gchar</span></code>目前已经完全支持明日方舟<code class="docutils literal notranslate"><span class="pre">Arknights</span></code>的角色数据，史尔特尔的当然也包括在其中</p>
+<p>因此，我们只需<strong>从</strong><code class="docutils literal notranslate"><span class="pre">Source</span></code><strong>中导入</strong><code class="docutils literal notranslate"><span class="pre">GcharAutoSource</span></code></p>
+<p>并<strong>将</strong><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">DanbooruSource(['surtr_(arknights)'])</span></code><strong>替换为</strong><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">GcharAutoSource('surtr')</span></code><strong>或</strong><code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">GcharAutoSource('史尔特尔')</span></code>即可</p>
+<p>当然，上面提到了，<strong>角色的外号与别称也是被允许的，不过相较于官方名称来说，覆盖程度会较窄</strong></p>
+<p>完整代码如下：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span><span class="p">,</span> <span class="n">FilterSimilarAction</span><span class="p">,</span> \
+<span class="linenos"> 2</span>    <span class="n">TaggingAction</span><span class="p">,</span> <span class="n">PersonSplitAction</span><span class="p">,</span> <span class="n">FaceCountAction</span><span class="p">,</span> <span class="n">FirstNSelectAction</span><span class="p">,</span> \
+<span class="linenos"> 3</span>    <span class="n">CCIPAction</span><span class="p">,</span> <span class="n">ModeConvertAction</span><span class="p">,</span> <span class="n">ClassFilterAction</span><span class="p">,</span> <span class="n">RandomFilenameAction</span><span class="p">,</span> <span class="n">AlignMinSizeAction</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">TextualInversionExporter</span>
+<span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">GcharAutoSource</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 8</span>    <span class="c1"># 通过gchar扩展包提供的数据源进行爬取</span>
+<span class="linenos"> 9</span>    <span class="c1"># 史尔特尔、42、surtr都是支持的</span>
+<span class="linenos">10</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">GcharAutoSource</span><span class="p">(</span><span class="s1">&#39;surtr&#39;</span><span class="p">)</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="c1"># 爬取图像，处理它们，然后以给定的格式保存到目录中</span>
+<span class="linenos">13</span>    <span class="n">s</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">14</span>        <span class="c1"># 以RGB色彩模式加载图像并将透明背景替换为白色背景</span>
+<span class="linenos">15</span>        <span class="n">ModeConvertAction</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="s1">&#39;white&#39;</span><span class="p">),</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>        <span class="c1"># 图像预过滤</span>
+<span class="linenos">18</span>        <span class="n">NoMonochromeAction</span><span class="p">(),</span>  <span class="c1"># 丢弃单色、灰度或素描等单色图像</span>
+<span class="linenos">19</span>        <span class="n">ClassFilterAction</span><span class="p">([</span><span class="s1">&#39;illustration&#39;</span><span class="p">,</span> <span class="s1">&#39;bangumi&#39;</span><span class="p">]),</span>  <span class="c1"># 丢弃漫画或3D图像</span>
+<span class="linenos">20</span>        <span class="c1"># RatingFilterAction([&#39;safe&#39;, &#39;r15&#39;]),  # 可选，丢弃非全年龄或R15的图像</span>
+<span class="linenos">21</span>        <span class="n">FilterSimilarAction</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">),</span>  <span class="c1"># 丢弃相似或重复的图像</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>        <span class="c1"># 人像处理</span>
+<span class="linenos">24</span>        <span class="n">FaceCountAction</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>  <span class="c1"># 丢弃没有人脸或有多个人脸的图像</span>
+<span class="linenos">25</span>        <span class="n">PersonSplitAction</span><span class="p">(),</span>  <span class="c1"># 将多人图像中每个人物裁出</span>
+<span class="linenos">26</span>        <span class="n">FaceCountAction</span><span class="p">(</span><span class="n">count</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span>  <span class="c1"># 丢弃裁出内容中没有人脸或有多个人脸的图像</span>
+<span class="linenos">27</span>
+<span class="linenos">28</span>        <span class="c1"># CCIP，丢弃内容为非指定角色的图像</span>
+<span class="linenos">29</span>        <span class="n">CCIPAction</span><span class="p">(),</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span>        <span class="c1"># 将短边大于800像素的图像等比例调整至短边为800像素</span>
+<span class="linenos">32</span>        <span class="n">AlignMinSizeAction</span><span class="p">(</span><span class="mi">800</span><span class="p">),</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span>        <span class="c1"># 使用wd14 v2进行标注，如果不需要角色标注，将character_threshold设置为1.01</span>
+<span class="linenos">35</span>        <span class="n">TaggingAction</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span>
+<span class="linenos">36</span>
+<span class="linenos">37</span>        <span class="n">FilterSimilarAction</span><span class="p">(</span><span class="s1">&#39;all&#39;</span><span class="p">),</span>  <span class="c1"># 再次丢弃相似或重复的图像</span>
+<span class="linenos">38</span>        <span class="n">FirstNSelectAction</span><span class="p">(</span><span class="mi">200</span><span class="p">),</span>  <span class="c1"># 当已有200张图像到达此步骤时，停止后继图像处理</span>
+<span class="linenos">39</span>        <span class="c1"># MirrorAction(),  # 可选，镜像处理图像进行数据增强</span>
+<span class="linenos">40</span>        <span class="n">RandomFilenameAction</span><span class="p">(</span><span class="n">ext</span><span class="o">=</span><span class="s1">&#39;.png&#39;</span><span class="p">),</span>  <span class="c1"># 随机重命名图像</span>
+<span class="linenos">41</span>    <span class="p">)</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">42</span>        <span class="c1"># 保存到/data/surtr_dataset目录，可自行更改</span>
+<span class="linenos">43</span>        <span class="n">TextualInversionExporter</span><span class="p">(</span><span class="s1">&#39;/data/surtr_dataset&#39;</span><span class="p">)</span>
+<span class="linenos">44</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+</section>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../installation/index.html" class="btn btn-neutral float-left" title="使用须知" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../crawl_images/index.html" class="btn btn-neutral float-right" title="我想从网站上爬取一些数据" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, narugo1992.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev/ratelimit
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">dev/ratelimit</a></dd>
+                        <dd><a href="../../../curl/tutorials-CN/quick_start/index.html">dev/curl</a></dd>
+                        <dd><a href="../../../httpx/tutorials-CN/quick_start/index.html">dev/httpx</a></dd>
+                        <dd><a href="../../../parallel/tutorials-CN/quick_start/index.html">dev/parallel</a></dd>
+                        <dd><a href="../../../save/tutorials-CN/quick_start/index.html">dev/save</a></dd>
+                        <dd><a href="../../../tagfilter/tutorials-CN/quick_start/index.html">dev/tagfilter</a></dd>
+                        <dd><a href="../../../../doc/guide/tutorials-CN/quick_start/index.html">doc/guide</a></dd>
+                        <dd><a href="../../../../main/tutorials-CN/quick_start/index.html">main</a></dd>
+                </dl>
+        </div>
+    </div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
