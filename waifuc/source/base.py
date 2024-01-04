@@ -46,9 +46,12 @@ class BaseDataSource:
                 return ComposedDataSource(self, other)
 
     def __getitem__(self, item):
-        from ..action import SliceSelectAction
+        from ..action import SliceSelectAction, FirstNSelectAction
         if isinstance(item, slice):
-            return self.attach(SliceSelectAction(item.start, item.stop, item.step))
+            if item.start is None and item.step is None and item.stop is not None:
+                return self.attach(FirstNSelectAction(item.stop))
+            else:
+                return self.attach(SliceSelectAction(item.start, item.stop, item.step))
         else:
             raise TypeError(f'Data source\'s getitem only accept slices, but {item!r} found.')
 

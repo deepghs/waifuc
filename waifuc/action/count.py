@@ -61,7 +61,11 @@ class SliceSelectAction(ProgressBarAction):
         ProgressBarAction.__init__(self, self._count())
 
     def _args(self) -> Optional[List[Any]]:
-        return [self._start, self._stop if self._stop is not None else math.inf, self._step]
+        start, stop = self._start, self._stop if self._stop is not None else math.inf
+        if self._step != 1:
+            return [start, stop, self._step]
+        else:
+            return [start, stop]
 
     def _count(self):
         if self._stop is None:
