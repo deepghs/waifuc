@@ -1,12 +1,10 @@
 import pytest
-import responses
 
 from waifuc.source import PahealSource
 
 
 @pytest.mark.unittest
 class TestSourcePaheal:
-    @responses.activate
     def test_paheal(self, paheal_surtr):
         source = PahealSource(['surtr', 'arknights'])
         items = list(source[:20])

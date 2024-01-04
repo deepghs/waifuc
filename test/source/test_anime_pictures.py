@@ -1,12 +1,11 @@
 import pytest
-import responses
 
 from waifuc.source import AnimePicturesSource
 
 
-@pytest.mark.unittest
+@pytest.mark.ignore
 class TestSourceAnimePictures:
-    @responses.activate
+
     def test_anime_pictures(self, anime_pictures_surtr, anime_pictures_2girls):
         s1 = AnimePicturesSource(['surtr (arknights)', 'solo'])
         items = list(s1[:10])

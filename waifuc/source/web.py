@@ -3,7 +3,7 @@ import os
 import warnings
 from typing import Iterator, Tuple, Union
 
-import requests
+import httpx
 from PIL import UnidentifiedImageError, Image
 from PIL.Image import DecompressionBombError
 from hbutils.system import urlsplit, TemporaryDirectory
@@ -22,7 +22,7 @@ class WebDataSource(NamedDataSource):
     __download_rate_limit__: int = 1
     __download_rate_interval__: float = 1
 
-    def __init__(self, group_name: str, session: requests.Session = None, download_silent: bool = True):
+    def __init__(self, group_name: str, session: httpx.Client = None, download_silent: bool = True):
         self.download_silent = download_silent
         self.session = session or get_requests_session()
         self.group_name = group_name
@@ -53,11 +53,14 @@ class WebDataSource(NamedDataSource):
                     )
                     image = Image.open(td_file)
                     image.load()
+                except httpx.HTTPError as err:
+                    warnings.warn(f'Skipped due to download error: {err!r}')
+                    continue
                 except UnidentifiedImageError:
                     warnings.warn(f'{self.group_name.capitalize()} resource {id_} unidentified as image, skipped.')
                     continue
                 except (IOError, DecompressionBombError) as err:
-                    warnings.warn(f'Skipped due to error: {err!r}')
+                    warnings.warn(f'Skipped due to IO error: {err!r}')
                     continue
 
                 meta = {**meta, 'url': url}

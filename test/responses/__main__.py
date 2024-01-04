@@ -9,7 +9,7 @@ GLOBAL_CONTEXT_SETTINGS = dict(
 )
 
 
-@click.group(context_settings={**GLOBAL_CONTEXT_SETTINGS}, help='Create reponses files')
+@click.group(context_settings={**GLOBAL_CONTEXT_SETTINGS}, help='Create responses files')
 def cli():
     pass  # pragma: no cover
 
@@ -30,6 +30,13 @@ def record(record_all, websites):
     for site in list(websites):
         logging.info(f'Recording for {site!r} ...')
         record_site(site)
+
+
+@cli.command('list', context_settings={**GLOBAL_CONTEXT_SETTINGS},
+               help='List existing sites.')
+def list_():
+    for site in sorted(_KNOWN_RECORDERS.keys()):
+        print(site)
 
 
 if __name__ == '__main__':

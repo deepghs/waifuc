@@ -27,7 +27,7 @@ def list_datasources():
 def list_responses():
     return [
         os.path.splitext(os.path.basename(item))[0]
-        for item in hf_fs.glob(f'datasets/{_REPOSITORY}/responses/*.zip')
+        for item in hf_fs.glob(f'datasets/{_REPOSITORY}/responses_httpx/*.zip')
     ]
 
 
@@ -64,9 +64,9 @@ def responses():
         for ds_name in list_responses():
             print(f"", file=f)
             print(f"", file=f)
-            print(f"@pytest.fixture(scope='session')", file=f)
-            print(f"def {ds_name}():", file=f)
-            print(f"    with {mock_responses_from_hf.__name__}({ds_name!r}):", file=f)
+            print(f"@pytest.fixture()", file=f)
+            print(f"def {ds_name}(httpx_mock):", file=f)
+            print(f"    with {mock_responses_from_hf.__name__}({ds_name!r}, httpx_mock):", file=f)
             print(f"        yield", file=f)
 
 

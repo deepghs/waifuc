@@ -1,5 +1,4 @@
 import pytest
-import responses
 
 from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource, \
     GelbooruSource, XbooruSource, SafebooruOrgSource, TBIBSource
@@ -7,7 +6,6 @@ from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, Lolibo
 
 @pytest.mark.unittest
 class TestSourceKonachan:
-    @responses.activate
     def test_konachan(self, konachan_surtr, konachan_2dogs):
         source = KonachanSource(['surtr_(arknights)'])
         items = list(source[:15])
@@ -23,7 +21,6 @@ class TestSourceKonachan:
             assert 'lappland_(arknights)' in item.meta['tags']
             assert '2girls' in item.meta['tags']
 
-    @responses.activate
     def test_konachan_net(self, konachan_net_surtr, konachan_net_2dogs):
         source = KonachanNetSource(['surtr_(arknights)'])
         items = list(source[:15])
@@ -39,7 +36,6 @@ class TestSourceKonachan:
             assert 'lappland_(arknights)' in item.meta['tags']
             assert '2girls' in item.meta['tags']
 
-    @responses.activate
     def test_yande(self, yande_surtr, yande_2dogs):
         source = YandeSource(['surtr_(arknights)'])
         items = list(source[:15])
@@ -54,7 +50,6 @@ class TestSourceKonachan:
             assert 'texas_(arknights)' in item.meta['tags']
             assert 'lappland_(arknights)' in item.meta['tags']
 
-    @responses.activate
     def test_lolibooru(self, lolibooru_surtr, lolibooru_2dogs):
         source = LolibooruSource(['surtr_(arknights)', 'solo'])
         items = list(source[:15])
@@ -73,7 +68,6 @@ class TestSourceKonachan:
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
 
-    @responses.activate
     def test_rule34(self, rule34_surtr, rule34_2dogs):
         source = Rule34Source(['surtr_(arknights)', 'solo'])
         items = list(source[:15])
@@ -92,7 +86,6 @@ class TestSourceKonachan:
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
 
-    @responses.activate
     def test_hypnohub(self, hypnohub_surtr, hypnohub_2dogs):
         source = HypnoHubSource(['surtr_(arknights)'])
         items = list(source[:15])
@@ -107,7 +100,6 @@ class TestSourceKonachan:
             assert 'texas_(arknights)' in item.meta['tags']
             assert 'lappland_(arknights)' in item.meta['tags']
 
-    @responses.activate
     def test_gelbooru(self, gelbooru_surtr, gelbooru_2dogs):
         source = GelbooruSource(['surtr_(arknights)', 'solo'])
         items = list(source[:15])
@@ -126,7 +118,6 @@ class TestSourceKonachan:
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
 
-    @responses.activate
     def test_xbooru(self, xbooru_surtr, xbooru_2dogs):
         source = XbooruSource(['surtr_(arknights)', 'solo'])
         items = list(source[:15])
@@ -146,7 +137,6 @@ class TestSourceKonachan:
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
 
-    @responses.activate
     def test_safebooru_org(self, safebooru_org_surtr, safebooru_org_2dogs):
         source = SafebooruOrgSource(['surtr_(arknights)', 'solo'])
         items = list(source[:15])
@@ -165,7 +155,6 @@ class TestSourceKonachan:
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
 
-    @responses.activate
     def test_tbib(self, tbib_surtr, tbib_2dogs):
         source = TBIBSource(['surtr_(arknights)', 'solo'])
         items = list(source[:15])
