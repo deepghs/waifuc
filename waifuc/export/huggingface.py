@@ -23,7 +23,7 @@ class HuggingFaceExporter(BaseExporter):
         self._exporter: Optional[LocalDirectoryExporter] = None
         self.hf_token = hf_token or os.environ.get('HF_TOKEN')
 
-    def _args(self) -> Optional[List[str]]:
+    def _args(self) -> Optional[List[Any]]:
         return [self.repository, self.repo_type]
 
     def pre_export(self):

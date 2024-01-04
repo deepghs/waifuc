@@ -6,21 +6,12 @@ from hbutils.system import remove
 from tqdm.auto import tqdm
 
 from ..model import ImageItem
-from ..utils import get_task_names
+from ..utils import get_task_names, NamedObject
 
 
-class BaseExporter:
+class BaseExporter(NamedObject):
     def __init__(self, ignore_error_when_export: bool = False):
         self.ignore_error_when_export = ignore_error_when_export
-
-    def _args(self) -> Optional[List[str]]:
-        return None
-
-    def __str__(self):
-        return f'{self.__class__.__name__}({", ".join(map(repr, self._args() or []))})'
-
-    def __repr__(self):
-        return f'<{self.__class__.__name__} {", ".join(map(repr, self._args() or []))}>'
 
     def pre_export(self):
         raise NotImplementedError  # pragma: no cover
@@ -58,7 +49,7 @@ class LocalDirectoryExporter(BaseExporter):
         self.output_dir = output_dir
         self.clear = clear
 
-    def _args(self) -> Optional[List[str]]:
+    def _args(self) -> Optional[List[Any]]:
         return [self.output_dir]
 
     def pre_export(self):

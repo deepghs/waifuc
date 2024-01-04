@@ -1,13 +1,18 @@
-from typing import Iterator
+import math
+from typing import Iterator, Optional, List, Any
 
-from .base import BaseAction, ActionStop
+from .base import ActionStop, ProgressBarAction
 from ..model import ImageItem
 
 
-class FirstNSelectAction(BaseAction):
+class FirstNSelectAction(ProgressBarAction):
     def __init__(self, n: int):
+        ProgressBarAction.__init__(self, n)
         self._n = n
         self._passed = 0
+
+    def _args(self) -> Optional[List[Any]]:
+        return [self._n]
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         if self._passed < self._n:
@@ -33,7 +38,7 @@ def _slice_process(start, stop, step):
     return start, stop, step
 
 
-class SliceSelectAction(BaseAction):
+class SliceSelectAction(ProgressBarAction):
     def __init__(self, *args):
         if len(args) == 0:
             slice_args = _slice_process(None, None, None)
@@ -52,6 +57,19 @@ class SliceSelectAction(BaseAction):
         else:
             self._max = None
         self._current = 0
+
+        ProgressBarAction.__init__(self, self._count())
+
+    def _args(self) -> Optional[List[Any]]:
+        return [self._start, self._stop if self._stop is not None else math.inf, self._step]
+
+    def _count(self):
+        if self._stop is None:
+            return None
+        elif self._step <= self._start:
+            return 0
+        else:
+            return (self._stop - self._start - 1) // self._step + 1
 
     def _check_current(self):
         if self._stop is not None and self._current >= self._stop:

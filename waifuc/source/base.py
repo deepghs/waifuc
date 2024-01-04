@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 from ..action import BaseAction
 from ..export import BaseExporter
 from ..model import ImageItem
-from ..utils import task_ctx, get_task_names
+from ..utils import task_ctx, get_task_names, NamedObject
 
 
 class BaseDataSource:
@@ -62,16 +62,7 @@ class BaseDataSource:
             return exporter.export_from(iter(self))
 
 
-class NamedDataSource(BaseDataSource):
-    def _args(self):
-        return None
-
-    def __str__(self):
-        return f'{self.__class__.__name__}({", ".join(map(repr, self._args() or []))})'
-
-    def __repr__(self):
-        return f'<{self.__class__.__name__} {", ".join(map(repr, self._args() or []))}>'
-
+class NamedDataSource(BaseDataSource, NamedObject):
     def _iter(self) -> Iterator[ImageItem]:
         raise NotImplementedError  # pragma: no cover
 
