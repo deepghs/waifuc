@@ -109,7 +109,8 @@
     
     
   <h1>Source code for waifuc.source.web</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
 
@@ -117,6 +118,7 @@
 <span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">UnidentifiedImageError</span><span class="p">,</span> <span class="n">Image</span>
 <span class="kn">from</span> <span class="nn">PIL.Image</span> <span class="kn">import</span> <span class="n">DecompressionBombError</span>
 <span class="kn">from</span> <span class="nn">hbutils.system</span> <span class="kn">import</span> <span class="n">urlsplit</span><span class="p">,</span> <span class="n">TemporaryDirectory</span>
+<span class="kn">from</span> <span class="nn">pyrate_limiter</span> <span class="kn">import</span> <span class="n">Rate</span><span class="p">,</span> <span class="n">Duration</span><span class="p">,</span> <span class="n">Limiter</span>
 
 <span class="kn">from</span> <span class="nn">.base</span> <span class="kn">import</span> <span class="n">RootDataSource</span>
 <span class="kn">from</span> <span class="nn">..model</span> <span class="kn">import</span> <span class="n">ImageItem</span>
@@ -128,10 +130,22 @@
 
 
 <div class="viewcode-block" id="WebDataSource"><a class="viewcode-back" href="../../../advanced_guides/customize/index.html#waifuc.source.web.WebDataSource">[docs]</a><span class="k">class</span> <span class="nc">WebDataSource</span><span class="p">(</span><span class="n">RootDataSource</span><span class="p">):</span>
+    <span class="n">__download_rate_limit__</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">__download_rate_interval__</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">download_silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">download_silent</span> <span class="o">=</span> <span class="n">download_silent</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span> <span class="ow">or</span> <span class="n">get_requests_session</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">group_name</span> <span class="o">=</span> <span class="n">group_name</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_rate_limiter</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Limiter</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_rate_limit&#39;</span><span class="p">):</span>
+            <span class="n">rate</span> <span class="o">=</span> <span class="n">Rate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__download_rate_limit__</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">Duration</span><span class="o">.</span><span class="n">SECOND</span> <span class="o">*</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__download_rate_interval__</span><span class="p">)))</span>
+            <span class="n">limiter</span> <span class="o">=</span> <span class="n">Limiter</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="n">max_delay</span><span class="o">=</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_rate_limit&#39;</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_rate_limit&#39;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_iter_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]:</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
@@ -143,6 +157,7 @@
                 <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">id_</span><span class="si">}{</span><span class="n">ext_name</span><span class="si">}</span><span class="s1">&#39;</span>
                 <span class="n">td_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_rate_limiter</span><span class="p">()</span><span class="o">.</span><span class="n">try_acquire</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
                     <span class="n">download_file</span><span class="p">(</span>
                         <span class="n">url</span><span class="p">,</span> <span class="n">td_file</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
                         <span class="n">session</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">download_silent</span>
@@ -194,14 +209,12 @@
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../../../main/index.html">main</a></dd>
                         <dd><a href="web.html">dev/httpx</a></dd>
-                        <dd><a href="../../../../curl/index.html">dev/curl</a></dd>
                         <dd><a href="../../../../parallel/index.html">dev/parallel</a></dd>
-                        <dd><a href="../../../../ratelimit/index.html">dev/ratelimit</a></dd>
                         <dd><a href="../../../../save/index.html">dev/save</a></dd>
                         <dd><a href="../../../../tagfilter/index.html">dev/tagfilter</a></dd>
                         <dd><a href="../../../../../doc/guide/index.html">doc/guide</a></dd>
-                        <dd><a href="../../../../../main/index.html">main</a></dd>
                 </dl>
         </div>
     </div><script>
