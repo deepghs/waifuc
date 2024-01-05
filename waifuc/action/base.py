@@ -71,7 +71,7 @@ class ProgressBarAction(BaseAction, NamedObject):
             yield item
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover
 
     def reset(self):
-        raise NotImplementedError
+        raise NotImplementedError  # pragma: no cover

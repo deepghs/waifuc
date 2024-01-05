@@ -1,25 +1,25 @@
-import glob
 import os
 import pathlib
 import random
 import re
 import warnings
-from typing import Iterator
+from typing import Iterator, Optional, List, Any
 
 from PIL import UnidentifiedImageError
 from imgutils.data import load_image
+from tqdm.auto import tqdm
 
 from .base import NamedDataSource
 from ..model import ImageItem
 
 
-class LocalSource(NamedDataSource):
+class BaseDirectorySource(NamedDataSource):
     def __init__(self, directory: str, recursive: bool = True, shuffle: bool = False):
         self.directory = directory
         self.recursive = recursive
         self.shuffle = shuffle
 
-    def _args(self):
+    def _args(self) -> Optional[List[Any]]:
         return [self.directory]
 
     def _iter_files(self):
@@ -37,10 +37,18 @@ class LocalSource(NamedDataSource):
         lst = list(self._iter_files())
         if self.shuffle:
             random.shuffle(lst)
-        yield from lst
+        yield from tqdm(lst, desc=f'Loading from {self.directory!r}')
 
     def _iter(self) -> Iterator[ImageItem]:
-        for file, group_name in self._iter_files():
+        raise NotImplementedError  # pragma: no cover
+
+
+class LocalSource(BaseDirectorySource):
+    def __init__(self, directory: str, recursive: bool = True, shuffle: bool = False):
+        BaseDirectorySource.__init__(self, directory, recursive, shuffle)
+
+    def _iter(self) -> Iterator[ImageItem]:
+        for file, group_name in self._actual_iter_files():
             try:
                 origin_item = ImageItem.load_from_image(file)
                 origin_item.image.load()
@@ -58,23 +66,22 @@ class LocalSource(NamedDataSource):
             yield ImageItem(origin_item.image, meta)
 
 
-class LocalTISource(NamedDataSource):
-    def __init__(self, directory: str):
-        self.directory = directory
+class LocalTISource(BaseDirectorySource):
+    def __init__(self, directory: str, recursive: bool = True, shuffle: bool = False):
+        BaseDirectorySource.__init__(self, directory, recursive, shuffle)
 
     def _iter(self) -> Iterator[ImageItem]:
-        group_name = re.sub(r'[\W_]+', '_', self.directory).strip('_')
-        for f in glob.glob(os.path.join(self.directory, '*')):
-            if not os.path.isfile(f):
-                continue
-
+        for file, group_name in self._actual_iter_files():
             try:
-                image = load_image(f)
+                image = load_image(file)
             except UnidentifiedImageError:
                 continue
+            except OSError:
+                warnings.warn(f'File {file} is truncated or corrupted, skipped.')
+                continue
 
-            id_ = os.path.splitext(os.path.basename(f))[0]
-            txt_file = os.path.join(self.directory, f'{id_}.txt')
+            filename_body = os.path.splitext(os.path.basename(file))[0]
+            txt_file = os.path.join(self.directory, f'{filename_body}.txt')
             if os.path.exists(txt_file):
                 full_text = pathlib.Path(txt_file).read_text(encoding='utf-8')
                 words = re.split(r'\s*,\s*', full_text)
@@ -83,9 +90,9 @@ class LocalTISource(NamedDataSource):
                 tags = {}
 
             meta = {
-                'path': os.path.abspath(f),
+                'path': os.path.abspath(file),
                 'group_id': group_name,
-                'filename': os.path.basename(f),
+                'filename': os.path.basename(file),
                 'tags': tags,
             }
             yield ImageItem(image, meta)
