@@ -68,6 +68,9 @@ class SankakuSource(WebDataSource):
             'X-Requested-With': 'com.android.browser',
         })
 
+    def _args(self):
+        return [self.tags]
+
     _FILE_URLS = [
         ('sample_url', 'sample_width', 'sample_height'),
         ('preview_url', 'preview_width', 'preview_height'),

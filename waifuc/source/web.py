@@ -9,7 +9,7 @@ from PIL.Image import DecompressionBombError
 from hbutils.system import urlsplit, TemporaryDirectory
 from pyrate_limiter import Rate, Duration, Limiter
 
-from .base import RootDataSource
+from .base import NamedDataSource
 from ..model import ImageItem
 from ..utils import get_requests_session, download_file
 
@@ -18,7 +18,7 @@ class NoURL(Exception):
     pass
 
 
-class WebDataSource(RootDataSource):
+class WebDataSource(NamedDataSource):
     __download_rate_limit__: int = 1
     __download_rate_interval__: float = 1
 

@@ -55,6 +55,9 @@ class ZerochanSource(WebDataSource):
         self._password = password
         self._is_authed = False
 
+    def _args(self):
+        return [self.word]
+
     def _auth(self):
         if not self._is_authed and self.username is not None:
             resp = self.session.post(

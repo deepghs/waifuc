@@ -17,6 +17,9 @@ class Huashi6Source(WebDataSource):
         WebDataSource.__init__(self, group_name, get_requests_session(), download_silent)
         self.word = word
 
+    def _args(self):
+        return [self.word]
+
     @classmethod
     @lru_cache()
     def _get_img_site_url(cls):

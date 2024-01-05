@@ -27,6 +27,9 @@ class DanbooruLikeSource(WebDataSource):
         self.tags = tags
         self.min_size = min_size
 
+    def _args(self):
+        return [self.tags]
+
     def _get_data_from_raw(self, raw):
         return raw
 

@@ -1,15 +1,15 @@
 import logging
 import os.path
-from typing import Iterator, Optional, Mapping, Any
+from typing import Iterator, Optional, Mapping, Any, List
 
 from hbutils.system import remove
 from tqdm.auto import tqdm
 
 from ..model import ImageItem
-from ..utils import get_task_names
+from ..utils import get_task_names, NamedObject
 
 
-class BaseExporter:
+class BaseExporter(NamedObject):
     def __init__(self, ignore_error_when_export: bool = False):
         self.ignore_error_when_export = ignore_error_when_export
 
@@ -26,9 +26,9 @@ class BaseExporter:
         self.pre_export()
         names = get_task_names()
         if names:
-            desc = f'{self.__class__.__name__} - {".".join(names)}'
+            desc = f'{self} - {".".join(names)}'
         else:
-            desc = f'{self.__class__.__name__}'
+            desc = f'{self}'
         for item in tqdm(items, desc=desc):
             try:
                 self.export_item(item)
@@ -48,6 +48,9 @@ class LocalDirectoryExporter(BaseExporter):
         BaseExporter.__init__(self, ignore_error_when_export)
         self.output_dir = output_dir
         self.clear = clear
+
+    def _args(self) -> Optional[List[Any]]:
+        return [self.output_dir]
 
     def pre_export(self):
         if self.clear and os.path.exists(self.output_dir):

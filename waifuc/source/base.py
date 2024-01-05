@@ -6,7 +6,7 @@ from tqdm.auto import tqdm
 from ..action import BaseAction
 from ..export import BaseExporter
 from ..model import ImageItem
-from ..utils import task_ctx, get_task_names
+from ..utils import task_ctx, get_task_names, NamedObject
 
 
 class BaseDataSource:
@@ -46,9 +46,12 @@ class BaseDataSource:
                 return ComposedDataSource(self, other)
 
     def __getitem__(self, item):
-        from ..action import SliceSelectAction
+        from ..action import SliceSelectAction, FirstNSelectAction
         if isinstance(item, slice):
-            return self.attach(SliceSelectAction(item.start, item.stop, item.step))
+            if item.start is None and item.step is None and item.stop is not None:
+                return self.attach(FirstNSelectAction(item.stop))
+            else:
+                return self.attach(SliceSelectAction(item.start, item.stop, item.step))
         else:
             raise TypeError(f'Data source\'s getitem only accept slices, but {item!r} found.')
 
@@ -62,16 +65,16 @@ class BaseDataSource:
             return exporter.export_from(iter(self))
 
 
-class RootDataSource(BaseDataSource):
+class NamedDataSource(BaseDataSource, NamedObject):
     def _iter(self) -> Iterator[ImageItem]:
         raise NotImplementedError  # pragma: no cover
 
     def _iter_from(self) -> Iterator[ImageItem]:
         names = get_task_names()
         if names:
-            desc = f'{self.__class__.__name__} - {".".join(names)}'
+            desc = f'{self} - {".".join(names)}'
         else:
-            desc = f'{self.__class__.__name__}'
+            desc = f'{self}'
         for item in tqdm(self._iter(), desc=desc):
             yield item
 

@@ -19,6 +19,9 @@ class KonachanLikeSource(WebDataSource):
         self.min_size = min_size
         self.tags: List[str] = tags
 
+    def _args(self):
+        return [self.tags]
+
     def _select_url(self, data):
         if self.min_size is not None:
             url_names = [key for key in data.keys() if key.endswith('_url')]

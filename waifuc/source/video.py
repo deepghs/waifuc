@@ -6,7 +6,7 @@ from urllib.error import HTTPError
 
 from tqdm.auto import tqdm
 
-from .base import BaseDataSource, EmptySource
+from .base import EmptySource, NamedDataSource, BaseDataSource
 from ..model import ImageItem
 
 try:
@@ -17,12 +17,15 @@ except (ImportError, ModuleNotFoundError):
     av = None
 
 
-class VideoSource(BaseDataSource):
+class VideoSource(NamedDataSource):
     def __init__(self, video_file):
         if av is None:
             raise ImportError(f'pyav not installed, {self.__class__.__name__} is unavailable. '
                               f'Please install this with `pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[video]` to solve this problem.')
         self.video_file = video_file
+
+    def _args(self):
+        return [self.video_file]
 
     def _iter(self) -> Iterator[ImageItem]:
         try:

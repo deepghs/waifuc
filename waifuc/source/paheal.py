@@ -17,6 +17,9 @@ class PahealSource(WebDataSource):
         self.min_size = min_size
         self.user_id, self.api_key = user_id, api_key
 
+    def _args(self):
+        return [self.tags]
+
     def _params(self, page):
         params = {
             'tags': ' '.join(self.tags),
