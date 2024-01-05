@@ -79,9 +79,9 @@ if __name__ == '__main__':
         FilterSimilarAction('all'),  # filter duplicated images
 
         # human processing
-        FaceCountAction(count=1),  # drop images with 0 or >1 faces
+        FaceCountAction(1),  # drop images with 0 or >1 faces
         PersonSplitAction(),  # crop for each person
-        FaceCountAction(count=1),
+        FaceCountAction(1),
 
         # CCIP, filter the character you may not want to see in dataset
         CCIPAction(min_val_count=15),

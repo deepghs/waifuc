@@ -23,9 +23,9 @@ if __name__ == '__main__':
         FilterSimilarAction('all'),  # 丢弃相似或重复的图像
 
         # 人像处理
-        FaceCountAction(count=1),  # 丢弃没有人脸或有多个人脸的图像
+        FaceCountAction(1),  # 丢弃没有人脸或有多个人脸的图像
         PersonSplitAction(),  # 将多人图像中每个人物裁出
-        FaceCountAction(count=1),  # 丢弃裁出内容中没有人脸或有多个人脸的图像
+        FaceCountAction(1),  # 丢弃裁出内容中没有人脸或有多个人脸的图像
 
         # CCIP，丢弃内容为非指定角色的图像
         CCIPAction(),

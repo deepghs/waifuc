@@ -18,7 +18,7 @@ from ..model import ImageItem
 
 _PRESET_SITES = ('zerochan', 'anime_pictures')
 _REGISTERED_SITE_SOURCES = {
-    'anime_pictures': AnimePicturesSource,
+    'anime_pictures': AnimePicturesSource,  # no 'min_size'
     'atfbooru': ATFBooruSource,
     # 'sankaku': SankakuSource,  # still something wrong with sankaku source
     'danbooru': DanbooruSource,
@@ -30,17 +30,18 @@ _REGISTERED_SITE_SOURCES = {
     # 'safebooru': SafebooruSource,
     'xbooru': XbooruSource,
     'yande': YandeSource,
-    'zerochan': ZerochanSource,
-    'wallhaven': WallHavenSource,
-    'pixiv': PixivSearchSource,
+    'zerochan': ZerochanSource,  # no 'min_size'
+    'wallhaven': WallHavenSource,  # no 'min_size'
+    'pixiv': PixivSearchSource,  # no 'min_size'
 }
 
 
 class GcharAutoSource(BaseDataSource):
     def __init__(self, ch, allow_fuzzy: bool = False, fuzzy_threshold: int = 80, contains_extra: bool = True,
                  sure_only: bool = True, preset_sites: Tuple[str, ...] = _PRESET_SITES,
-                 max_preset_limit: Optional[int] = None, main_sources_count: int = 3,
+                 max_preset_limit: Optional[int] = 30, main_sources_count: int = 5,
                  blacklist_sites: Tuple[str, ...] = (), pixiv_refresh_token: Optional[str] = None,
+                 min_size: Optional[int] = 1500, strict_for_preset: bool = True, strict_for_main: bool = False,
                  extra_cfg: Optional[Mapping[str, dict]] = None):
         from gchar.games import get_character
         from gchar.games.base import Character
@@ -56,6 +57,9 @@ class GcharAutoSource(BaseDataSource):
         self.sure_only = sure_only
         self.pixiv_refresh_token = pixiv_refresh_token
         self.extra_cfg = dict(extra_cfg or {})
+        self.min_size = min_size
+        self.strict_for_preset = strict_for_preset
+        self.strict_for_main = strict_for_main
 
         for site in preset_sites:
             assert site in _REGISTERED_SITE_SOURCES, f'Preset site {site!r} not available.'
@@ -85,19 +89,23 @@ class GcharAutoSource(BaseDataSource):
             else:
                 return None, None
 
-    def _build_source_on_site(self, site) -> Optional[BaseDataSource]:
+    def _build_source_on_site(self, site, strict: bool = False) -> Optional[BaseDataSource]:
         site_class = _REGISTERED_SITE_SOURCES[site]
         keyword, count = self._select_keyword_for_site(site)
         if keyword is not None:
             extra_cfg = dict(self.extra_cfg.get(site, None) or {})
             logging.info(f'Recommended keyword for site {site!r} is {keyword!r}, '
                          f'with {plural_word(count, "known post")}.')
-            if issubclass(site_class, (DanbooruLikeSource, AnimePicturesSource)):
-                return site_class([keyword, 'solo'], **extra_cfg)
+            if issubclass(site_class, AnimePicturesSource):
+                tags = [keyword, 'solo'] if strict else [keyword]
+                return site_class(tags, **extra_cfg)
+            elif issubclass(site_class, DanbooruLikeSource):
+                tags = [keyword, 'solo'] if strict else [keyword]
+                return site_class(tags, min_size=self.min_size, **extra_cfg)
             elif issubclass(site_class, (KonachanLikeSource, SankakuSource)):
-                return site_class([keyword], **extra_cfg)
+                return site_class([keyword], min_size=self.min_size, **extra_cfg)
             elif issubclass(site_class, ZerochanSource):
-                return ZerochanSource(keyword, strict=True, **extra_cfg)
+                return ZerochanSource(keyword, strict=strict, **{'select': 'full', **extra_cfg})
             elif issubclass(site_class, WallHavenSource):
                 return site_class(keyword, **extra_cfg)
             elif issubclass(site_class, (PixivSearchSource,)):
@@ -111,7 +119,7 @@ class GcharAutoSource(BaseDataSource):
     def _build_preset_source(self) -> Optional[BaseDataSource]:
         logging.info('Building preset sites sources ...')
         sources = [
-            self._build_source_on_site(site)
+            self._build_source_on_site(site, strict=self.strict_for_preset)
             for site in self.preset_sites
         ]
         sources = [source for source in sources if source is not None]
@@ -127,7 +135,9 @@ class GcharAutoSource(BaseDataSource):
         _all_sites = set(_REGISTERED_SITE_SOURCES.keys())
         if not self.pixiv_refresh_token:
             _all_sites.remove('pixiv')
-        _all_sites = sorted(_all_sites - set(self.preset_sites) - set(self.blacklist_sites))
+        if bool(self.strict_for_main) == bool(self.strict_for_preset):
+            _all_sites = _all_sites - set(self.preset_sites)
+        _all_sites = sorted(_all_sites - set(self.blacklist_sites))
         logging.info(f'Available sites for main sources: {_all_sites!r}.')
 
         site_pairs = []
@@ -139,7 +149,7 @@ class GcharAutoSource(BaseDataSource):
         logging.info(f'Selected main sites: {site_pairs!r}')
 
         sources = [
-            self._build_source_on_site(site)
+            self._build_source_on_site(site, strict=self.strict_for_main)
             for site, _, _ in site_pairs
         ]
         sources = [source for source in sources if source is not None]
