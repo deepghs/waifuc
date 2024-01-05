@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>What is CCIP, and What are its Features? &mdash; waifuc 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c9d0a6ec" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Run Environment Information" href="../../information/environment.result.html" />
+    <link rel="prev" title="How to Customize In Waifuc?" href="../customize/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            waifuc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Training a LoRA for My Waifu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_images/index.html">Crawling Some Images From Websites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/process_images/index.html">Process Crawled or Local Images and Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_videos/index.html">Extracting Character Images from Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/device/index.html">How to Prevent Waifuc from Using GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../before_read/index.html">Reading Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../workflow/index.html">Understanding the Waifuc Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dynamic/index.html">I Need to Dynamically Design the Processing Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customize/index.html">How to Customize In Waifuc?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">What is CCIP, and What are its Features?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#what-is-ccip">What is CCIP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#known-uses-and-limitations-of-ccip">Known Uses and Limitations of CCIP</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#character-similarity-determination">Character Similarity Determination</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#character-dataset-filtering">Character Dataset Filtering</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sorting-anime-character-images">Sorting Anime Character Images</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#quality-assessment-of-character-lora-training">Quality Assessment of Character LoRA Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limitations-of-ccip">Limitations of CCIP</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#how-ccipaction-works">How CCIPAction Works</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">waifuc.config</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">waifuc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">What is CCIP, and What are its Features?</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/advanced_guides/ccip/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+    
+    
+  <section id="what-is-ccip-and-what-are-its-features">
+<h1>What is CCIP, and What are its Features?<a class="headerlink" href="#what-is-ccip-and-what-are-its-features" title="Permalink to this heading"></a></h1>
+<p>Given that <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> is an important operation in waifuc and plays a crucial role in cleaning up character
+training datasets, many waifuc users are interested in it. Therefore, we believe it’s necessary to have a section
+to introduce CCIP and <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code>.</p>
+<section id="what-is-ccip">
+<h2>What is CCIP<a class="headerlink" href="#what-is-ccip" title="Permalink to this heading"></a></h2>
+<p><strong>CCIP, short for Contrastive Character Image Pretraining, is a contrastive learning model designed for character</strong>
+<strong>feature extracting</strong>. Its inspiration and name are derived from CLIP, and like CLIP,
+it falls under the category of contrastive learning models.
+However, while CLIP aligns images and text, CCIP aligns images of anime characters.
+The concept and requirements for CCIP were initially proposed by <a class="reference external" href="https://github.com/narugo1992">narugo1992</a>,
+and the technical roadmap and solution were designed and implemented by <a class="reference external" href="https://github.com/IrisRainbowNeko">7eu7d7</a>,
+with narugo1992 completing the data collection.
+7eu7d7 provided the computational resources for training and version iteration of CCIP.</p>
+<p>The CCIP model consists of two parts:</p>
+<ol class="arabic simple">
+<li><p>Feature Extractor, used to <strong>extract feature vectors from character images</strong>.</p></li>
+<li><p>Feature Comparator, used for <strong>similarity calculations</strong> on the extracted feature vectors.</p></li>
+</ol>
+<p>The currently widely used CCIP model was trained using the <code class="docutils literal notranslate"><span class="pre">v1_pruned</span></code> version of the dataset
+from <a class="reference external" href="https://huggingface.co/datasets/deepghs/character_similarity">Huggingface - deepghs/character_similarity</a>,
+which contains approximately 240,000 images from 3,982 different characters.</p>
+<p>CCIP has shown promising results through extensive usage and testing.</p>
+</section>
+<section id="known-uses-and-limitations-of-ccip">
+<h2>Known Uses and Limitations of CCIP<a class="headerlink" href="#known-uses-and-limitations-of-ccip" title="Permalink to this heading"></a></h2>
+<section id="character-similarity-determination">
+<h3>Character Similarity Determination<a class="headerlink" href="#character-similarity-determination" title="Permalink to this heading"></a></h3>
+<p>The core feature of CCIP is to take two individual images as input, extract their features,
+and output a visual dissimilarity value between the characters in the two images.
+When this dissimilarity value falls below a specific threshold, it can be considered that the characters
+in the two images are the same.</p>
+<p>In simple terms, CCIP allows a computer program to answer the question:
+<strong>“Are these two individual images of the same character?”</strong>
+This was previously considered a task that only humans could perform.</p>
+<p>The image below visually demonstrates CCIP’s capabilities
+(you can also try it yourself using the <a class="reference external" href="https://huggingface.co/spaces/deepghs/ccip">online demo</a>):</p>
+<img alt="../../_images/ccip_compare.png" class="align-center" src="../../_images/ccip_compare.png" />
+</section>
+<section id="character-dataset-filtering">
+<h3>Character Dataset Filtering<a class="headerlink" href="#character-dataset-filtering" title="Permalink to this heading"></a></h3>
+<p>Clearly, CCIP is essential for cleaning up irrelevant characters in web data. Anyone who has grabed images
+from Danbooru should be familiar with the experience that <strong>web data always contains a lot of noise,</strong>
+<strong>and in most cases, it cannot be effectively removed using tags</strong>.
+However, CCIP addresses this problem, achieving a level of dataset purity that is almost comparable to manually
+selecting images. With the support of the waifuc framework, users can easily obtain datasets containing thousands
+or even tens of thousands of high-quality images. This enables LoRAs trained on such datasets to perform at a
+level previously unattainable by LoRAs trained on a few dozen images.</p>
+<p>The task of cleaning the dataset is performed by <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code>, which will be detailed
+in the <a class="reference internal" href="#ccip-action"><span class="std std-ref">How CCIPAction Works</span></a> sections.</p>
+</section>
+<section id="sorting-anime-character-images">
+<h3>Sorting Anime Character Images<a class="headerlink" href="#sorting-anime-character-images" title="Permalink to this heading"></a></h3>
+<p>Based on CCIP’s ability to extract and compare character features,
+it’s possible to use OPTICS clustering algorithm by treating character feature vectors as samples and
+the feature comparator as the distance metric. This allows for automatic classification of images into
+different character categories.</p>
+<p>This practice has already been successful, with examples including:</p>
+<ul class="simple">
+<li><p>DeepGHS’s <a class="reference external" href="https://huggingface.co/BangumiBase">BangumiBase</a>, which contains character image sorting for hundreds of anime series.</p></li>
+</ul>
+<img alt="../../_images/bangumibase.png" class="align-center" src="../../_images/bangumibase.png" />
+<p>This is a repository for the famous anime, <a class="reference external" href="https://huggingface.co/datasets/BangumiBase/fatestaynightufotable">Fate Stay Night (Ufotable version)</a>.</p>
+<img alt="../../_images/bangumibase_fsn.png" class="align-center" src="../../_images/bangumibase_fsn.png" />
+<ul class="simple">
+<li><p><a class="reference external" href="https://github.com/cyber-meow/anime_screenshot_pipeline">cybermeow’s Semi-Automatic Anime Screenshot Sorting Pipeline</a>. Unlike our pipeline, <strong>their dataset retains both single character images and complete multi-character images, and for multi-character images, they also use CCIP to accurately label the characters</strong>. This is <a class="reference external" href="https://civitai.com/user/alea31415">cybermeow’s civitai account</a>, and models trained on data processed by such pipelines have received widespread praise.</p></li>
+</ul>
+</section>
+<section id="quality-assessment-of-character-lora-training">
+<h3>Quality Assessment of Character LoRA Training<a class="headerlink" href="#quality-assessment-of-character-lora-training" title="Permalink to this heading"></a></h3>
+<p>Currently, CCIP has shown reliable performance in many use cases, including the evaluation of the quality of
+images generated by character LoRAs. The specific operation involves generating images using a character model,
+calculating CCIP dissimilarity values between the generated images and images from the dataset,
+and then determining the proportion of samples with dissimilarity values below a certain threshold.
+This metric is called the Recognition Score or RecScore, as shown in the image below:</p>
+<img alt="../../_images/ccip_metrics.png" src="../../_images/ccip_metrics.png" />
+<p>In simple terms, the higher the RecScore, the more likely the generated images are to be recognized as
+the same character as images in the dataset, indicating a higher level of character fidelity.</p>
+<p>CCIP’s ability in this regard has also been demonstrated in the automatic LoRA training pipeline of the DeepGHS team.
+It can be said that CCIP has played a significant role in achieving the capabilities of LoRAs produced by the
+v1.4 pipeline.</p>
+</section>
+<section id="limitations-of-ccip">
+<h3>Limitations of CCIP<a class="headerlink" href="#limitations-of-ccip" title="Permalink to this heading"></a></h3>
+<p>However, CCIP is not a silver bullet, as it does not memorize specific character information.
+It only extracts common features from images. This means that <strong>when you provide an image to CCIP,</strong>
+<strong>it cannot tell you the specific name of the character</strong>.
+CCIP is a 0-shot classification model, which is fundamentally different from traditional taggers
+(taggers are classification models).</p>
+<p>CCIP’s training accuracy is still not high enough, and its limitations include:</p>
+<ul class="simple">
+<li><p>Strong capturing ability for character hairstyles but less sensitivity to other factors such as skin color and hair color.</p></li>
+<li><p>While it has decent accuracy when comparing two images for the same character, it still requires more images to compensate for this limitation.</p></li>
+<li><p>When creating a 0-shot classification problem, its ability to determine “not belonging to any existing character” is insufficient, and it tends to force a choice of the most similar category as the result.</p></li>
+</ul>
+<p>Regarding the second limitation, we are continuously working to improve CCIP and are exploring ways to obtain
+better training datasets. We welcome anyone with access to higher-quality datasets to contact us.</p>
+</section>
+</section>
+<section id="how-ccipaction-works">
+<span id="ccip-action"></span><h2>How CCIPAction Works<a class="headerlink" href="#how-ccipaction-works" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> is one of the flagship features of waifuc, capable of filtering out characters that are
+not relevant to the user. To solve the problem of filtering out irrelevant characters in web datasets,
+you need to address another problem first: <strong>how do you know if a character is the one the user wants?</strong>
+This is not as simple as it may seem because for noisy data, you cannot easily determine a character’s
+core features by averaging the first few characters. To address this problem, <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code>
+employs a state machine with four states:</p>
+<ul class="simple">
+<li><p>Initialization Phase (INIT): <strong>Entered when no trusted images are used</strong> (trusted images are images that can be confirmed as characters the user wants). In this state, <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> does not have much known information. It will <strong>extract features from input images one by one and store them without output</strong>. When the stored images reach a certain quantity (which can be set by the user), the state transitions to the Stepping Phase.</p></li>
+<li><p>Initialization with Trusted Source Phase (INIT_WITH_SOURCE): <strong>Entered when trusted images are provided for initialization</strong>. In this state, features of the provided trusted images are extracted and recorded. When all trusted images are recorded, the state transitions to the Inference Phase.</p></li>
+<li><p>Stepping Phase (APPROACH): At this point, <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> has some character feature vectors and tries to use these features for clustering operations. <strong>If one category in the clustering results dominates (e.g., 70%, a value that can be set by the user), it’s considered that key features have been identified</strong>. All items belonging to this category are output at once, and the state transitions to the Inference Phase. If this is not successful, it will continue to read and store new images and attempt clustering at intervals until successful.</p></li>
+<li><p>Inference Phase (INFER): In this phase, the key character features to be filtered in the data source have been determined. The filtering is performed using this set of features. For images that pass the filter, their features are recorded in the key feature set and used for subsequent filtering. Therefore, as <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> filters more images, its accuracy in determining the characters increases.</p></li>
+</ul>
+<p>The state diagram is shown below:</p>
+<img alt="../../_images/ccip_action_states.puml.svg" class="align-center" src="../../_images/ccip_action_states.puml.svg" /><p>This state diagram illustrates the flow of <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> based on different phases.</p>
+<p>It’s worth noting that while <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> is highly effective in real-world web data sources,
+it’s not infallible. It relies on a fundamental property of anime character web data sources:
+<strong>when you use tags to filter, the expected character should make up the majority and be evenly distributed</strong>.
+In practice:</p>
+<ol class="arabic simple">
+<li><p>When 80% of the data source consists of character A and 20% of various other characters, randomly distributed throughout the source, <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> works well.</p></li>
+<li><p>When 50% of the data source consists of character A and 50% of the same character B, randomly distributed, it might be challenging for <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> to find key character features in the APPROACH phase and may get stuck without any images being output.</p></li>
+<li><p>When 80% of the data source consists of character A and 20% of character B, but character B is highly concentrated at the beginning of the data source, <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> may mistakenly treat character B’s features as key character features and enter the inference phase, filtering out all images of character A.</p></li>
+</ol>
+<p>In typical web data sources, the 3rd scenario is very unlikely to occur.
+The second scenario has some probability of occurring
+(e.g., with the sexy wolf🐺 babe Texas in Arknights and her waifus like Exusiai👼, Lappland🐺, and Sora🐇.
+It’s my honor to share so many waifus with my cool wolf waifu❤️),
+but it’s still rare to have such a high proportion of two characters bound together in data source.
+<code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> <strong>is well-equipped to handle such scenarios</strong>. Therefore, <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> performs quite well
+in real-world web data sources. Based on tests conducted within the team,
+even when up to 40% of random characters are mixed into the data source, <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> can
+still work properly and successfully filter out the expected characters without significant loss.
+However, the above-mentioned issues should still be noted, especially when attempting to
+build complex data sources through concatenation and parallelization, as misconfigurations
+in prior data sources can have catastrophic consequences.</p>
+</section>
+</section>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../customize/index.html" class="btn btn-neutral float-left" title="How to Customize In Waifuc?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../information/environment.result.html" class="btn btn-neutral float-right" title="Run Environment Information" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, narugo1992.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev/drop
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">dev/drop</a></dd>
+                        <dd><a href="../../../tagfilter/index.html">dev/tagfilter</a></dd>
+                        <dd><a href="../../../tqdm/advanced_guides/ccip/index.html">dev/tqdm</a></dd>
+                        <dd><a href="../../../../main/advanced_guides/ccip/index.html">main</a></dd>
+                </dl>
+        </div>
+    </div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
