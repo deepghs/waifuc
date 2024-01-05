@@ -2,7 +2,7 @@ from functools import partial
 from typing import Iterator, Union, List, Mapping, Literal
 
 from PIL import Image
-from imgutils.tagging import get_deepdanbooru_tags, get_wd14_tags, get_mldanbooru_tags
+from imgutils.tagging import get_deepdanbooru_tags, get_wd14_tags, get_mldanbooru_tags, drop_overlap_tags
 
 from .base import ProcessAction, BaseAction
 from ..model import ImageItem
@@ -81,3 +81,19 @@ class TagFilterAction(BaseAction):
 
     def reset(self):
         self.tagger.reset()
+
+
+class TagOverlapDropAction(ProcessAction):
+    def process(self, item: ImageItem) -> ImageItem:
+        tags = drop_overlap_tags(dict(item.meta.get('tags') or {}))
+        return ImageItem(item.image, {**item.meta, 'tags': tags})
+
+
+class TagDropAction(ProcessAction):
+    def __init__(self, tags_to_drop: List[str]):
+        self.tags_to_drop = set(tags_to_drop)
+
+    def process(self, item: ImageItem) -> ImageItem:
+        tags = dict(item.meta.get('tags') or {})
+        tags = {tag: score for tag, score in tags.items() if tag not in self.tags_to_drop}
+        return ImageItem(item.image, {**item.meta, 'tags': tags})
