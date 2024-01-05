@@ -6,9 +6,9 @@ start
 if (NoMonochromeAction()\n是否是单色图？) then (否)
   if (ClassFilterAction(['illustration', 'bangumi'])\n是否是插画或番剧截图？) then (是)
     if (FilterSimilarAction('all')\n和处理过的图像数据是否相似？) then (否)
-      if (FaceCountAction(count=1)\n是否包含且仅包含单一人像？) then (是)
+      if (FaceCountAction(1)\n是否包含且仅包含单一人像？) then (是)
         :PersonSplitAction()\n裁出图像中包含人物的部分;
-        if (FaceCountAction(count=1)\n是否包含且仅包含单一人像？) then (是)
+        if (FaceCountAction(1)\n是否包含且仅包含单一人像？) then (是)
           if (CCIPAction()\n人物是否为史尔特尔？) then (是)
             if (AlignMinSizeAction(800)\n短边是否大于800像素？) then (是)
               :等比例压缩图像数据至短边长度为800像素;
