@@ -56,8 +56,9 @@ class TaggingAction(ProcessAction):
 
 
 class TagFilterAction(BaseAction):
+    # noinspection PyShadowingBuiltins
     def __init__(self, tags: Union[List[str], Mapping[str, float]],
-                 method: TaggingMethodTyping = 'wd14_convnextv2', **kwargs):
+                 method: TaggingMethodTyping = 'wd14_convnextv2', reversed: bool = False, **kwargs):
         if isinstance(tags, (list, tuple)):
             self.tags = {tag: 1e-6 for tag in tags}
         elif isinstance(tags, dict):
@@ -65,6 +66,7 @@ class TagFilterAction(BaseAction):
         else:
             raise TypeError(f'Unknown type of tags - {tags!r}.')
         self.tagger = TaggingAction(method, force=False, **kwargs)
+        self.reversed = reversed
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
         item = self.tagger(item)
@@ -72,7 +74,9 @@ class TagFilterAction(BaseAction):
 
         valid = True
         for tag, min_score in self.tags.items():
-            if tags[tag] < min_score:
+            tag_score = tags.get(tag, 0.0)
+            if (not self.reversed and tag_score < min_score) or \
+                    (self.reversed and tag_score > min_score):
                 valid = False
                 break
 
