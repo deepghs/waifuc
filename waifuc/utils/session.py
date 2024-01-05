@@ -3,13 +3,70 @@ import warnings
 from typing import Optional, Dict
 
 import httpx
+import requests
+from requests.adapters import HTTPAdapter, Retry
 
 DEFAULT_TIMEOUT = 10  # seconds
 
 
-def get_requests_session(timeout: int = DEFAULT_TIMEOUT, headers: Optional[Dict[str, str]] = None,
+class TimeoutHTTPAdapter(HTTPAdapter):
+    """
+    Custom HTTP adapter that sets a default timeout for requests.
+
+    Inherits from `HTTPAdapter`.
+
+    Usage:
+    - Create an instance of `TimeoutHTTPAdapter` and pass it to a `requests.Session` object's `mount` method.
+
+    Example:
+    ```python
+    session = requests.Session()
+    adapter = TimeoutHTTPAdapter(timeout=10)
+    session.mount('http://', adapter)
+    session.mount('https://', adapter)
+    ```
+
+    :param timeout: The default timeout value in seconds. (default: 10)
+    :type timeout: int
+    """
+
+    def __init__(self, *args, **kwargs):
+        self.timeout = DEFAULT_TIMEOUT
+        if "timeout" in kwargs:
+            self.timeout = kwargs["timeout"]
+            del kwargs["timeout"]
+        super().__init__(*args, **kwargs)
+
+    def send(self, request, **kwargs):
+        """
+        Sends a request with the provided timeout value.
+
+        :param request: The request to send.
+        :type request: PreparedRequest
+        :param kwargs: Additional keyword arguments.
+        :type kwargs: dict
+        :returns: The response from the request.
+        :rtype: Response
+        """
+        timeout = kwargs.get("timeout")
+        if timeout is None:
+            kwargs["timeout"] = self.timeout
+        return super().send(request, **kwargs)
+
+
+def get_requests_session(max_retries: int = 5, timeout: int = DEFAULT_TIMEOUT,
+                         headers: Optional[Dict[str, str]] = None,
                          session: Optional[httpx.Client] = None) -> httpx.Client:
     session = session or httpx.Client(http2=True, timeout=timeout, follow_redirects=True)
+    if isinstance(session, requests.Session):
+        retries = Retry(
+            total=max_retries, backoff_factor=1,
+            status_forcelist=[408, 413, 429, 500, 501, 502, 503, 504, 505, 506, 507, 509, 510, 511],
+            allowed_methods=["HEAD", "GET", "POST", "PUT", "DELETE", "OPTIONS", "TRACE"],
+        )
+        adapter = TimeoutHTTPAdapter(max_retries=retries, timeout=timeout, pool_connections=32, pool_maxsize=32)
+        session.mount('http://', adapter)
+        session.mount('https://', adapter)
     session.headers.update({
         "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
                       "(KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36",
