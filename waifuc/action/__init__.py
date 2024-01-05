@@ -12,4 +12,4 @@ from .head import HeadCoverAction, HeadCutOutAction
 from .lpips import FilterSimilarAction
 from .safety import SafetyAction
 from .split import PersonSplitAction, ThreeStageSplitAction
-from .tagging import TaggingAction, TagFilterAction
+from .tagging import TaggingAction, TagFilterAction, TagOverlapDropAction, TagDropAction
