@@ -39,9 +39,9 @@ _REGISTERED_SITE_SOURCES = {
 class GcharAutoSource(BaseDataSource):
     def __init__(self, ch, allow_fuzzy: bool = False, fuzzy_threshold: int = 80, contains_extra: bool = True,
                  sure_only: bool = True, preset_sites: Tuple[str, ...] = _PRESET_SITES,
-                 max_preset_limit: Optional[int] = 30, main_sources_count: int = 5,
+                 max_preset_limit: Optional[int] = None, main_sources_count: int = 5,
                  blacklist_sites: Tuple[str, ...] = (), pixiv_refresh_token: Optional[str] = None,
-                 min_size: Optional[int] = 1500, strict_for_preset: bool = True, strict_for_main: bool = False,
+                 min_size: Optional[int] = 1500, strict_for_preset: bool = True, strict_for_main: bool = True,
                  extra_cfg: Optional[Mapping[str, dict]] = None):
         from gchar.games import get_character
         from gchar.games.base import Character
