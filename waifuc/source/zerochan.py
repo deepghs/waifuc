@@ -1,4 +1,6 @@
+import json
 import os
+import warnings
 from enum import Enum
 from typing import Iterator, Union, List, Optional, Mapping, Tuple, Literal
 from urllib.parse import quote_plus, urljoin
@@ -107,34 +109,46 @@ class ZerochanSource(WebDataSource):
 
         return params
 
-    @classmethod
-    def _get_urls(cls, data):
+    def _get_urls(self, data):
         id_ = data['id']
-        medium_url = data['thumbnail']
-        prefix = quote_plus(data['tag'].replace(' ', '.'))
-        large_urls = [f'https://s1.zerochan.net/{prefix}.600.{id_}.jpg']
-        full_urls = [
-            f"https://static.zerochan.net/{prefix}.full.{id_}{ext}"
-            for ext in ['.jpg', '.png']
+        resp = srequest(
+            self.session, 'GET', f'https://www.zerochan.net/{id_}',
+            params={'json': '1'},
+        )
+        json_data = resp.json()
+        return [
+            ('full', json_data['full']),
+            ('large', json_data['large']),
+            ('medium', json_data['medium']),
+            ('small', json_data['small']),
         ]
-
-        return {'medium': medium_url, 'large': large_urls, 'full': full_urls}
 
     def _get_url(self, data):
         urls = self._get_urls(data)
-        if self.select == 'full':
-            url_fallbacks = [*urls['full'], *urls['large']]
-        elif self.select == 'large':
-            url_fallbacks = urls['large']
+        urls_dict = dict(urls)
+        if urls_dict.get(self.select):
+            return urls_dict[self.select]
         else:
-            url_fallbacks = []
+            for i, (name, _) in enumerate(urls):
+                if name == self.select:
+                    idx = i
+                    break
+            else:
+                raise ValueError(f'Unknown select: {self.select!r}')
 
-        for url in url_fallbacks:
-            resp = srequest(self.session, 'HEAD', url, raise_for_status=False)
-            if resp.status_code // 100 == 2:
-                return url
-        else:
-            return urls['medium']
+            ls, gs = [], []
+            for i, (name, v) in enumerate(urls):
+                if i == idx or not v:
+                    continue
+
+                if i < idx:
+                    ls.append((i, name, v))
+                else:
+                    gs.append((i, name, v))
+
+            ls = sorted(ls, key=lambda x: -x[0])
+            _, _, url = [*ls, *gs][0]
+            return url
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         self._auth()
@@ -162,7 +176,12 @@ class ZerochanSource(WebDataSource):
             if 'items' in json_:
                 items = json_['items']
                 for data in items:
-                    url = self._get_url(data)
+                    try:
+                        url = self._get_url(data)
+                    except json.JSONDecodeError as err:
+                        warnings.warn(f'API of {self.__SITE__} died again, skipped! Error: {err!r}')
+                        continue
+
                     _, ext_name = os.path.splitext(urlsplit(url).filename)
                     filename = f'{self.group_name}_{data["id"]}{ext_name}'
                     meta = {

@@ -92,6 +92,8 @@ def srequest(session: httpx.Client, method, url, *, max_retries: int = 5,
         sleep_time = backoff_factor * (2 ** i)
         try:
             resp = session.request(method, url, **kwargs)
+            if raise_for_status:
+                resp.raise_for_status()
         except httpx.HTTPStatusError as err:
             if _should_retry(err.response):
                 warnings.warn(f'Requests {err.response.status_code} ({i + 1}/{max_retries}), '
