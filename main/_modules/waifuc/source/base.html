@@ -110,7 +110,7 @@
     
   <h1>Source code for waifuc.source.base</h1><div class="highlight"><pre>
 <span></span><span class="kn">import</span> <span class="nn">copy</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Union</span>
 
 <span class="kn">from</span> <span class="nn">tqdm.auto</span> <span class="kn">import</span> <span class="n">tqdm</span>
 
@@ -169,7 +169,11 @@
     <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">actions</span><span class="p">:</span> <span class="n">BaseAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;AttachedDataSource&#39;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">AttachedDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">actions</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exporter</span><span class="p">:</span> <span class="n">BaseExporter</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exporter</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseExporter</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exporter</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">..export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">SaveExporter</span><span class="p">(</span><span class="n">exporter</span><span class="p">,</span> <span class="n">no_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
         <span class="n">exporter</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">exporter</span><span class="p">)</span>
         <span class="n">exporter</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
         <span class="k">with</span> <span class="n">task_ctx</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
@@ -241,10 +245,8 @@
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../dev/save/index.html">dev/save</a></dd>
-                        <dd><a href="../../../../dev/quality/index.html">dev/quality</a></dd>
-                        <dd><a href="../../../../dev/tagfilter/index.html">dev/tagfilter</a></dd>
                         <dd><a href="base.html">main</a></dd>
+                        <dd><a href="../../../../dev/tagfilter/index.html">dev/tagfilter</a></dd>
                 </dl>
         </div>
     </div><script>

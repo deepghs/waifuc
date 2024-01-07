@@ -200,11 +200,14 @@
         <span class="n">full_directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">full_filename</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">full_directory</span><span class="p">:</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">full_directory</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">item_save_cfg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;save_cfg&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="p">{})</span>
+        <span class="n">save_cfg</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">item_save_cfg</span><span class="p">,</span> <span class="o">**</span><span class="bp">self</span><span class="o">.</span><span class="n">save_params</span><span class="p">}</span>
         <span class="n">item</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
             <span class="n">full_filename</span><span class="p">,</span>
             <span class="n">no_meta</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">no_meta</span><span class="p">,</span>
             <span class="n">skip_when_image_exist</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">skip_when_image_exist</span><span class="p">,</span>
-            <span class="n">save_params</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">save_params</span><span class="p">,</span>
+            <span class="n">save_params</span><span class="o">=</span><span class="n">save_cfg</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -242,10 +245,8 @@
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../dev/save/index.html">dev/save</a></dd>
-                        <dd><a href="../../../../dev/quality/index.html">dev/quality</a></dd>
-                        <dd><a href="../../../../dev/tagfilter/index.html">dev/tagfilter</a></dd>
                         <dd><a href="base.html">main</a></dd>
+                        <dd><a href="../../../../dev/tagfilter/index.html">dev/tagfilter</a></dd>
                 </dl>
         </div>
     </div><script>
