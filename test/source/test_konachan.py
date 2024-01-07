@@ -1,7 +1,7 @@
 import pytest
 
 from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource, \
-    GelbooruSource, XbooruSource, SafebooruOrgSource, TBIBSource
+    GelbooruSource, XbooruSource, SafebooruOrgSource, TBIBSource, ThreeDBooruSource, RealbooruSource
 
 
 @pytest.mark.unittest
@@ -68,6 +68,13 @@ class TestSourceKonachan:
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
 
+    def test_threedbooru(self, threedbooru_misaka_mikoto):
+        source = ThreeDBooruSource(['misaka_mikoto'])
+        items = list(source[:20])
+        assert len(items) == 20
+        for item in items:
+            assert 'misaka_mikoto' in item.meta['tags']
+
     def test_rule34(self, rule34_surtr, rule34_2dogs):
         source = Rule34Source(['surtr_(arknights)', 'solo'])
         items = list(source[:15])
@@ -117,6 +124,13 @@ class TestSourceKonachan:
             assert '2girls' in item.meta['tags']
             assert 'comic' not in item.meta['tags']
             assert 'monochrome' not in item.meta['tags']
+
+    def test_realbooru(self, realbooru_thong):
+        source = RealbooruSource(['thong'])
+        items = list(source[:15])
+        assert len(items) == 15
+        for item in items:
+            assert 'thong' in item.meta['tags']
 
     def test_xbooru(self, xbooru_surtr, xbooru_2dogs):
         source = XbooruSource(['surtr_(arknights)', 'solo'])
