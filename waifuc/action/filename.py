@@ -1,3 +1,4 @@
+import copy
 import os
 from typing import Iterator, Optional
 
@@ -6,8 +7,9 @@ from ..model import ImageItem
 
 
 class FileExtAction(BaseAction):
-    def __init__(self, ext: str):
+    def __init__(self, ext: str, quality: Optional[int] = None):
         self.ext = ext
+        self.quality = quality
         self.untitles = 0
 
     def iter(self, item: ImageItem) -> Iterator[ImageItem]:
@@ -18,7 +20,13 @@ class FileExtAction(BaseAction):
             self.untitles += 1
             filename = f'untitled_{self.untitles}{self.ext}'
 
-        yield ImageItem(item.image, {**item.meta, 'filename': filename})
+        meta_info = copy.deepcopy(item.meta)
+        meta_info['filename'] = filename
+        if self.quality is not None:
+            if 'save_cfg' not in meta_info:
+                meta_info['save_cfg'] = {}
+            meta_info['save_cfg']['quality'] = self.quality
+        yield ImageItem(item.image, meta_info)
 
     def reset(self):
         self.untitles = 0

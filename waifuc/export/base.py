@@ -89,11 +89,14 @@ class SaveExporter(LocalDirectoryExporter):
         full_directory = os.path.dirname(full_filename)
         if full_directory:
             os.makedirs(full_directory, exist_ok=True)
+
+        item_save_cfg = dict(item.meta.get('save_cfg') or {})
+        save_cfg = {**item_save_cfg, **self.save_params}
         item.save(
             full_filename,
             no_meta=self.no_meta,
             skip_when_image_exist=self.skip_when_image_exist,
-            save_params=self.save_params,
+            save_params=save_cfg,
         )
 
     def reset(self):
