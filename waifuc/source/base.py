@@ -1,5 +1,5 @@
 import copy
-from typing import Iterator, Optional
+from typing import Iterator, Optional, Union
 
 from tqdm.auto import tqdm
 
@@ -58,7 +58,11 @@ class BaseDataSource:
     def attach(self, *actions: BaseAction) -> 'AttachedDataSource':
         return AttachedDataSource(self, *actions)
 
-    def export(self, exporter: BaseExporter, name: Optional[str] = None):
+    def export(self, exporter: Union[BaseExporter, str], name: Optional[str] = None):
+        if isinstance(exporter, str):
+            from ..export import SaveExporter
+            exporter = SaveExporter(exporter, no_meta=True)
+
         exporter = copy.deepcopy(exporter)
         exporter.reset()
         with task_ctx(name):
