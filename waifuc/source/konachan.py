@@ -185,6 +185,16 @@ class GelbooruSource(Rule34LikeSource):
         return raw['post'] if 'post' in raw else None
 
 
+class RealbooruSource(Rule34LikeSource):
+    def __init__(self, tags: List[str], min_size: Optional[int] = 800,
+                 group_name: str = 'realbooru', download_silent: bool = True):
+        Rule34LikeSource.__init__(self, 'realbooru', 'https://realbooru.com',
+                                  tags, min_size, group_name, download_silent)
+
+    def _select_url(self, data):
+        return f'{self.site_url}/images/{data["directory"]}/{data["image"]}'
+
+
 class XbooruLikeSource(Rule34LikeSource):
     def __init__(self, site_name: str, site_url: str, img_site_url: str,
                  tags: List[str], min_size: Optional[int] = 800,
