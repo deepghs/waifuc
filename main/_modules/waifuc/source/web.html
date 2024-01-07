@@ -109,7 +109,8 @@
     
     
   <h1>Source code for waifuc.source.web</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">math</span>
+<span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
@@ -141,6 +142,10 @@
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">_rate_limiter</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Limiter</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_rate_limit&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SHOW_RATE_LIMIT_LOG&#39;</span><span class="p">):</span>
+                <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pyrate_limiter&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+
             <span class="n">rate</span> <span class="o">=</span> <span class="n">Rate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__download_rate_limit__</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">Duration</span><span class="o">.</span><span class="n">SECOND</span> <span class="o">*</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__download_rate_interval__</span><span class="p">)))</span>
             <span class="n">limiter</span> <span class="o">=</span> <span class="n">Limiter</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="n">max_delay</span><span class="o">=</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="p">)</span>
             <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_rate_limit&#39;</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
@@ -209,9 +214,8 @@
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../dev/3dbooru/index.html">dev/3dbooru</a></dd>
-                        <dd><a href="../../../../dev/tagfilter/index.html">dev/tagfilter</a></dd>
                         <dd><a href="web.html">main</a></dd>
+                        <dd><a href="../../../../dev/tagfilter/index.html">dev/tagfilter</a></dd>
                 </dl>
         </div>
     </div><script>
