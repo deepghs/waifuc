@@ -1,3 +1,4 @@
+import logging
 import math
 import os
 import warnings
@@ -30,6 +31,10 @@ class WebDataSource(NamedDataSource):
     @classmethod
     def _rate_limiter(cls) -> Limiter:
         if not hasattr(cls, '_rate_limit'):
+            if not os.environ.get('SHOW_RATE_LIMIT_LOG'):
+                logger = logging.getLogger("pyrate_limiter")
+                logger.disabled = True
+
             rate = Rate(cls.__download_rate_limit__, int(math.ceil(Duration.SECOND * cls.__download_rate_interval__)))
             limiter = Limiter(rate, max_delay=1 << 32)
             setattr(cls, '_rate_limit', limiter)

@@ -124,6 +124,12 @@ def paheal_surtr(httpx_mock):
 
 
 @pytest.fixture()
+def realbooru_thong(httpx_mock):
+    with mock_responses_from_hf('realbooru_thong', httpx_mock):
+        yield
+
+
+@pytest.fixture()
 def rule34_2dogs(httpx_mock):
     with mock_responses_from_hf('rule34_2dogs', httpx_mock):
         yield
@@ -180,6 +186,12 @@ def tbib_2dogs(httpx_mock):
 @pytest.fixture()
 def tbib_surtr(httpx_mock):
     with mock_responses_from_hf('tbib_surtr', httpx_mock):
+        yield
+
+
+@pytest.fixture()
+def threedbooru_misaka_mikoto(httpx_mock):
+    with mock_responses_from_hf('threedbooru_misaka_mikoto', httpx_mock):
         yield
 
 

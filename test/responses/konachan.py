@@ -1,6 +1,6 @@
 from test.responses import resp_recorder
 from waifuc.source import KonachanSource, KonachanNetSource, YandeSource, LolibooruSource, Rule34Source, HypnoHubSource, \
-    GelbooruSource, XbooruSource, SafebooruOrgSource, TBIBSource
+    GelbooruSource, XbooruSource, SafebooruOrgSource, TBIBSource, ThreeDBooruSource, RealbooruSource
 
 
 @resp_recorder()
@@ -52,6 +52,12 @@ def lolibooru_2dogs():
 
 
 @resp_recorder()
+def threedbooru_misaka_mikoto():
+    source = ThreeDBooruSource(['misaka_mikoto'])
+    _ = list(source[:20])
+
+
+@resp_recorder()
 def rule34_surtr():
     source = Rule34Source(['surtr_(arknights)', 'solo'])
     _ = list(source[:15])
@@ -85,6 +91,12 @@ def gelbooru_surtr():
 def gelbooru_2dogs():
     source = GelbooruSource(['texas_(arknights)', 'lappland_(arknights)', '2girls', '-comic', '-monochrome'])
     _ = list(source[:20])
+
+
+@resp_recorder()
+def realbooru_thong():
+    source = RealbooruSource(['thong'])
+    _ = list(source[:15])
 
 
 @resp_recorder()

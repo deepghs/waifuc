@@ -8,7 +8,7 @@ from .gchar import GcharAutoSource
 from .huashi6 import Huashi6Source
 from .konachan import KonachanLikeSource, YandeSource, KonachanSource, KonachanNetSource, LolibooruSource, \
     Rule34LikeSource, Rule34Source, HypnoHubSource, GelbooruSource, XbooruLikeSource, XbooruSource, \
-    SafebooruOrgSource, TBIBSource
+    SafebooruOrgSource, TBIBSource, ThreeDBooruSource, RealbooruSource
 from .local import LocalSource, LocalTISource
 from .paheal import PahealSource
 from .pixiv import BasePixivSource, PixivSearchSource, PixivUserSource, PixivRankingSource
