@@ -126,6 +126,23 @@ class LolibooruSource(KonachanLikeSource):
         })
 
 
+class ThreeDBooruSource(KonachanLikeSource):
+    def __init__(self, tags: List[str], min_size: Optional[int] = 800,
+                 group_name: str = '3dbooru', download_silent: bool = True):
+        KonachanLikeSource.__init__(self, '3dbooru', 'http://behoimi.org',
+                                    tags, 1, min_size, group_name, download_silent)
+        self.session.headers.update({
+            'Referer': "http://behoimi.org/",
+        })
+
+    def _request(self, page):
+        return srequest(self.session, 'GET', f'{self.site_url}/post/index.json', params={
+            'tags': ' '.join(self.tags),
+            'limit': '100',
+            'page': str(page),
+        })
+
+
 class Rule34LikeSource(KonachanLikeSource):
     def __init__(self, site_name: str, site_url: str,
                  tags: List[str], min_size: Optional[int] = 800,
