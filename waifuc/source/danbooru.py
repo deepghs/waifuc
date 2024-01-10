@@ -1,6 +1,5 @@
 import logging
 import os.path
-import random
 import re
 from typing import Optional, Iterator, List, Tuple, Union, Literal
 
@@ -18,6 +17,9 @@ class DanbooruLikeSource(WebDataSource):
                  site_name: Optional[str] = 'danbooru', site_url: Optional[str] = 'https://danbooru.donmai.us/',
                  group_name: Optional[str] = None):
         WebDataSource.__init__(self, group_name or site_name, None, download_silent)
+        self.session = get_requests_session(headers={
+            'Content-Type': 'application/json; charset=utf-8',
+        })
         if username and api_key:
             self.auth = (username, api_key)
         else:
@@ -25,25 +27,21 @@ class DanbooruLikeSource(WebDataSource):
         self.site_name, self.site_url = site_name, site_url
         self.tags = tags
         self.min_size = min_size
-        self.session = self._get_session()
 
-    def _get_session(self):
+    def _ensure_session(self):
         while True:
             user_agent = get_random_ua()
-            session = get_requests_session(headers={
-                'Content-Type': 'application/json; charset=utf-8',
+            self.session.headers.update(headers={
                 'User-Agent': user_agent,
             })
             logging.info(f'Trying use UA: {user_agent!r} ...')
-            resp = srequest(session, 'GET', f'{self.site_url}/posts.json', params={
+            resp = srequest(self.session, 'GET', f'{self.site_url}/posts.json', params={
                 "format": "json",
-                "limit": str(random.randint(10, 40)),
-                "page": str(random.randint(1, 5)),
                 "tags": '1girl',
             }, auth=self.auth, raise_for_status=False)
             if resp.status_code // 100 == 2:
                 logging.info(f'UA {user_agent!r} passed.')
-                return session
+                return
 
     def _args(self):
         return [self.tags]
@@ -73,6 +71,8 @@ class DanbooruLikeSource(WebDataSource):
         return re.split(r'\s+', data["tag_string"])
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
+        self._ensure_session()
+
         page = 1
         while True:
             resp = srequest(self.session, 'GET', f'{self.site_url}/posts.json', params={
