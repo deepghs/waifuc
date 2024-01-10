@@ -77,7 +77,7 @@ class DanbooruLikeSource(WebDataSource):
         while True:
             resp = srequest(self.session, 'GET', f'{self.site_url}/posts.json', params={
                 "format": "json",
-                "limit": "100",
+                "limit": "200",
                 "page": str(page),
                 "tags": ' '.join(self.tags),
             }, auth=self.auth)
