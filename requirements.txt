@@ -3,6 +3,7 @@ pillow
 numpy
 tqdm
 pandas
+random_user_agent
 dghs-imgutils>=0.3.3
 requests
 pixivpy3
