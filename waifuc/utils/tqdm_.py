@@ -11,7 +11,7 @@ def tqdm(*args, silent: bool = False, **kwargs):
 
     This function modifies the behavior of tqdm to allow silencing the progress bar.
 
-    :param args: Positional arguments to be passed to tqdm.
+    :param args: Positional arguments to be passed to tqdm. Default means nothing.
     :param silent: If ``True``, the progress bar content will not be displayed.
     :type silent: bool
     :param kwargs: Additional keyword arguments to be passed to tqdm.
