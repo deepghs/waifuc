@@ -58,7 +58,10 @@ class ZerochanSource(DynamicUAWebDataSource):
         self._is_authed = False
 
     def _args(self):
-        return [self.word]
+        _kws = {}
+        if self.strict:
+            _kws['strict'] = True
+        return [self.word], _kws
 
     def _auth(self):
         if not self._is_authed and self.username is not None:
