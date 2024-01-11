@@ -1,23 +1,22 @@
-import logging
 import os.path
 import re
 from typing import Optional, Iterator, List, Tuple, Union, Literal
 
 from hbutils.system import urlsplit
 
-from .web import NoURL, WebDataSource
-from ..utils import get_requests_session, srequest, get_random_ua
+from .web import NoURL, WebDataSource, DynamicUAWebDataSource
+from ..utils import srequest
 
 _DanbooruSiteTyping = Literal['konachan', 'yandere', 'danbooru', 'safebooru', 'lolibooru']
 
 
-class DanbooruLikeSource(WebDataSource):
+class DanbooruLikeSource(DynamicUAWebDataSource):
     def __init__(self, tags: List[str], min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
                  site_name: Optional[str] = 'danbooru', site_url: Optional[str] = 'https://danbooru.donmai.us/',
                  group_name: Optional[str] = None):
         WebDataSource.__init__(self, group_name or site_name, None, download_silent)
-        self.session = get_requests_session(headers={
+        self.session.headers.update({
             'Content-Type': 'application/json; charset=utf-8',
         })
         if username and api_key:
@@ -28,20 +27,12 @@ class DanbooruLikeSource(WebDataSource):
         self.tags = tags
         self.min_size = min_size
 
-    def _ensure_session(self):
-        while True:
-            user_agent = get_random_ua()
-            self.session.headers.update(headers={
-                'User-Agent': user_agent,
-            })
-            logging.info(f'Trying use UA: {user_agent!r} ...')
-            resp = srequest(self.session, 'GET', f'{self.site_url}/posts.json', params={
-                "format": "json",
-                "tags": '1girl',
-            }, auth=self.auth, raise_for_status=False)
-            if resp.status_code // 100 == 2:
-                logging.info(f'UA {user_agent!r} passed.')
-                return
+    def _check_session(self) -> bool:
+        resp = srequest(self.session, 'GET', f'{self.site_url}/posts.json', params={
+            "format": "json",
+            "tags": '1girl',
+        }, auth=self.auth, raise_for_status=False)
+        return resp.status_code // 100 == 2
 
     def _args(self):
         return [self.tags]
@@ -71,8 +62,6 @@ class DanbooruLikeSource(WebDataSource):
         return re.split(r'\s+', data["tag_string"])
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
-        self._ensure_session()
-
         page = 1
         while True:
             resp = srequest(self.session, 'GET', f'{self.site_url}/posts.json', params={

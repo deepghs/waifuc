@@ -7,7 +7,7 @@ from urllib.parse import quote_plus, urljoin
 
 from hbutils.system import urlsplit
 
-from .web import WebDataSource
+from .web import WebDataSource, DynamicUAWebDataSource
 from ..utils import get_requests_session, srequest
 
 
@@ -33,7 +33,7 @@ class Dimension(str, Enum):
 SelectTyping = Literal['medium', 'large', 'full']
 
 
-class ZerochanSource(WebDataSource):
+class ZerochanSource(DynamicUAWebDataSource):
     __SITE__ = 'https://www.zerochan.net'
 
     def __init__(self, word: Union[str, List[str]], sort: Sort = Sort.FAV, time: Time = Time.ALL,
@@ -149,6 +149,10 @@ class ZerochanSource(WebDataSource):
             ls = sorted(ls, key=lambda x: -x[0])
             _, _, url = [*ls, *gs][0]
             return url
+
+    def _check_session(self) -> bool:
+        resp = srequest(self.session, 'GET', f'{self.__SITE__}/?json', raise_for_status=False)
+        return resp.status_code // 100 == 2
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         self._auth()

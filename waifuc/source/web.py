@@ -12,7 +12,7 @@ from pyrate_limiter import Rate, Duration, Limiter
 
 from .base import NamedDataSource
 from ..model import ImageItem
-from ..utils import get_requests_session, download_file
+from ..utils import get_requests_session, download_file, get_random_ua
 
 
 class NoURL(Exception):
@@ -70,3 +70,37 @@ class WebDataSource(NamedDataSource):
 
                 meta = {**meta, 'url': url}
                 yield ImageItem(image, meta)
+
+
+class WebPlusDataSource(WebDataSource):
+    def _check_session(self) -> bool:
+        raise NotImplementedError  # pragma: no cover
+
+    def _refresh_session(self):
+        raise NotImplementedError  # pragma: no cover
+
+    def _prune_session(self):
+        while True:
+            self._rate_limiter().try_acquire('_prune_session_')
+            self._refresh_session()
+            if self._check_session():
+                return
+
+    def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
+        raise NotImplementedError  # pragma: no cover
+
+    def _iter(self) -> Iterator[ImageItem]:
+        self._prune_session()
+        yield from WebDataSource._iter(self)
+
+
+class DynamicUAWebDataSource(WebPlusDataSource):
+    def _check_session(self) -> bool:
+        raise NotImplementedError  # pragma: no cover
+
+    def _refresh_session(self):
+        user_agent = get_random_ua()
+        self.session.headers.update({
+            'User-Agent': user_agent,
+        })
+        logging.info(f'Trying use UA: {user_agent!r} ...')

@@ -6,7 +6,7 @@ import cloudscraper
 from hbutils.system import urlsplit
 from pyquery import PyQuery as pq
 
-from .web import WebDataSource
+from .web import WebDataSource, DynamicUAWebDataSource
 from ..utils import get_requests_session, srequest
 
 
@@ -31,7 +31,7 @@ class Period(str, Enum):
     PAST_3_YEARS = "7"
 
 
-class AnimePicturesSource(WebDataSource):
+class AnimePicturesSource(DynamicUAWebDataSource):
     __api_root__ = 'https://api.anime-pictures.net'
     __root__ = 'https://anime-pictures.net'
 
@@ -88,6 +88,14 @@ class AnimePicturesSource(WebDataSource):
             return pq(resp.text)('#rating a.download_icon').attr('href')
         else:
             raise ValueError(f'Invalid image selection - {self.select!r}.')
+
+    def _check_session(self) -> bool:
+        resp = srequest(self.session, 'GET', f'{self.__api_root__}/api/v3/posts', params={
+            'ldate': '0',
+            'lang': 'en',
+            'page': '0',
+        }, raise_for_status=False)
+        return resp.status_code // 100 == 2
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         page = 0
