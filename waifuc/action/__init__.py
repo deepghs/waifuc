@@ -1,4 +1,4 @@
-from .align import AlignMaxSizeAction, AlignMinSizeAction, PaddingAlignAction
+from .align import AlignMaxSizeAction, AlignMinSizeAction, PaddingAlignAction, AlignMaxAreaAction
 from .augument import RandomFilenameAction, RandomChoiceAction, BaseRandomAction, MirrorAction
 from .background import BackgroundRemovalAction
 from .base import BaseAction, ProcessAction, FilterAction, ActionStop, ProgressBarAction
