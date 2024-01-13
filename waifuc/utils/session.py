@@ -129,4 +129,3 @@ def _ua_pool():
 
 def get_random_ua():
     return _ua_pool().get_random_user_agent()
-
