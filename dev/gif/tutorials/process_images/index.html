@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Process Crawled or Local Images and Data &mdash; waifuc 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c9d0a6ec" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Extracting Character Images from Videos" href="../crawl_videos/index.html" />
+    <link rel="prev" title="Crawling Some Images From Websites" href="../crawl_images/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            waifuc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">Training a LoRA for My Waifu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_images/index.html">Crawling Some Images From Websites</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Process Crawled or Local Images and Data</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#how-to-process-data">How to Process Data</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-actions-and-usage-examples">Common Actions and Usage Examples</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#modeconvertaction">ModeConvertAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#firstnselectaction">FirstNSelectAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#nomonochromeaction">NoMonochromeAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#classfilteraction">ClassFilterAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filtersimilaraction">FilterSimilarAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#taggingaction">TaggingAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#personsplitaction">PersonSplitAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#facecountaction">FaceCountAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ccipaction">CCIPAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#alignminsizeaction">AlignMinSizeAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#randomfilenameaction">RandomFilenameAction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#threestagesplitaction">ThreeStageSplitAction</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#other-actions">Other Actions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_videos/index.html">Extracting Character Images from Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../device/index.html">How to Prevent Waifuc from Using GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/before_read/index.html">Reading Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/workflow/index.html">Understanding the Waifuc Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/dynamic/index.html">I Need to Dynamically Design the Processing Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/customize/index.html">How to Customize In Waifuc?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/ccip/index.html">What is CCIP, and What are its Features?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">waifuc.config</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">waifuc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Process Crawled or Local Images and Data</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/process_images/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+    
+    
+  <section id="process-crawled-or-local-images-and-data">
+<h1>Process Crawled or Local Images and Data<a class="headerlink" href="#process-crawled-or-local-images-and-data" title="Permalink to this heading"></a></h1>
+<p>(Chinese Doc：<a class="reference external" href="https://deepghs.github.io/waifuc/main/tutorials-CN/process_images/index.html">https://deepghs.github.io/waifuc/main/tutorials-CN/process_images/index.html</a> )</p>
+<p>For data that is about to be crawled or has already been crawled, further processing is often needed to make it suitable for LoRA training. This section will introduce such functionalities in waifuc.</p>
+<p><strong>Important Note:</strong></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>When processing crawled data, all data sources support a caching mechanism. This means you can temporarily store data using a defined variable. For the sake of convenience, we will demonstrate using <code class="docutils literal notranslate"><span class="pre">LocalSource</span></code> to load local data. In reality, actions can be used with any data source.</p></li>
+<li><p>Waifuc provides a variety of preset actions. Due to space limitations, not all features will be demonstrated here. A comprehensive list of functions can be found in the documentation.</p></li>
+</ol>
+</div>
+<section id="how-to-process-data">
+<h2>How to Process Data<a class="headerlink" href="#how-to-process-data" title="Permalink to this heading"></a></h2>
+<p>In waifuc, we use actions to process the data obtained, as shown in the examples earlier.</p>
+<p>We can use the <code class="docutils literal notranslate"><span class="pre">attach</span></code> method of the data source to add an action to the data source, creating a new data source. Here’s an example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">4</span>    <span class="c1"># define &quot;source&quot; to cache the data clawed from source.</span>
+<span class="linenos">5</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/mydataset&#39;</span><span class="p">)</span>
+<span class="linenos">6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">7</span>        <span class="n">XXXAction</span><span class="p">()</span>  <span class="c1"># now source&#39;s output will be items processed by XXXAction</span>
+<span class="linenos">8</span>    <span class="p">)</span>  <span class="c1"># and then they&#39;ll be cached by new &quot;source&quot; that is different</span>
+</pre></div>
+</div>
+<p>However, it’s important to note that every time the <code class="docutils literal notranslate"><span class="pre">attach</span></code> method is called, a <strong>new data source</strong> will be generated. It won’t change the original data source. Therefore, <strong>the following usage is incorrect</strong>, and the action in the <code class="docutils literal notranslate"><span class="pre">attach</span></code> method will not be effectively added:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/mydataset&#39;</span><span class="p">)</span>
+<span class="linenos"> 6</span>    <span class="c1"># WRONG USAGE!!!!! no variable for caching the processed source</span>
+<span class="linenos"> 7</span>    <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">XXXAction</span><span class="p">()</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="c1"># these images will NOT! NOT! NOT! be processed by XXXAction</span>
+<span class="linenos">12</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="common-actions-and-usage-examples">
+<h2>Common Actions and Usage Examples<a class="headerlink" href="#common-actions-and-usage-examples" title="Permalink to this heading"></a></h2>
+<section id="modeconvertaction">
+<h3>ModeConvertAction<a class="headerlink" href="#modeconvertaction" title="Permalink to this heading"></a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">ModeConvertAction</span></code> is a very commonly used action. Since actual images often come in various formats such as grayscale, binary, RGB, RGBA, etc. (see: <a class="reference external" href="https://pillow.readthedocs.io/en/stable/handbook/concepts.html#modes">Pillow Modes</a>), we need to convert the mode of the images to facilitate further processing by other actions. Here’s how you can use it:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">ModeConvertAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/mydataset&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">ModeConvertAction</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="n">force_background</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">),</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>In this code, <code class="docutils literal notranslate"><span class="pre">ModeConvertAction</span></code> will convert all images to the RGB mode. For images with a transparent background (e.g., PNG images in RGBA format), it will fill the background with white.</p>
+<p>Considering the requirements of many subsequent action stages for image mode and to avoid format incompatibility issues during data saving, it is recommended to add this action as the first action in most cases.</p>
+</section>
+<section id="firstnselectaction">
+<h3>FirstNSelectAction<a class="headerlink" href="#firstnselectaction" title="Permalink to this heading"></a></h3>
+<p>For data sources, we often want to keep only the first several data items. Furthermore, for web data sources, limiting the number of images fetched is essential to ensure the finiteness of the process. Therefore, we can use <code class="docutils literal notranslate"><span class="pre">FirstNSelectAction</span></code> to truncate the data stream, as shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FirstNSelectAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/mydataset&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">FirstNSelectAction</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>This code will retain only the first 100 images read from <code class="docutils literal notranslate"><span class="pre">/data/mydataset</span></code> and save them to <code class="docutils literal notranslate"><span class="pre">/data/dstdataset</span></code>.</p>
+<p>It’s worth noting that there is a more concise way to use <code class="docutils literal notranslate"><span class="pre">FirstNSelectAction</span></code>, as shown below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">5</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/mydataset&#39;</span><span class="p">)</span>
+<span class="linenos">6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="p">[:</span><span class="mi">100</span><span class="p">]</span>
+<span class="linenos">7</span>
+<span class="linenos">8</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Yes, this code is equivalent to the code using <code class="docutils literal notranslate"><span class="pre">FirstNSelectAction</span></code>. This is a concise form frequently used in the earlier content.</p>
+</section>
+<section id="nomonochromeaction">
+<h3>NoMonochromeAction<a class="headerlink" href="#nomonochromeaction" title="Permalink to this heading"></a></h3>
+<p>When processing training data, monochrome images (as defined <a class="reference external" href="https://danbooru.donmai.us/wiki_pages/monochrome?z=2">here</a>) often sneak in. In most cases, these images are not desirable because they can have a negative impact on the model’s training. Therefore, we want to filter them out. In waifuc, this is very simple. For example, for the following images stored in <code class="docutils literal notranslate"><span class="pre">/data/raw</span></code>:</p>
+<img alt="../../_images/monochrome_raw1.png" class="align-center" src="../../_images/monochrome_raw1.png" />
+<p>We can use the following code to filter out monochrome images:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">NoMonochromeAction</span><span class="p">(),</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>However, note that depending on the content of the images, this action may also filter out images with color that are too similar to monochrome images.</p>
+<p>Non-monochrome images will be saved in the <code class="docutils literal notranslate"><span class="pre">/data/dstdataset</span></code> path, as shown below:</p>
+<img alt="../../_images/monochrome_processed1.png" class="align-center" src="../../_images/monochrome_processed1.png" />
+</section>
+<section id="classfilteraction">
+<h3>ClassFilterAction<a class="headerlink" href="#classfilteraction" title="Permalink to this heading"></a></h3>
+<p>Similarly, when processing training data, there are often manga and 3D images mixed in. In most cases, we want to exclude them. This is also very easy for waifuc. For example, for the following image:</p>
+<img alt="../../_images/class_raw1.png" class="align-center" src="../../_images/class_raw1.png" />
+<p>You can use the following code to filter out manga (images with comic frames) and 3D images:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">ClassFilterAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="c1"># only keep the illustrations and bangumi screenshots</span>
+<span class="linenos"> 8</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 9</span>        <span class="n">ClassFilterAction</span><span class="p">([</span><span class="s1">&#39;illustration&#39;</span><span class="p">,</span> <span class="s1">&#39;bangumi&#39;</span><span class="p">]),</span>
+<span class="linenos">10</span>    <span class="p">)</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The final saved images are accurately filtered out:</p>
+<img alt="../../_images/class_processed1.png" class="align-center" src="../../_images/class_processed1.png" />
+</section>
+<section id="filtersimilaraction">
+<h3>FilterSimilarAction<a class="headerlink" href="#filtersimilaraction" title="Permalink to this heading"></a></h3>
+<p>When fetching data, we often need to filter out identical or similar images. In waifuc, there is a <code class="docutils literal notranslate"><span class="pre">FilterSimilarAction</span></code> based on the <a class="reference external" href="https://github.com/richzhang/PerceptualSimilarity">LPIPS model</a> to filter similar images. For example, for the following 10 images:</p>
+<img alt="../../_images/lpips_raw1.png" class="align-center" src="../../_images/lpips_raw1.png" />
+<p>You can use the following code to filter out similar images:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FilterSimilarAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">FilterSimilarAction</span><span class="p">(),</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The final images obtained are as follows:</p>
+<img alt="../../_images/lpips_processed1.png" class="align-center" src="../../_images/lpips_processed1.png" />
+</section>
+<section id="taggingaction">
+<h3>TaggingAction<a class="headerlink" href="#taggingaction" title="Permalink to this heading"></a></h3>
+<p>To train a LoRA dataset, it is generally necessary to label the content of the images. The specific format is an image plus a text file with the same name. For example, for the following set of images:</p>
+<img alt="../../_images/tagging_raw1.png" class="align-center" src="../../_images/tagging_raw1.png" />
+<p>You can use the following code to generate tags for them and export them using <code class="docutils literal notranslate"><span class="pre">TextureInversionExporter</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">TaggingAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">TextualInversionExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">TaggingAction</span><span class="p">(),</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">TextualInversionExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The resulting dataset looks like this:</p>
+<img alt="../../_images/tagging_processed1.png" class="align-center" src="../../_images/tagging_processed1.png" />
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">TaggingAction</span></code> itself does not directly export images in the image+txt data format. It only generates tag information for images and stores it in the image’s metadata. The actual export in the format required for LoRA training occurs only when <code class="docutils literal notranslate"><span class="pre">TextualInversionExporter</span></code> is used for the final export.</p></li>
+<li><p>When fetching images from some websites (such as Danbooru), the images on the website already have tag information. In this case, if you <strong>directly use `TaggingAction`</strong>, it will skip images with pre-existing tag information, resulting in tag information in the final exported dataset coming entirely from the crawled website. If you want to regenerate tag information for each image, you need to use <code class="docutils literal notranslate"><span class="pre">TagginngAction(force=True)</span></code> for forced tagging, replacing the original tagging information with information generated by the tagger.</p></li>
+</ol>
+</div>
+</section>
+<section id="personsplitaction">
+<h3>PersonSplitAction<a class="headerlink" href="#personsplitaction" title="Permalink to this heading"></a></h3>
+<p>When fetching images, you may encounter images with multiple people. In some cases, we may want to split the various characters in the image to facilitate further filtering. In such cases, you can use <cite>PersonSplitAction</cite>. For example, for the following image:</p>
+<img alt="../../_images/person_split_raw1.png" class="align-center" src="../../_images/person_split_raw1.png" />
+<p>You can use the following code to split the image:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">PersonSplitAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">PersonSplitAction</span><span class="p">(),</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The final split and saved images look like this:</p>
+<img alt="../../_images/person_split_processed1.png" class="align-center" src="../../_images/person_split_processed1.png" />
+</section>
+<section id="facecountaction">
+<h3>FaceCountAction<a class="headerlink" href="#facecountaction" title="Permalink to this heading"></a></h3>
+<p>Waifuc can also filter based on the number of faces in an image. For example, for the following set of images:</p>
+<img alt="../../_images/face_count_raw1.png" class="align-center" src="../../_images/face_count_raw1.png" />
+<p>You can use the following code to filter out images with only one face:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FaceCountAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">FaceCountAction</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The resulting dataset looks like this, with photos containing multiple faces filtered out:</p>
+<img alt="../../_images/face_count_processed1.png" class="align-center" src="../../_images/face_count_processed1.png" />
+</section>
+<section id="ccipaction">
+<h3>CCIPAction<a class="headerlink" href="#ccipaction" title="Permalink to this heading"></a></h3>
+<p>When fetching data, there is often a situation where <strong>irrelevant characters are mixed in</strong>. Even for websites with clear character tags like Danbooru, there will still be a certain percentage of irrelevant characters. <strong>This problem is often difficult to completely avoid through common tagging mechanisms</strong>, but such impurities can have a significant negative impact on the quality of LoRA training.</p>
+<p>To address this issue, waifuc provides <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code>, which can automatically filter out irrelevant characters from the data source. For example, in the following code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">CCIPAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">CCIPAction</span><span class="p">(),</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The effect is shown in the image below. Seven irrelevant images are randomly removed from a total of 32 images:</p>
+<img alt="../../_images/ccip_simple1.jpeg" class="align-center" src="../../_images/ccip_simple1.jpeg" />
+<p>Moreover, when we stack <code class="docutils literal notranslate"><span class="pre">PersonSplitAction</span></code> and <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code>, we can filter images that contain both single and multiple characters in the data source (which is actually very common). The code is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">CCIPAction</span><span class="p">,</span> <span class="n">PersonSplitAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">PersonSplitAction</span><span class="p">(),</span>
+<span class="linenos"> 9</span>        <span class="n">CCIPAction</span><span class="p">(),</span>
+<span class="linenos">10</span>    <span class="p">)</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The effect is shown in the image below:</p>
+<img alt="../../_images/ccip_complex1.jpeg" class="align-center" src="../../_images/ccip_complex1.jpeg" />
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>By default, <strong>make sure the data source can provide at least 15 images</strong>. The CCIP model needs a certain number of images for cross-validation to determine the main character in the data source. If an insufficient number of images is provided, all images will accumulate in the <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> step, preventing them from entering subsequent actions.</p></li>
+<li><p>The effective prerequisite for <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> is that the data set contains <strong>exactly one main character</strong> (i.e., the character the user wants to obtain data for), and the <strong>proportion of this character in the data source should not be too low</strong> (ideally not less than 60%). The CCIP model needs to use clustering algorithms to determine the main character in the data source to filter all images. If the data source does not satisfy this characteristic, <code class="docutils literal notranslate"><span class="pre">CCIPAction</span></code> will take a long time to determine the main character, resulting in image accumulation.</p></li>
+</ol>
+</div>
+</section>
+<section id="alignminsizeaction">
+<h3>AlignMinSizeAction<a class="headerlink" href="#alignminsizeaction" title="Permalink to this heading"></a></h3>
+<p>When the data source contains images that are too large, but large-sized images are not needed during training, and storage space needs to be saved as much as possible, you can use <code class="docutils literal notranslate"><span class="pre">AlignMinSizeAction</span></code> to compress large-sized images. The code is as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">AlignMinSizeAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">AlignMinSizeAction</span><span class="p">(</span><span class="mi">800</span><span class="p">),</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The above code scales images with a short side length greater than 800, maintaining the original aspect ratio, so that the short side length becomes 800. For images with a short side length not exceeding 800, no modifications are made.</p>
+</section>
+<section id="randomfilenameaction">
+<h3>RandomFilenameAction<a class="headerlink" href="#randomfilenameaction" title="Permalink to this heading"></a></h3>
+<p>In some cases, to keep the processed image data in a shuffled state, avoiding the sequential loading of images in the model training script, we need to shuffle the images. In waifuc, you can use the following code to randomly rename all the images:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">RandomFilenameAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">RandomFilenameAction</span><span class="p">()</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="threestagesplitaction">
+<h3>ThreeStageSplitAction<a class="headerlink" href="#threestagesplitaction" title="Permalink to this heading"></a></h3>
+<p>In some experiments related to LoRA character model training, it has been preliminarily proven that splitting the same portrait image again for model training can improve LoRA’s generalization and enhance the fidelity of character details. Therefore, waifuc also supports such operations. For example, for the following set of images:</p>
+<img alt="../../_images/3stage_raw1.png" class="align-center" src="../../_images/3stage_raw1.png" />
+<p>You can use <code class="docutils literal notranslate"><span class="pre">ThreeStageSplitAction</span></code> to split the images into full body - upper body - head, as shown in the code below:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">ThreeStageSplitAction</span><span class="p">,</span> <span class="n">FilterSimilarAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/raw&#39;</span><span class="p">)</span>
+<span class="linenos"> 7</span>    <span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="n">ThreeStageSplitAction</span><span class="p">(),</span>
+<span class="linenos"> 9</span>        <span class="n">FilterSimilarAction</span><span class="p">()</span>
+<span class="linenos">10</span>    <span class="p">)</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/dstdataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">FilterSimilarAction</span></code> can filter out highly similar sub-images that may appear after the split. It is recommended to add this action. The final processed dataset looks like this:</p>
+<img alt="../../_images/3stage_processed1.png" class="align-center" src="../../_images/3stage_processed1.png" />
+</section>
+</section>
+<section id="other-actions">
+<h2>Other Actions<a class="headerlink" href="#other-actions" title="Permalink to this heading"></a></h2>
+<p>In fact, waifuc supports more than just the several actions mentioned above. You can find more actions in the <a class="reference external" href="https://github.com/deepghs/waifuc/blob/main/waifuc/action/__init__.py">source code</a>.</p>
+<p>Additionally, actions are customizable, meaning you can customize the actions you need and add them to the processing pipeline. Details about this will be explained in the subsequent content.</p>
+</section>
+</section>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../crawl_images/index.html" class="btn btn-neutral float-left" title="Crawling Some Images From Websites" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../crawl_videos/index.html" class="btn btn-neutral float-right" title="Extracting Character Images from Videos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, narugo1992.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev/gif
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">dev/gif</a></dd>
+                        <dd><a href="../../../../main/tutorials/process_images/index.html">main</a></dd>
+                </dl>
+        </div>
+    </div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
