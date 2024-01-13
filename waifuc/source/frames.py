@@ -13,7 +13,7 @@ class _FrameSource(BaseDataSource):
         self.meta_info = dict(meta_info or {})
 
     def _iter(self) -> Iterator[ImageItem]:
-        if self.image.n_frames == 1:
+        if not hasattr(self.image, 'n_frames') or self.image.n_frames == 1:
             yield ImageItem(self.image, self.meta_info)
         else:
             for i in range(self.image.n_frames):
@@ -21,7 +21,10 @@ class _FrameSource(BaseDataSource):
                 frame_image = self.image.copy()
 
                 if 'filename' not in self.meta_info:
-                    meta_info = self.meta_info
+                    meta_info = {
+                        **self.meta_info,
+                        'frame_id': i,
+                    }
                 else:
                     filename, fileext = os.path.splitext(self.meta_info['filename'])
                     meta_info = {
