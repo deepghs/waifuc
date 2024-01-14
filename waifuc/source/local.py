@@ -10,6 +10,7 @@ from imgutils.data import load_image
 from tqdm.auto import tqdm
 
 from .base import NamedDataSource
+from .frames import _FrameSource
 from ..model import ImageItem
 
 
@@ -58,12 +59,13 @@ class LocalSource(BaseDirectorySource):
                 warnings.warn(f'File {file} is truncated or corrupted, skipped.')
                 continue
 
+            target_filename = os.path.basename(file)
             meta = origin_item.meta or {
                 'path': os.path.abspath(file),
                 'group_id': group_name,
-                'filename': os.path.basename(file),
+                'filename': target_filename,
             }
-            yield ImageItem(origin_item.image, meta)
+            yield from _FrameSource(origin_item.image, meta)
 
 
 class LocalTISource(BaseDirectorySource):
