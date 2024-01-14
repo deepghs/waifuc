@@ -50,17 +50,20 @@ class WebDataSource(NamedDataSource):
                 _, ext_name = os.path.splitext(urlsplit(url).filename)
                 filename = f'{self.group_name}_{id_}{ext_name}'
                 td_file = os.path.join(td, filename)
+
                 try:
                     self._rate_limiter().try_acquire(filename)
                     download_file(
                         url, td_file, desc=filename,
                         session=self.session, silent=self.download_silent
                     )
-                    image = Image.open(td_file)
-                    image.load()
                 except httpx.HTTPError as err:
                     warnings.warn(f'Skipped due to download error: {err!r}')
                     continue
+
+                try:
+                    image = Image.open(td_file)
+                    image.load()
                 except UnidentifiedImageError:
                     warnings.warn(f'{self.group_name.capitalize()} resource {id_} unidentified as image, skipped.')
                     continue

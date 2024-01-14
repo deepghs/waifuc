@@ -13,13 +13,16 @@ try:
     import av
     import av.datasets
     from av.error import InvalidDataError
+
+    _VIDEO_EXTRACT_AVAILABLE = True
 except (ImportError, ModuleNotFoundError):
     av = None
+    _VIDEO_EXTRACT_AVAILABLE = False
 
 
 class VideoSource(NamedDataSource):
     def __init__(self, video_file):
-        if av is None:
+        if not _VIDEO_EXTRACT_AVAILABLE:
             raise ImportError(f'pyav not installed, {self.__class__.__name__} is unavailable. '
                               f'Please install this with `pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[video]` to solve this problem.')
         self.video_file = video_file
