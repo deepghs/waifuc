@@ -11,6 +11,7 @@ from hbutils.system import urlsplit, TemporaryDirectory
 from pyrate_limiter import Rate, Duration, Limiter
 
 from .base import NamedDataSource
+from .frames import _FrameSource
 from ..model import ImageItem
 from ..utils import get_requests_session, download_file, get_random_ua
 
@@ -72,7 +73,7 @@ class WebDataSource(NamedDataSource):
                     continue
 
                 meta = {**meta, 'url': url}
-                yield ImageItem(image, meta)
+                yield from _FrameSource(image, meta)
 
 
 class WebPlusDataSource(WebDataSource):
