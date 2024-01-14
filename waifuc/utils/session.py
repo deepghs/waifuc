@@ -99,14 +99,14 @@ def srequest(session: httpx.Client, method, url, *, max_retries: int = 5,
                 resp.raise_for_status()
         except (httpx.TooManyRedirects,):
             raise
-        except httpx.HTTPStatusError as err:
+        except (httpx.HTTPStatusError, requests.exceptions.HTTPError) as err:
             if _should_retry(err.response):
                 warnings.warn(f'Requests {err.response.status_code} ({i + 1}/{max_retries}), '
                               f'sleep for {sleep_time!r}s ...')
                 time.sleep(sleep_time)
             else:
                 raise
-        except httpx.HTTPError as err:
+        except (httpx.HTTPError, requests.exceptions.RequestException) as err:
             warnings.warn(f'Requests error ({i + 1}/{max_retries}): {err!r}, '
                           f'sleep for {sleep_time!r}s ...')
             time.sleep(sleep_time)
