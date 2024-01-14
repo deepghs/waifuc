@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>我想从网站上爬取一些数据 &mdash; waifuc 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c9d0a6ec" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="我想处理爬取到的或本地的图像" href="../process_images/index.html" />
+    <link rel="prev" title="我想给我老婆炼丹" href="../quick_start/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            waifuc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Training a LoRA for My Waifu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_images/index.html">Crawling Some Images From Websites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/process_images/index.html">Process Crawled or Local Images and Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_videos/index.html">Extracting Character Images from Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/device/index.html">How to Prevent Waifuc from Using GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">我想从网站上爬取一些数据</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#id2">如何从网站爬取数据？</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#zerochan">Zerochan</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#danbooru">Danbooru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#pixiv">Pixiv</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#anime-pictures">Anime-Pictures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#sankaku">Sankaku</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#gelbooru">Gelbooru</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#duitang">Duitang</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id3">其余受支持的图像站</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#id4">我想从多个网站上爬取数据</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#json">为什么会有这么多json文件？</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#id5">我不想将图像保存到硬盘上，如何直接使用它们？</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Guides</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/before_read/index.html">Reading Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/workflow/index.html">Understanding the Waifuc Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/dynamic/index.html">I Need to Dynamically Design the Processing Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/customize/index.html">How to Customize In Waifuc?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../advanced_guides/ccip/index.html">What is CCIP, and What are its Features?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">waifuc.config</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">waifuc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">我想从网站上爬取一些数据</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials-CN/crawl_images/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+    
+    
+  <section id="id1">
+<h1>我想从网站上爬取一些数据<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h1>
+<section id="id2">
+<h2>如何从网站爬取数据？<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>实际上，<strong>waifuc能爬取的网站远远不止Danbooru一个</strong></p>
+<p>不过在正式开始之前，Narugo要介绍他的另一位老婆，可爱的小兔娘<strong>阿米娅</strong><code class="docutils literal notranslate"><span class="pre">amiya</span></code>，同样来自<strong>明日方舟</strong><code class="docutils literal notranslate"><span class="pre">Arknights</span></code></p>
+<p>以下为Narugo发癫内容：你问我为什么有这么多老婆？众所周知，二次元爱好者的老婆有无限多个，她们都是我的天使<strong>😍</strong></p>
+<blockquote>
+<div><img alt="../../_images/amiya.png" class="align-center" src="../../_images/amiya.png" />
+</div></blockquote>
+<section id="zerochan">
+<h3>Zerochan<a class="headerlink" href="#zerochan" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://zerochan.net/">Zerochan</a>是一个包含图像平均质量较高的网站，我们可以使用极为简单的方式进行爬取</p>
+<p><strong>当我们不需要大批量的获取图像，而只需要50张图像时</strong>，可以使用以下代码实现：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">ZerochanSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">ZerochanSource</span><span class="p">(</span><span class="s1">&#39;Amiya&#39;</span><span class="p">)</span>
+<span class="linenos"> 6</span>    <span class="c1"># &#39;[:50]&#39;限制爬取数量为50张，</span>
+<span class="linenos"> 7</span>    <span class="c1"># 如果需要全部爬取只需删去即可</span>
+<span class="linenos"> 8</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos"> 9</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan&#39;</span><span class="p">)</span>
+<span class="linenos">10</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>请注意，<strong>此处使用</strong><code class="docutils literal notranslate"><span class="pre">SaveExporter</span></code><strong>导出，而非之前的</strong><code class="docutils literal notranslate"><span class="pre">TextureInversionExporter</span></code><strong>导出</strong>，关于它的作用将在本篇后续部分进行介绍</p>
+<p>上述爬取到的图像数据将被导出到<strong>指定的</strong><code class="docutils literal notranslate"><span class="pre">./data/amiya_zerochan</span></code><strong>本地路径</strong>下，结果如下：</p>
+<blockquote>
+<div><img alt="../../_images/zerochan_simple_50.png" class="align-center" src="../../_images/zerochan_simple_50.png" />
+</div></blockquote>
+<p>然而，我们会发现一个问题：</p>
+<p>Zerochan上有较多的member-only的图像，我们需要登录后才能获取它们</p>
+<p>为此我们可以<strong>使用自己的用户名</strong><code class="docutils literal notranslate"><span class="pre">username</span></code>和<strong>密码</strong><code class="docutils literal notranslate"><span class="pre">password</span></code>进行鉴权，以获得更多、更优质的图像，代码如下：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">ZerochanSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">ZerochanSource</span><span class="p">(</span>
+<span class="linenos"> 6</span>        <span class="s1">&#39;Amiya&#39;</span><span class="p">,</span>
+<span class="linenos"> 7</span>        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span>        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;your_password&#39;</span><span class="p">,</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">11</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan&#39;</span><span class="p">)</span>
+<span class="linenos">12</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>再次运行，果然我们成功获取到了不少的member-only图像：</p>
+<blockquote>
+<div><img alt="../../_images/zerochan_login_50.png" class="align-center" src="../../_images/zerochan_login_50.png" />
+</div></blockquote>
+<p>不过我们又发现，这些图像很多分辨率并不高，边长超过1000像素的不多</p>
+<p>这是因为<strong>Zerochan会默认选用</strong><code class="docutils literal notranslate"><span class="pre">large</span></code><strong>尺寸的图像</strong>，以提高下载速度</p>
+<p>如果需要更大尺寸的图像，可以将<strong>尺寸选择</strong><code class="docutils literal notranslate"><span class="pre">select</span></code>设置为<code class="docutils literal notranslate"><span class="pre">full</span></code>，就像这样：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">ZerochanSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">ZerochanSource</span><span class="p">(</span>
+<span class="linenos"> 6</span>        <span class="s1">&#39;Amiya&#39;</span><span class="p">,</span>
+<span class="linenos"> 7</span>        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span>        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;your_password&#39;</span><span class="p">,</span>
+<span class="linenos"> 9</span>        <span class="n">select</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
+<span class="linenos">10</span>    <span class="p">)</span>
+<span class="linenos">11</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">12</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan&#39;</span><span class="p">)</span>
+<span class="linenos">13</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>再再次运行后，得到的将全都是全尺寸的图像</p>
+<p>然而，依然还存在一个问题：高质量图片中很多都是官方画作，而阿米娅作为游戏的女主角，更是常作为C位出现在多人图中</p>
+<p><strong>我们实际上只需要仅包含她自己的图像</strong>，这当然是没问题，只需要将<strong>严格搜索模式</strong><code class="docutils literal notranslate"><span class="pre">strict</span></code>设置为<code class="docutils literal notranslate"><span class="pre">True</span></code>即可：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">ZerochanSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">ZerochanSource</span><span class="p">(</span>
+<span class="linenos"> 6</span>        <span class="s1">&#39;Amiya&#39;</span><span class="p">,</span>
+<span class="linenos"> 7</span>        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span>        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;your_password&#39;</span><span class="p">,</span>
+<span class="linenos"> 9</span>        <span class="n">select</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
+<span class="linenos">10</span>        <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">11</span>    <span class="p">)</span>
+<span class="linenos">12</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">13</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan&#39;</span><span class="p">)</span>
+<span class="linenos">14</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>再再再次运行，我们最终得到了来自Zerochan的高质量、全尺寸且均为阿米娅单人的图像，如下所示：</p>
+<blockquote>
+<div><img alt="../../_images/zerochan_login_50_full_strict.png" class="align-center" src="../../_images/zerochan_login_50_full_strict.png" />
+</div></blockquote>
+</section>
+<section id="danbooru">
+<h3>Danbooru<a class="headerlink" href="#danbooru" title="Permalink to this heading"></a></h3>
+<p>理所当然，<a class="reference external" href="https://danbooru.donmai.us/">Danbooru</a>也是可以轻松被waifuc爬取的，使用十分简单：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">])</span>
+<span class="linenos">6</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">7</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_danbooru&#39;</span><span class="p">)</span>
+<span class="linenos">8</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>以及，<strong>在Danbooru及其类似网站可通过添加</strong><code class="docutils literal notranslate"><span class="pre">solo</span></code><strong>关键词来直接筛选单人图像</strong>，以节省操作步骤，就像这样：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">])</span>
+<span class="linenos">6</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">7</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_solo_danbooru&#39;</span><span class="p">)</span>
+<span class="linenos">8</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="pixiv">
+<h3>Pixiv<a class="headerlink" href="#pixiv" title="Permalink to this heading"></a></h3>
+<p>waifuc<strong>支持对</strong><a class="reference external" href="https://www.pixiv.net/">Pixiv</a><strong>的多种爬取方式：关键词检索、用户检索以及各种排行榜爬取</strong></p>
+<p>我们可以使用<code class="docutils literal notranslate"><span class="pre">PixivSearchSource</span></code>数据源来进行关键词检索方式的图像数据爬取，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">PixivSearchSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">PixivSearchSource</span><span class="p">(</span>
+<span class="linenos"> 6</span>        <span class="c1"># &#39;明日方舟 阿米娅&#39;</span>
+<span class="linenos"> 7</span>        <span class="s1">&#39;アークナイツ アーミヤ&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span>        <span class="n">refresh_token</span><span class="o">=</span><span class="s1">&#39;your_pixiv_refresh_token&#39;</span><span class="p">,</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">11</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_pixiv&#39;</span><span class="p">)</span>
+<span class="linenos">12</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>我们也可以使用<code class="docutils literal notranslate"><span class="pre">PixivUserSource</span></code>数据源来进行检索方式的图像数据爬取，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">PixivUserSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">PixivUserSource</span><span class="p">(</span>
+<span class="linenos"> 6</span>        <span class="mi">2864095</span><span class="p">,</span>  <span class="c1"># 爬取用户2864095</span>
+<span class="linenos"> 7</span>        <span class="n">refresh_token</span><span class="o">=</span><span class="s1">&#39;your_pixiv_refresh_token&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span>    <span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">10</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/pixiv_user_misaka_12003&#39;</span><span class="p">)</span>
+<span class="linenos">11</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>我们还可以使用<code class="docutils literal notranslate"><span class="pre">PixivRankingSource</span></code>数据源来进行可选择的排行榜的图像数据爬取，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">PixivRankingSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">PixivRankingSource</span><span class="p">(</span>
+<span class="linenos"> 6</span>        <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;day&#39;</span><span class="p">,</span>  <span class="c1"># 选择全年龄日榜</span>
+<span class="linenos"> 7</span>        <span class="n">refresh_token</span><span class="o">=</span><span class="s1">&#39;your_pixiv_refresh_token&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span>    <span class="p">)</span>
+<span class="linenos"> 9</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">10</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/pixiv_daily_best&#39;</span><span class="p">)</span>
+<span class="linenos">11</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="anime-pictures">
+<h3>Anime-Pictures<a class="headerlink" href="#anime-pictures" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://anime-pictures.net/posts?search_tag=amiya+%28arknights%29&amp;lang=en&amp;page=0">Anime-Pictures</a>的图像数量不多，但是质量普遍很高</p>
+<p>因此waifuc也同样支持对它的爬取，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">AnimePicturesSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">AnimePicturesSource</span><span class="p">([</span><span class="s1">&#39;amiya (arknights)&#39;</span><span class="p">])</span>
+<span class="linenos">6</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">7</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_animepictures&#39;</span><span class="p">)</span>
+<span class="linenos">8</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="sankaku">
+<h3>Sankaku<a class="headerlink" href="#sankaku" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://chan.sankakucomplex.com/">Sankaku</a>的图像数量庞大且种类很多</p>
+<p>waifuc同样支持了它，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">SankakuSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">SankakuSource</span><span class="p">(</span>
+<span class="linenos"> 6</span>        <span class="p">[</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">],</span>
+<span class="linenos"> 7</span>        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span>
+<span class="linenos"> 8</span>        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;your_password&#39;</span><span class="p">,</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">11</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_sankaku&#39;</span><span class="p">)</span>
+<span class="linenos">12</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="gelbooru">
+<h3>Gelbooru<a class="headerlink" href="#gelbooru" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://gelbooru.com/">Gelbooru</a>与Danbooru的内容很相似，但在一些特定内容上有更多图像</p>
+<p>waifuc同样它支持的爬取，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">GelbooruSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">GelbooruSource</span><span class="p">([</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">])</span>
+<span class="linenos">6</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">7</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_gelbooru&#39;</span><span class="p">)</span>
+<span class="linenos">8</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="duitang">
+<h3>Duitang<a class="headerlink" href="#duitang" title="Permalink to this heading"></a></h3>
+<p><a class="reference external" href="https://www.duitang.com/">Duitang</a>是一个来自中国的网站，因其建站时间较长，也包含不少优质的图像</p>
+<p>应中国用户的请求，Narugo为waifuc添加了针对堆糖(duitang)的支持，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DuitangSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">DuitangSource</span><span class="p">(</span><span class="s1">&#39;阿米娅&#39;</span><span class="p">)</span>
+<span class="linenos">6</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">7</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_duitang&#39;</span><span class="p">)</span>
+<span class="linenos">8</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+</section>
+<section id="id3">
+<h3>其余受支持的图像站<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<p>除了上述的这些外，waifuc还支持了大量其他的图像站。<strong>所有受支持图像站</strong>如下所示：</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://booru.allthefallen.moe/">ATFBooruSource</a></p></li>
+<li><p><a class="reference external" href="https://anime-pictures.net/">AnimePicturesSource</a></p></li>
+<li><p><a class="reference external" href="https://danbooru.donmai.us/">DanbooruSource</a></p></li>
+<li><p><a class="reference external" href="https://derpibooru.org/">DerpibooruSource</a></p></li>
+<li><p><a class="reference external" href="https://www.duitang.com/">DuitangSource</a></p></li>
+<li><p><a class="reference external" href="https://e621.net/">E621Source</a></p></li>
+<li><p><a class="reference external" href="https://e926.net/">E926Source</a></p></li>
+<li><p><a class="reference external" href="https://furbooru.com/">FurbooruSource</a></p></li>
+<li><p><a class="reference external" href="https://gelbooru.com/">GelbooruSource</a></p></li>
+<li><p><a class="reference external" href="https://www.huashi6.com/">Huashi6Source</a></p></li>
+<li><p><a class="reference external" href="https://hypnohub.net/">HypnoHubSource</a></p></li>
+<li><p><a class="reference external" href="https://konachan.net/">KonachanNetSource</a></p></li>
+<li><p><a class="reference external" href="https://konachan.com/">KonachanSource</a></p></li>
+<li><p><a class="reference external" href="https://lolibooru.moe/">LolibooruSource</a></p></li>
+<li><p><a class="reference external" href="https://rule34.paheal.net/">PahealSource</a></p></li>
+<li><p><a class="reference external" href="https://pixiv.net/">PixivRankingSource</a></p></li>
+<li><p><a class="reference external" href="https://pixiv.net/">PixivSearchSource</a></p></li>
+<li><p><a class="reference external" href="https://pixiv.net/">PixivUserSource</a></p></li>
+<li><p><a class="reference external" href="https://rule34.xxx/">Rule34Source</a></p></li>
+<li><p><a class="reference external" href="https://safebooru.org/">SafebooruOrgSource</a></p></li>
+<li><p><a class="reference external" href="https://safebooru.donmai.us/">SafebooruSource</a></p></li>
+<li><p><a class="reference external" href="https://chan.sankakucomplex.com/">SankakuSource</a></p></li>
+<li><p><a class="reference external" href="https://tbib.org/">TBIBSource</a></p></li>
+<li><p><a class="reference external" href="https://wallhaven.cc/">WallHavenSource</a></p></li>
+<li><p><a class="reference external" href="https://xbooru.com/">XbooruSource</a></p></li>
+<li><p><a class="reference external" href="https://yande.re/">YandeSource</a></p></li>
+<li><p><a class="reference external" href="https://www.zerochan.net/">ZerochanSource</a></p></li>
+</ul>
+<p>(关于上述<code class="docutils literal notranslate"><span class="pre">Source</span></code>的更多信息和使用细节，详见waifuc源代码)</p>
+</section>
+</section>
+<section id="id4">
+<h2>我想从多个网站上爬取数据<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h2>
+<p>在一些情况中，我们希望从多个网站获取图像数据</p>
+<p>比如下面的情况中，我们需要从Danbooru上获取30张图像，再从zerochan上获取30张图像</p>
+<p>为满足此类需求，waifuc提供了<code class="docutils literal notranslate"><span class="pre">Source</span></code>间的串并联操作，可以通过串联<code class="docutils literal notranslate"><span class="pre">+</span></code>和并联<code class="docutils literal notranslate"><span class="pre">|</span></code>将多个数据源进行集成</p>
+<p>例如在上面的需求中，我们可以将Danbooru数据源和Zerochan数据源进行串联，形成新的数据源，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span><span class="p">,</span> <span class="n">ZerochanSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="c1"># 先从Danbooru爬取30张</span>
+<span class="linenos"> 6</span>    <span class="n">s_db</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">(</span>
+<span class="linenos"> 7</span>        <span class="p">[</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">],</span>
+<span class="linenos"> 8</span>        <span class="n">min_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+<span class="linenos"> 9</span>    <span class="p">)[:</span><span class="mi">30</span><span class="p">]</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="c1"># 再从Zerochan爬取30张</span>
+<span class="linenos">12</span>    <span class="n">s_zerochan</span> <span class="o">=</span> <span class="n">ZerochanSource</span><span class="p">(</span>
+<span class="linenos">13</span>        <span class="s1">&#39;Amiya&#39;</span><span class="p">,</span>
+<span class="linenos">14</span>        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span>
+<span class="linenos">15</span>        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;your_password&#39;</span><span class="p">,</span>
+<span class="linenos">16</span>        <span class="n">select</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
+<span class="linenos">17</span>        <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">18</span>    <span class="p">)[:</span><span class="mi">30</span><span class="p">]</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>    <span class="c1"># 合并爬取到的两个数据流</span>
+<span class="linenos">21</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">s_db</span> <span class="o">+</span> <span class="n">s_zerochan</span>
+<span class="linenos">22</span>    <span class="n">s</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">23</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_2datasources&#39;</span><span class="p">)</span>
+<span class="linenos">24</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>上述代码将先从Danbooru爬取30张图像，再从Zerochan爬取30张图像</p>
+<p>这样，我们可以得到如下的数据集：</p>
+<blockquote>
+<div><img alt="../../_images/source_concat.png" class="align-center" src="../../_images/source_concat.png" />
+</div></blockquote>
+<p>除此之外，在部分情况下，我们可能并不会提前设计好从各个数据源爬取多少图像，而是希望能尽量多地从不同数据源爬取，并最终得到一个需要的总数量。在这种情况下，我们可以使用并联操作，如下所示：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span><span class="p">,</span> <span class="n">ZerochanSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="c1"># 初始化Danbooru数据源</span>
+<span class="linenos"> 6</span>    <span class="n">s_db</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">(</span>
+<span class="linenos"> 7</span>        <span class="p">[</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">],</span>
+<span class="linenos"> 8</span>        <span class="n">min_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="c1"># 初始化Zerochan数据源</span>
+<span class="linenos">12</span>    <span class="n">s_zerochan</span> <span class="o">=</span> <span class="n">ZerochanSource</span><span class="p">(</span>
+<span class="linenos">13</span>        <span class="s1">&#39;Amiya&#39;</span><span class="p">,</span>
+<span class="linenos">14</span>        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span>
+<span class="linenos">15</span>        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;your_password&#39;</span><span class="p">,</span>
+<span class="linenos">16</span>        <span class="n">select</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
+<span class="linenos">17</span>        <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">18</span>    <span class="p">)</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>    <span class="c1"># 从两个数据源随机爬取60张</span>
+<span class="linenos">21</span>    <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_db</span> <span class="o">|</span> <span class="n">s_zerochan</span><span class="p">)[:</span><span class="mi">60</span><span class="p">]</span>
+<span class="linenos">22</span>    <span class="n">s</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">23</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan&#39;</span><span class="p">)</span>
+<span class="linenos">24</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>在这一次爬取中，将从两个站中随机选择进行爬取，直至爬取到60张图像为止</p>
+<p>因此实际上最终获得的数据集并不确定，以下数据集仅供参考：</p>
+<img alt="../../_images/source_union.png" class="align-center" src="../../_images/source_union.png" />
+<p>所有的<code class="docutils literal notranslate"><span class="pre">Source</span></code>间也可以进行复杂的嵌套运算，以构建一个复杂的数据源：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span><span class="p">,</span> <span class="n">ZerochanSource</span><span class="p">,</span> <span class="n">PixivSearchSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="c1"># 初始化Danbooru数据源</span>
+<span class="linenos"> 6</span>    <span class="n">s_db</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">(</span>
+<span class="linenos"> 7</span>        <span class="p">[</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">],</span>
+<span class="linenos"> 8</span>        <span class="n">min_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+<span class="linenos"> 9</span>    <span class="p">)</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span>    <span class="c1"># 初始化Zerochan数据源</span>
+<span class="linenos">12</span>    <span class="n">s_zerochan</span> <span class="o">=</span> <span class="n">ZerochanSource</span><span class="p">(</span>
+<span class="linenos">13</span>        <span class="s1">&#39;Amiya&#39;</span><span class="p">,</span>
+<span class="linenos">14</span>        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span>
+<span class="linenos">15</span>        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;your_password&#39;</span><span class="p">,</span>
+<span class="linenos">16</span>        <span class="n">select</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
+<span class="linenos">17</span>        <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">18</span>    <span class="p">)</span>
+<span class="linenos">19</span>
+<span class="linenos">20</span>    <span class="c1"># 初始化Pixiv数据源</span>
+<span class="linenos">21</span>    <span class="n">s_pixiv</span> <span class="o">=</span> <span class="n">PixivSearchSource</span><span class="p">(</span>
+<span class="linenos">22</span>        <span class="s1">&#39;アークナイツ (amiya OR アーミヤ OR 阿米娅)&#39;</span><span class="p">,</span>
+<span class="linenos">23</span>        <span class="n">refresh_token</span><span class="o">=</span><span class="s1">&#39;your_pixiv_refresh_token&#39;</span><span class="p">,</span>
+<span class="linenos">24</span>    <span class="p">)</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span>    <span class="c1"># 从构造的数据源爬取共计100张</span>
+<span class="linenos">27</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">s_zerochan</span><span class="p">[:</span><span class="mi">50</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">s_db</span> <span class="o">|</span> <span class="n">s_pixiv</span><span class="p">)[:</span><span class="mi">50</span><span class="p">]</span>
+<span class="linenos">28</span>    <span class="n">s</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">29</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan&#39;</span><span class="p">)</span>
+<span class="linenos">30</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>此处就构建了一个复杂的数据源
+<code class="docutils literal notranslate"><span class="pre">s</span> <span class="pre">=</span> <span class="pre">s_zerochan[:50]</span> <span class="pre">+</span> <span class="pre">(s_db</span> <span class="pre">|</span> <span class="pre">s_pixiv)[:50]</span></code>，具体功能为：</p>
+<ul class="simple">
+<li><p>先从Zerochan上爬取50张图像</p></li>
+<li><p>再从Danbooru和Pixiv上随机爬取，共计50张图像</p></li>
+</ul>
+<p>因此这个数据源最终将爬取以Zerochan为主的100张图像</p>
+<p><code class="docutils literal notranslate"><span class="pre">Source</span></code>的串并联操作还可以在<code class="docutils literal notranslate"><span class="pre">attach</span></code>方法之后进行，即进行预处理后，再进行串并联</p>
+<p>例如：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">BackgroundRemovalAction</span><span class="p">,</span> <span class="n">FileExtAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span><span class="p">,</span> <span class="n">ZerochanSource</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 6</span>    <span class="c1"># 初始化Danbooru数据源</span>
+<span class="linenos"> 7</span>    <span class="n">s_db</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">(</span>
+<span class="linenos"> 8</span>        <span class="p">[</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">],</span>
+<span class="linenos"> 9</span>        <span class="n">min_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+<span class="linenos">10</span>    <span class="p">)</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="c1"># 初始化Zerochan数据源</span>
+<span class="linenos">13</span>    <span class="n">s_zerochan</span> <span class="o">=</span> <span class="n">ZerochanSource</span><span class="p">(</span>
+<span class="linenos">14</span>        <span class="s1">&#39;Amiya&#39;</span><span class="p">,</span>
+<span class="linenos">15</span>        <span class="n">username</span><span class="o">=</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span>
+<span class="linenos">16</span>        <span class="n">password</span><span class="o">=</span><span class="s1">&#39;your_password&#39;</span><span class="p">,</span>
+<span class="linenos">17</span>        <span class="n">select</span><span class="o">=</span><span class="s1">&#39;full&#39;</span><span class="p">,</span>
+<span class="linenos">18</span>        <span class="n">strict</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="linenos">19</span>    <span class="p">)</span>
+<span class="linenos">20</span>    <span class="c1"># 对爬取自Zerochan的图像进行去背景处理</span>
+<span class="linenos">21</span>    <span class="n">s_zerochan</span> <span class="o">=</span> <span class="n">s_zerochan</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">22</span>        <span class="n">BackgroundRemovalAction</span><span class="p">()</span>
+<span class="linenos">23</span>    <span class="p">)</span>
+<span class="linenos">24</span>
+<span class="linenos">25</span>    <span class="c1"># 从Danbooru数据源与处理后的Zerochan数据源中随机爬取60张</span>
+<span class="linenos">26</span>    <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="n">s_zerochan</span> <span class="o">|</span> <span class="n">s_db</span><span class="p">)[:</span><span class="mi">60</span><span class="p">]</span>
+<span class="linenos">27</span>    <span class="n">s</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">28</span>        <span class="n">FileExtAction</span><span class="p">(</span><span class="s1">&#39;.png&#39;</span><span class="p">),</span>  <span class="c1"># 以&#39;.png&#39;扩展名保存图像文件</span>
+<span class="linenos">29</span>    <span class="p">)</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">30</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan&#39;</span><span class="p">)</span>
+<span class="linenos">31</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>上述代码的效果是：</p>
+<ul class="simple">
+<li><p>从Zerochan和Danbooru两个网站上爬取图像</p></li>
+<li><p>Zerochan的图像需要进行去背景处理，而Danbooru上的不需要</p></li>
+<li><p>两个数据源总计爬取60张图像</p></li>
+</ul>
+<p>得到的结果如下所示，可以看到，zerochan的图像都进行了去背景处理：</p>
+<img alt="../../_images/source_complex_attach.png" class="align-center" src="../../_images/source_complex_attach.png" />
+<p>通过以上演示可以了解，串并联是<code class="docutils literal notranslate"><span class="pre">Source</span></code>的一项重要特性，合理利用将让配置多样化且极富灵活性</p>
+</section>
+<section id="json">
+<h2>为什么会有这么多json文件？<a class="headerlink" href="#json" title="Permalink to this heading"></a></h2>
+<p>如果你坚持读到了这里，你应该会注意到示例图中的一个问题</p>
+<p>上述所有使用<code class="docutils literal notranslate"><span class="pre">SaveExporter</span></code>进行保存的数据集，每个图像文件都有与其同名的json文件</p>
+<p>你一定会感到好奇，这些json文件是做什么用的？我该如何关闭它们的生成？</p>
+<p>该部分将对此一一作出解答</p>
+<p>首先，我们打开一个其中的json文件<code class="docutils literal notranslate"><span class="pre">.danbooru_6814120_meta.json</span></code>，并查看里面的内容：</p>
+<blockquote>
+<div><details class="summary-a-sample-meta-information-json">
+<summary>A Sample Meta-Information JSON</summary><div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="linenos">  1</span><span class="p">{</span>
+<span class="linenos">  2</span><span class="w">  </span><span class="nt">&quot;danbooru&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">  3</span><span class="w">    </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">6814120</span><span class="p">,</span>
+<span class="linenos">  4</span><span class="w">    </span><span class="nt">&quot;created_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-10-26T08:20:14.250-04:00&quot;</span><span class="p">,</span>
+<span class="linenos">  5</span><span class="w">    </span><span class="nt">&quot;uploader_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">499293</span><span class="p">,</span>
+<span class="linenos">  6</span><span class="w">    </span><span class="nt">&quot;score&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span>
+<span class="linenos">  7</span><span class="w">    </span><span class="nt">&quot;source&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://i.pximg.net/img-original/img/2023/10/26/20/46/42/112868915_p0.jpg&quot;</span><span class="p">,</span>
+<span class="linenos">  8</span><span class="w">    </span><span class="nt">&quot;md5&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0ce585ccbbe7c79f0970466ef7e464ee&quot;</span><span class="p">,</span>
+<span class="linenos">  9</span><span class="w">    </span><span class="nt">&quot;last_comment_bumped_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="linenos"> 10</span><span class="w">    </span><span class="nt">&quot;rating&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;s&quot;</span><span class="p">,</span>
+<span class="linenos"> 11</span><span class="w">    </span><span class="nt">&quot;image_width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4586</span><span class="p">,</span>
+<span class="linenos"> 12</span><span class="w">    </span><span class="nt">&quot;image_height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3758</span><span class="p">,</span>
+<span class="linenos"> 13</span><span class="w">    </span><span class="nt">&quot;tag_string&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1girl absurdres alternate_costume amiya_(arknights) animal_ears arknights backpack bag black_bag black_footwear black_jacket black_shorts blue_eyes brown_hair commentary_request flag ganet_p highres holding holding_flag holding_megaphone jacket jewelry long_hair long_sleeves looking_at_viewer mask mask_pull megaphone midriff mouth_mask multiple_rings open_clothes open_jacket outdoors rabbit_ears ring shadow shirt shorts sleeveless sleeveless_shirt socks solo tied_shirt very_long_hair white_socks&quot;</span><span class="p">,</span>
+<span class="linenos"> 14</span><span class="w">    </span><span class="nt">&quot;fav_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span>
+<span class="linenos"> 15</span><span class="w">    </span><span class="nt">&quot;file_ext&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span>
+<span class="linenos"> 16</span><span class="w">    </span><span class="nt">&quot;last_noted_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="linenos"> 17</span><span class="w">    </span><span class="nt">&quot;parent_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="linenos"> 18</span><span class="w">    </span><span class="nt">&quot;has_children&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="linenos"> 19</span><span class="w">    </span><span class="nt">&quot;approver_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="linenos"> 20</span><span class="w">    </span><span class="nt">&quot;tag_count_general&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">41</span><span class="p">,</span>
+<span class="linenos"> 21</span><span class="w">    </span><span class="nt">&quot;tag_count_artist&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos"> 22</span><span class="w">    </span><span class="nt">&quot;tag_count_character&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos"> 23</span><span class="w">    </span><span class="nt">&quot;tag_count_copyright&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos"> 24</span><span class="w">    </span><span class="nt">&quot;file_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4320312</span><span class="p">,</span>
+<span class="linenos"> 25</span><span class="w">    </span><span class="nt">&quot;up_score&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">16</span><span class="p">,</span>
+<span class="linenos"> 26</span><span class="w">    </span><span class="nt">&quot;down_score&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="linenos"> 27</span><span class="w">    </span><span class="nt">&quot;is_pending&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="linenos"> 28</span><span class="w">    </span><span class="nt">&quot;is_flagged&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="linenos"> 29</span><span class="w">    </span><span class="nt">&quot;is_deleted&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="linenos"> 30</span><span class="w">    </span><span class="nt">&quot;tag_count&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">47</span><span class="p">,</span>
+<span class="linenos"> 31</span><span class="w">    </span><span class="nt">&quot;updated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-10-26T08:30:55.486-04:00&quot;</span><span class="p">,</span>
+<span class="linenos"> 32</span><span class="w">    </span><span class="nt">&quot;is_banned&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="linenos"> 33</span><span class="w">    </span><span class="nt">&quot;pixiv_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">112868915</span><span class="p">,</span>
+<span class="linenos"> 34</span><span class="w">    </span><span class="nt">&quot;last_commented_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="linenos"> 35</span><span class="w">    </span><span class="nt">&quot;has_active_children&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="linenos"> 36</span><span class="w">    </span><span class="nt">&quot;bit_flags&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span>
+<span class="linenos"> 37</span><span class="w">    </span><span class="nt">&quot;tag_count_meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3</span><span class="p">,</span>
+<span class="linenos"> 38</span><span class="w">    </span><span class="nt">&quot;has_large&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="linenos"> 39</span><span class="w">    </span><span class="nt">&quot;has_visible_children&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span>
+<span class="linenos"> 40</span><span class="w">    </span><span class="nt">&quot;media_asset&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 41</span><span class="w">      </span><span class="nt">&quot;id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">15651277</span><span class="p">,</span>
+<span class="linenos"> 42</span><span class="w">      </span><span class="nt">&quot;created_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-10-26T08:19:17.692-04:00&quot;</span><span class="p">,</span>
+<span class="linenos"> 43</span><span class="w">      </span><span class="nt">&quot;updated_at&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;2023-10-26T08:19:23.071-04:00&quot;</span><span class="p">,</span>
+<span class="linenos"> 44</span><span class="w">      </span><span class="nt">&quot;md5&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;0ce585ccbbe7c79f0970466ef7e464ee&quot;</span><span class="p">,</span>
+<span class="linenos"> 45</span><span class="w">      </span><span class="nt">&quot;file_ext&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jpg&quot;</span><span class="p">,</span>
+<span class="linenos"> 46</span><span class="w">      </span><span class="nt">&quot;file_size&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4320312</span><span class="p">,</span>
+<span class="linenos"> 47</span><span class="w">      </span><span class="nt">&quot;image_width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4586</span><span class="p">,</span>
+<span class="linenos"> 48</span><span class="w">      </span><span class="nt">&quot;image_height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3758</span><span class="p">,</span>
+<span class="linenos"> 49</span><span class="w">      </span><span class="nt">&quot;duration&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span>
+<span class="linenos"> 50</span><span class="w">      </span><span class="nt">&quot;status&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;active&quot;</span><span class="p">,</span>
+<span class="linenos"> 51</span><span class="w">      </span><span class="nt">&quot;file_key&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;vMcpfhxKG&quot;</span><span class="p">,</span>
+<span class="linenos"> 52</span><span class="w">      </span><span class="nt">&quot;is_public&quot;</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span>
+<span class="linenos"> 53</span><span class="w">      </span><span class="nt">&quot;pixel_hash&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1e09de6748794e2fb1138a4a30ec905a&quot;</span><span class="p">,</span>
+<span class="linenos"> 54</span><span class="w">      </span><span class="nt">&quot;variants&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="linenos"> 55</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 56</span><span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;180x180&quot;</span><span class="p">,</span>
+<span class="linenos"> 57</span><span class="w">          </span><span class="nt">&quot;url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/180x180/0c/e5/0ce585ccbbe7c79f0970466ef7e464ee.jpg&quot;</span><span class="p">,</span>
+<span class="linenos"> 58</span><span class="w">          </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">180</span><span class="p">,</span>
+<span class="linenos"> 59</span><span class="w">          </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">148</span><span class="p">,</span>
+<span class="linenos"> 60</span><span class="w">          </span><span class="nt">&quot;file_ext&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jpg&quot;</span>
+<span class="linenos"> 61</span><span class="w">        </span><span class="p">},</span>
+<span class="linenos"> 62</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 63</span><span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;360x360&quot;</span><span class="p">,</span>
+<span class="linenos"> 64</span><span class="w">          </span><span class="nt">&quot;url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/360x360/0c/e5/0ce585ccbbe7c79f0970466ef7e464ee.jpg&quot;</span><span class="p">,</span>
+<span class="linenos"> 65</span><span class="w">          </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">360</span><span class="p">,</span>
+<span class="linenos"> 66</span><span class="w">          </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">295</span><span class="p">,</span>
+<span class="linenos"> 67</span><span class="w">          </span><span class="nt">&quot;file_ext&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jpg&quot;</span>
+<span class="linenos"> 68</span><span class="w">        </span><span class="p">},</span>
+<span class="linenos"> 69</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 70</span><span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;720x720&quot;</span><span class="p">,</span>
+<span class="linenos"> 71</span><span class="w">          </span><span class="nt">&quot;url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/720x720/0c/e5/0ce585ccbbe7c79f0970466ef7e464ee.webp&quot;</span><span class="p">,</span>
+<span class="linenos"> 72</span><span class="w">          </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">720</span><span class="p">,</span>
+<span class="linenos"> 73</span><span class="w">          </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">590</span><span class="p">,</span>
+<span class="linenos"> 74</span><span class="w">          </span><span class="nt">&quot;file_ext&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;webp&quot;</span>
+<span class="linenos"> 75</span><span class="w">        </span><span class="p">},</span>
+<span class="linenos"> 76</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 77</span><span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;sample&quot;</span><span class="p">,</span>
+<span class="linenos"> 78</span><span class="w">          </span><span class="nt">&quot;url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/sample/0c/e5/sample-0ce585ccbbe7c79f0970466ef7e464ee.jpg&quot;</span><span class="p">,</span>
+<span class="linenos"> 79</span><span class="w">          </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">850</span><span class="p">,</span>
+<span class="linenos"> 80</span><span class="w">          </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">697</span><span class="p">,</span>
+<span class="linenos"> 81</span><span class="w">          </span><span class="nt">&quot;file_ext&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jpg&quot;</span>
+<span class="linenos"> 82</span><span class="w">        </span><span class="p">},</span>
+<span class="linenos"> 83</span><span class="w">        </span><span class="p">{</span>
+<span class="linenos"> 84</span><span class="w">          </span><span class="nt">&quot;type&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;original&quot;</span><span class="p">,</span>
+<span class="linenos"> 85</span><span class="w">          </span><span class="nt">&quot;url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/original/0c/e5/0ce585ccbbe7c79f0970466ef7e464ee.jpg&quot;</span><span class="p">,</span>
+<span class="linenos"> 86</span><span class="w">          </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">4586</span><span class="p">,</span>
+<span class="linenos"> 87</span><span class="w">          </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">3758</span><span class="p">,</span>
+<span class="linenos"> 88</span><span class="w">          </span><span class="nt">&quot;file_ext&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;jpg&quot;</span>
+<span class="linenos"> 89</span><span class="w">        </span><span class="p">}</span>
+<span class="linenos"> 90</span><span class="w">      </span><span class="p">]</span>
+<span class="linenos"> 91</span><span class="w">    </span><span class="p">},</span>
+<span class="linenos"> 92</span><span class="w">    </span><span class="nt">&quot;tag_string_general&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;1girl alternate_costume animal_ears backpack bag black_bag black_footwear black_jacket black_shorts blue_eyes brown_hair flag holding holding_flag holding_megaphone jacket jewelry long_hair long_sleeves looking_at_viewer mask mask_pull megaphone midriff mouth_mask multiple_rings open_clothes open_jacket outdoors rabbit_ears ring shadow shirt shorts sleeveless sleeveless_shirt socks solo tied_shirt very_long_hair white_socks&quot;</span><span class="p">,</span>
+<span class="linenos"> 93</span><span class="w">    </span><span class="nt">&quot;tag_string_character&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;amiya_(arknights)&quot;</span><span class="p">,</span>
+<span class="linenos"> 94</span><span class="w">    </span><span class="nt">&quot;tag_string_copyright&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;arknights&quot;</span><span class="p">,</span>
+<span class="linenos"> 95</span><span class="w">    </span><span class="nt">&quot;tag_string_artist&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ganet_p&quot;</span><span class="p">,</span>
+<span class="linenos"> 96</span><span class="w">    </span><span class="nt">&quot;tag_string_meta&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;absurdres commentary_request highres&quot;</span><span class="p">,</span>
+<span class="linenos"> 97</span><span class="w">    </span><span class="nt">&quot;file_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/original/0c/e5/0ce585ccbbe7c79f0970466ef7e464ee.jpg&quot;</span><span class="p">,</span>
+<span class="linenos"> 98</span><span class="w">    </span><span class="nt">&quot;large_file_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/sample/0c/e5/sample-0ce585ccbbe7c79f0970466ef7e464ee.jpg&quot;</span><span class="p">,</span>
+<span class="linenos"> 99</span><span class="w">    </span><span class="nt">&quot;preview_file_url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/180x180/0c/e5/0ce585ccbbe7c79f0970466ef7e464ee.jpg&quot;</span>
+<span class="linenos">100</span><span class="w">  </span><span class="p">},</span>
+<span class="linenos">101</span><span class="w">  </span><span class="nt">&quot;group_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;danbooru_6814120&quot;</span><span class="p">,</span>
+<span class="linenos">102</span><span class="w">  </span><span class="nt">&quot;filename&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;danbooru_6814120.png&quot;</span><span class="p">,</span>
+<span class="linenos">103</span><span class="w">  </span><span class="nt">&quot;tags&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos">104</span><span class="w">    </span><span class="nt">&quot;1girl&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">105</span><span class="w">    </span><span class="nt">&quot;absurdres&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">106</span><span class="w">    </span><span class="nt">&quot;alternate_costume&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">107</span><span class="w">    </span><span class="nt">&quot;amiya_(arknights)&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">108</span><span class="w">    </span><span class="nt">&quot;animal_ears&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">109</span><span class="w">    </span><span class="nt">&quot;arknights&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">110</span><span class="w">    </span><span class="nt">&quot;backpack&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">111</span><span class="w">    </span><span class="nt">&quot;bag&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">112</span><span class="w">    </span><span class="nt">&quot;black_bag&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">113</span><span class="w">    </span><span class="nt">&quot;black_footwear&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">114</span><span class="w">    </span><span class="nt">&quot;black_jacket&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">115</span><span class="w">    </span><span class="nt">&quot;black_shorts&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">116</span><span class="w">    </span><span class="nt">&quot;blue_eyes&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">117</span><span class="w">    </span><span class="nt">&quot;brown_hair&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">118</span><span class="w">    </span><span class="nt">&quot;commentary_request&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">119</span><span class="w">    </span><span class="nt">&quot;flag&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">120</span><span class="w">    </span><span class="nt">&quot;ganet_p&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">121</span><span class="w">    </span><span class="nt">&quot;highres&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">122</span><span class="w">    </span><span class="nt">&quot;holding&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">123</span><span class="w">    </span><span class="nt">&quot;holding_flag&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">124</span><span class="w">    </span><span class="nt">&quot;holding_megaphone&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">125</span><span class="w">    </span><span class="nt">&quot;jacket&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">126</span><span class="w">    </span><span class="nt">&quot;jewelry&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">127</span><span class="w">    </span><span class="nt">&quot;long_hair&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">128</span><span class="w">    </span><span class="nt">&quot;long_sleeves&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">129</span><span class="w">    </span><span class="nt">&quot;looking_at_viewer&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">130</span><span class="w">    </span><span class="nt">&quot;mask&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">131</span><span class="w">    </span><span class="nt">&quot;mask_pull&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">132</span><span class="w">    </span><span class="nt">&quot;megaphone&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">133</span><span class="w">    </span><span class="nt">&quot;midriff&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">134</span><span class="w">    </span><span class="nt">&quot;mouth_mask&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">135</span><span class="w">    </span><span class="nt">&quot;multiple_rings&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">136</span><span class="w">    </span><span class="nt">&quot;open_clothes&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">137</span><span class="w">    </span><span class="nt">&quot;open_jacket&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">138</span><span class="w">    </span><span class="nt">&quot;outdoors&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">139</span><span class="w">    </span><span class="nt">&quot;rabbit_ears&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">140</span><span class="w">    </span><span class="nt">&quot;ring&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">141</span><span class="w">    </span><span class="nt">&quot;shadow&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">142</span><span class="w">    </span><span class="nt">&quot;shirt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">143</span><span class="w">    </span><span class="nt">&quot;shorts&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">144</span><span class="w">    </span><span class="nt">&quot;sleeveless&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">145</span><span class="w">    </span><span class="nt">&quot;sleeveless_shirt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">146</span><span class="w">    </span><span class="nt">&quot;socks&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">147</span><span class="w">    </span><span class="nt">&quot;solo&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">148</span><span class="w">    </span><span class="nt">&quot;tied_shirt&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">149</span><span class="w">    </span><span class="nt">&quot;very_long_hair&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span>
+<span class="linenos">150</span><span class="w">    </span><span class="nt">&quot;white_socks&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span>
+<span class="linenos">151</span><span class="w">  </span><span class="p">},</span>
+<span class="linenos">152</span><span class="w">  </span><span class="nt">&quot;url&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;https://cdn.donmai.us/original/0c/e5/0ce585ccbbe7c79f0970466ef7e464ee.jpg&quot;</span>
+<span class="linenos">153</span><span class="p">}</span>
+</pre></div>
+</div>
+</details></div></blockquote>
+<p>内容比较长，<strong>简单来说，这是一个存储图像文件元数据</strong><code class="docutils literal notranslate"><span class="pre">meta-information</span></code><strong>文件</strong></p>
+<p>它包含了以下的信息：</p>
+<ul class="simple">
+<li><p>来自danbooru网站的图像信息，即图像的tag、尺寸、ID、上传时间等</p></li>
+<li><p>图像的url信息，即图像是从哪里被下载的</p></li>
+<li><p>图像的命名信息，即图像将被保存为什么文件名</p></li>
+<li><p>图像的tag信息，即当生成训练用的数据集时，其tag将包含哪些</p></li>
+</ul>
+<p>这些信息在一些处理环节中，将发挥其应有的作用</p>
+<p>例如tag信息，生成该信息需要从网站进行爬取，或者使用tagger进行打标，而该信息将在产生LoRA训练数据集时进行写入</p>
+<p>因此在waifuc中，默认对json文件进行保存，并且可以使用<code class="docutils literal notranslate"><span class="pre">SaveExporter</span></code>进行保存</p>
+<p>为了充分利用这些元数据，我们<strong>可以使用</strong><code class="docutils literal notranslate"><span class="pre">LocalSource</span></code><strong>将包含json文件的本地数据集通过</strong><code class="docutils literal notranslate"><span class="pre">SaveExporter</span></code><strong>再次加载</strong>：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">TextualInversionExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">LocalSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">5</span>    <span class="c1"># 从本地加载数据源</span>
+<span class="linenos">6</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan&#39;</span><span class="p">)</span>
+<span class="linenos">7</span>    <span class="n">s</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">8</span>        <span class="n">TextualInversionExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_zerochan_save&#39;</span><span class="p">)</span>
+<span class="linenos">9</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>以上代码可以将包含元数据的本地数据集再次载入，并按照LoRA训练数据集的格式进行再次保存，即只保留存储标注信息的txt文件</p>
+<p>处理后的数据集如下所示：</p>
+<blockquote>
+<div><img alt="../../_images/local_to_dataset.png" class="align-center" src="../../_images/local_to_dataset.png" />
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LocalSource</span></code><strong>对所有本地的数据集都可进行加载，并不一定需要元数据</strong></p></li>
+<li><p>若没有json文件，得到的图像数据将不包含初始元数据，这意味着tag等信息必须重新生成</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">LocalSource</span></code><strong>作为一种</strong><code class="docutils literal notranslate"><span class="pre">Source</span></code><strong>，也可以进行串并联操作，因此你可以同时使用来自网络和本地的图像构建数据集</strong></p></li>
+</ul>
+</div>
+<p>当你确定只需要图像，不需要任何元数据时，设置参数<code class="docutils literal notranslate"><span class="pre">no_meta</span></code>为<code class="docutils literal notranslate"><span class="pre">True</span></code>来实现这一点：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos"> 5</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">(</span>
+<span class="linenos"> 6</span>        <span class="p">[</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">],</span>
+<span class="linenos"> 7</span>        <span class="n">min_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+<span class="linenos"> 8</span>    <span class="p">)[:</span><span class="mi">50</span><span class="p">]</span>
+<span class="linenos"> 9</span>    <span class="n">s</span><span class="o">.</span><span class="n">export</span><span class="p">(</span>
+<span class="linenos">10</span>        <span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/data/amiya_danbooru_nometa&#39;</span><span class="p">,</span> <span class="n">no_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="linenos">11</span>    <span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>这样的代码将不会保存任何json文件，将只爬取50张图像，如下所示：</p>
+<blockquote>
+<div><img alt="../../_images/save_no_meta.png" class="align-center" src="../../_images/save_no_meta.png" />
+</div></blockquote>
+</section>
+<section id="id5">
+<h2>我不想将图像保存到硬盘上，如何直接使用它们？<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h2>
+<p>你可能不希望将图像文件缓存到硬盘上，而是直接在内存中处理以节省时间</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">4</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">(</span>
+<span class="linenos">5</span>        <span class="p">[</span><span class="s1">&#39;amiya_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">],</span>
+<span class="linenos">6</span>        <span class="n">min_size</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+<span class="linenos">7</span>    <span class="p">)[:</span><span class="mi">50</span><span class="p">]</span>
+<span class="linenos">8</span>    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">s</span><span class="p">:</span>
+<span class="linenos">9</span>        <span class="nb">print</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>没错，<strong>所有</strong><code class="docutils literal notranslate"><span class="pre">Source</span></code><strong>都是可以作为List进行遍历操作的</strong></p>
+<p>而其中的item，其类型定义如下：</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">dataclasses</span> <span class="kn">import</span> <span class="n">dataclass</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span>
+<span class="linenos">6</span><span class="nd">@dataclass</span>
+<span class="linenos">7</span><span class="k">class</span> <span class="nc">ImageItem</span><span class="p">:</span>
+<span class="linenos">8</span>    <span class="n">image</span><span class="p">:</span> <span class="n">Image</span><span class="o">.</span><span class="n">Image</span>
+<span class="linenos">9</span>    <span class="n">meta</span><span class="p">:</span> <span class="nb">dict</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>不难发现，每一个item的结构十分简单，包含一个<code class="docutils literal notranslate"><span class="pre">PIL.Image</span></code>结构的图像对象和一个用于存储元信息的<code class="docutils literal notranslate"><span class="pre">meta</span></code>项。</p>
+<p>获取到item项后，你将可以自行使用其图像对象和元数据定制所需要的操作。</p>
+</section>
+</section>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../quick_start/index.html" class="btn btn-neutral float-left" title="我想给我老婆炼丹" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../process_images/index.html" class="btn btn-neutral float-right" title="我想处理爬取到的或本地的图像" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, narugo1992.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev/session
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">dev/session</a></dd>
+                        <dd><a href="../../../gif/tutorials-CN/crawl_images/index.html">dev/gif</a></dd>
+                        <dd><a href="../../../../main/tutorials-CN/crawl_images/index.html">main</a></dd>
+                </dl>
+        </div>
+    </div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

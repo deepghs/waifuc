@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How to Customize In Waifuc? &mdash; waifuc 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c9d0a6ec" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="What is CCIP, and What are its Features?" href="../ccip/index.html" />
+    <link rel="prev" title="I Need to Dynamically Design the Processing Flow" href="../dynamic/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            waifuc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Training a LoRA for My Waifu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_images/index.html">Crawling Some Images From Websites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/process_images/index.html">Process Crawled or Local Images and Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_videos/index.html">Extracting Character Images from Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/device/index.html">How to Prevent Waifuc from Using GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../before_read/index.html">Reading Instructions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../workflow/index.html">Understanding the Waifuc Workflow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dynamic/index.html">I Need to Dynamically Design the Processing Flow</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">How to Customize In Waifuc?</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#framework-approach">Framework Approach</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-sources">Custom Sources</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#basic-data-sources">Basic Data Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#web-data-sources">Web Data Sources</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#about-metadata">About Metadata</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-actions">Custom Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#base-action-class">Base Action Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#filter-action-class">Filter Action Class</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#process-action-class">Process Action Class</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#custom-exporters">Custom Exporters</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ccip/index.html">What is CCIP, and What are its Features?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">waifuc.config</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">waifuc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">How to Customize In Waifuc?</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/advanced_guides/customize/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+    
+    
+  <section id="how-to-customize-in-waifuc">
+<h1>How to Customize In Waifuc?<a class="headerlink" href="#how-to-customize-in-waifuc" title="Permalink to this heading"></a></h1>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To enhance your reading experience in this chapter,
+it’s recommended to go through the <a class="reference internal" href="../workflow/index.html#waifuc-workflow"><span class="std std-ref">Understanding the Waifuc Workflow</span></a> section
+and grasp the basic concepts of waifuc’s workflow.</p>
+</div>
+<section id="framework-approach">
+<h2>Framework Approach<a class="headerlink" href="#framework-approach" title="Permalink to this heading"></a></h2>
+<p>Let’s continue with the example of the donut shop. Although our donut production pipeline is already mature,
+situations like the following may still arise:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>During Donut Frying:</strong></dt><dd><ul>
+<li><p>Some customers prefer donuts made with whole wheat flour for a rougher texture but healthier option.</p></li>
+<li><p>Some customers insist on donuts fried with a specific brand of olive oil.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>During Donut Decoration:</strong></dt><dd><ul>
+<li><p>Some customers enjoy spicy-flavored icing.</p></li>
+<li><p>Others want to use icing to create specific text or symbols to convey a special meaning.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>During Donut Packaging:</strong></dt><dd><ul>
+<li><p>A small company has placed an order for a batch of donuts and wants its company logo and graphics printed on the packaging bags.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>Such requirements are quite diverse and share a common characteristic:</p>
+<ul class="simple">
+<li><p>They are <strong>not highly repeatable</strong>. They either belong to relatively niche demands or pertain to special requirements for a specific batch of donuts. In either case, it is clearly not suitable for the official production line to be established permanently.</p></li>
+<li><p><strong>However, they do exist</strong>. This is evident, as no valid demand should be ignored.</p></li>
+</ul>
+<p>As a result, as the owner of a donut shop, you obviously cannot handle these demands all by yourself.
+Therefore, you will upgrade your industry and open up the entire process—allowing customers to make donuts
+in their own kitchens according to their taste preferences.</p>
+<p>Clearly, waifuc has also taken into account the existence of diverse and specialized requirements.
+From the very beginning, <strong>waifuc’s design is modular</strong>. This means that users can not only customize
+data processing workflows but also <strong>create their own data sources, actions, and exporters to meet different dataset creation needs</strong>.
+The following sections will provide detailed explanations of this feature.</p>
+</section>
+<section id="custom-sources">
+<h2>Custom Sources<a class="headerlink" href="#custom-sources" title="Permalink to this heading"></a></h2>
+<section id="basic-data-sources">
+<h3>Basic Data Sources<a class="headerlink" href="#basic-data-sources" title="Permalink to this heading"></a></h3>
+<p>In waifuc, all data sources inherit from the <code class="docutils literal notranslate"><span class="pre">BaseDataSource</span></code> class.
+The core definition of this class is as follows (for the definition of <code class="docutils literal notranslate"><span class="pre">ImageItem</span></code>,
+see <a class="reference internal" href="../../tutorials/crawl_images/index.html#waifuc-not-in-disk"><span class="std std-ref">I Don’t Want to Save Images to Disk, How Can I Use Them Directly?</span></a>:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">waifuc.source.base.</span></span><span class="sig-name descname"><span class="pre">BaseDataSource</span></span><a class="reference internal" href="../../_modules/waifuc/source/base.html#BaseDataSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BaseDataSource</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">_iter_from</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter_from</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="fm">__or__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">.compose</span> <span class="kn">import</span> <span class="n">ParallelDataSource</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ParallelDataSource</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ParallelDataSource</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">ParallelDataSource</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ParallelDataSource</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ParallelDataSource</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">ParallelDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ParallelDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__add__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">.compose</span> <span class="kn">import</span> <span class="n">ComposedDataSource</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ComposedDataSource</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ComposedDataSource</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">ComposedDataSource</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ComposedDataSource</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">sources</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">other</span><span class="p">,</span> <span class="n">ComposedDataSource</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">ComposedDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">other</span><span class="o">.</span><span class="n">sources</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">ComposedDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">):</span>
+        <span class="kn">from</span> <span class="nn">..action</span> <span class="kn">import</span> <span class="n">SliceSelectAction</span><span class="p">,</span> <span class="n">FirstNSelectAction</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">item</span><span class="p">,</span> <span class="nb">slice</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">start</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">item</span><span class="o">.</span><span class="n">step</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">item</span><span class="o">.</span><span class="n">stop</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">FirstNSelectAction</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">stop</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">SliceSelectAction</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">stop</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">step</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Data source</span><span class="se">\&#39;</span><span class="s1">s getitem only accept slices, but </span><span class="si">{</span><span class="n">item</span><span class="si">!r}</span><span class="s1"> found.&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">attach</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">actions</span><span class="p">:</span> <span class="n">BaseAction</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s1">&#39;AttachedDataSource&#39;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">AttachedDataSource</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">actions</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">export</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exporter</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">BaseExporter</span><span class="p">,</span> <span class="nb">str</span><span class="p">],</span> <span class="n">name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exporter</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="kn">from</span> <span class="nn">..export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+            <span class="n">exporter</span> <span class="o">=</span> <span class="n">SaveExporter</span><span class="p">(</span><span class="n">exporter</span><span class="p">,</span> <span class="n">no_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="n">exporter</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">exporter</span><span class="p">)</span>
+        <span class="n">exporter</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+        <span class="k">with</span> <span class="n">task_ctx</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">exporter</span><span class="o">.</span><span class="n">export_from</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Pretty simple structure, isn’t it? When you are building your own data source,
+all you need to do is inherit from the <code class="docutils literal notranslate"><span class="pre">BaseDataSource</span></code> class and implement <code class="docutils literal notranslate"><span class="pre">_iter</span></code>.
+For example, in the following example, we use the <a class="reference external" href="https://pillow.readthedocs.io/en/stable/">Pillow library</a> to
+randomly generate solid-color images of different sizes and save them to a specified path:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">random</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos"> 7</span><span class="kn">from</span> <span class="nn">waifuc.model</span> <span class="kn">import</span> <span class="n">ImageItem</span>
+<span class="linenos"> 8</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">BaseDataSource</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="k">class</span> <span class="nc">RandomColorSource</span><span class="p">(</span><span class="n">BaseDataSource</span><span class="p">):</span>
+<span class="linenos">12</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">min_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">max_width</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span><span class="p">,</span>
+<span class="linenos">13</span>                 <span class="n">min_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">256</span><span class="p">,</span> <span class="n">max_height</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">512</span><span class="p">):</span>
+<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">min_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_width</span> <span class="o">=</span> <span class="n">min_width</span><span class="p">,</span> <span class="n">max_width</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">min_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_height</span> <span class="o">=</span> <span class="n">min_height</span><span class="p">,</span> <span class="n">max_height</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="k">def</span> <span class="nf">_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+<span class="linenos">18</span>        <span class="c1"># endlessly create random images</span>
+<span class="linenos">19</span>        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="linenos">20</span>            <span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">),</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">)</span>
+<span class="linenos">21</span>            <span class="n">width</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_width</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_width</span><span class="p">)</span>
+<span class="linenos">22</span>            <span class="n">height</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">min_height</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_height</span><span class="p">)</span>
+<span class="linenos">23</span>
+<span class="linenos">24</span>            <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="s1">&#39;RGB&#39;</span><span class="p">,</span> <span class="p">(</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="p">),</span> <span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">g</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+<span class="linenos">25</span>            <span class="k">yield</span> <span class="n">ImageItem</span><span class="p">(</span>
+<span class="linenos">26</span>                <span class="n">image</span><span class="o">=</span><span class="n">image</span><span class="p">,</span>
+<span class="linenos">27</span>                <span class="n">meta</span><span class="o">=</span><span class="p">{</span>
+<span class="linenos">28</span>                    <span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="n">r</span><span class="p">,</span> <span class="s1">&#39;g&#39;</span><span class="p">:</span> <span class="n">g</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">:</span> <span class="n">b</span><span class="p">},</span>
+<span class="linenos">29</span>                    <span class="s1">&#39;size&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;width&#39;</span><span class="p">:</span> <span class="n">width</span><span class="p">,</span> <span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">height</span><span class="p">},</span>
+<span class="linenos">30</span>                <span class="p">}</span>
+<span class="linenos">31</span>            <span class="p">)</span>
+<span class="linenos">32</span>
+<span class="linenos">33</span>
+<span class="linenos">34</span><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+<span class="linenos">35</span>    <span class="n">s</span> <span class="o">=</span> <span class="n">RandomColorSource</span><span class="p">()</span>
+<span class="linenos">36</span>    <span class="c1"># only 30 images are needed</span>
+<span class="linenos">37</span>    <span class="n">s</span><span class="p">[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;test_random_color&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The resulting images look like this:</p>
+<img alt="../../_images/example_random_color.png" class="align-center" src="../../_images/example_random_color.png" />
+<p>It’s worth noting that we not only saved the images but also saved associated metadata with the images.
+For example, when we open one of the JSON files, the information inside will look something like this:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="p">{</span>
+<span class="linenos"> 2</span><span class="w">  </span><span class="nt">&quot;color&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 3</span><span class="w">    </span><span class="nt">&quot;r&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">70</span><span class="p">,</span>
+<span class="linenos"> 4</span><span class="w">    </span><span class="nt">&quot;g&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">127</span><span class="p">,</span>
+<span class="linenos"> 5</span><span class="w">    </span><span class="nt">&quot;b&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">255</span>
+<span class="linenos"> 6</span><span class="w">  </span><span class="p">},</span>
+<span class="linenos"> 7</span><span class="w">  </span><span class="nt">&quot;size&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
+<span class="linenos"> 8</span><span class="w">    </span><span class="nt">&quot;width&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">279</span><span class="p">,</span>
+<span class="linenos"> 9</span><span class="w">    </span><span class="nt">&quot;height&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">385</span>
+<span class="linenos">10</span><span class="w">  </span><span class="p">}</span>
+<span class="linenos">11</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>This is the metadata we specified in the code.</p>
+</section>
+<section id="web-data-sources">
+<h3>Web Data Sources<a class="headerlink" href="#web-data-sources" title="Permalink to this heading"></a></h3>
+<p>In practical usage of waifuc, we often need to fetch data from the internet, which is quite common.
+To address this need, waifuc provides a base class for web data sources called <code class="docutils literal notranslate"><span class="pre">WebDataSource</span></code>.
+Its basic structure is defined as follows:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">waifuc.source.web.</span></span><span class="sig-name descname"><span class="pre">WebDataSource</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">group_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">session</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Client</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">download_silent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/waifuc/source/web.html#WebDataSource"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WebDataSource</span><span class="p">(</span><span class="n">NamedDataSource</span><span class="p">):</span>
+    <span class="n">__download_rate_limit__</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">__download_rate_interval__</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">session</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Client</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">download_silent</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">download_silent</span> <span class="o">=</span> <span class="n">download_silent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="n">session</span> <span class="ow">or</span> <span class="n">get_requests_session</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group_name</span> <span class="o">=</span> <span class="n">group_name</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">_rate_limiter</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Limiter</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_rate_limit&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;SHOW_RATE_LIMIT_LOG&#39;</span><span class="p">):</span>
+                <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;pyrate_limiter&quot;</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">disabled</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="n">rate</span> <span class="o">=</span> <span class="n">Rate</span><span class="p">(</span><span class="bp">cls</span><span class="o">.</span><span class="n">__download_rate_limit__</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">Duration</span><span class="o">.</span><span class="n">SECOND</span> <span class="o">*</span> <span class="bp">cls</span><span class="o">.</span><span class="n">__download_rate_interval__</span><span class="p">)))</span>
+            <span class="n">limiter</span> <span class="o">=</span> <span class="n">Limiter</span><span class="p">(</span><span class="n">rate</span><span class="p">,</span> <span class="n">max_delay</span><span class="o">=</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">32</span><span class="p">)</span>
+            <span class="nb">setattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_rate_limit&#39;</span><span class="p">,</span> <span class="n">limiter</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="s1">&#39;_rate_limit&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_iter_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">_iter</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">id_</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="n">meta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_iter_data</span><span class="p">():</span>
+            <span class="k">with</span> <span class="n">TemporaryDirectory</span><span class="p">(</span><span class="n">ignore_cleanup_errors</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="k">as</span> <span class="n">td</span><span class="p">:</span>
+                <span class="n">_</span><span class="p">,</span> <span class="n">ext_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+                <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">id_</span><span class="si">}{</span><span class="n">ext_name</span><span class="si">}</span><span class="s1">&#39;</span>
+                <span class="n">td_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">td</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_rate_limiter</span><span class="p">()</span><span class="o">.</span><span class="n">try_acquire</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+                    <span class="n">download_file</span><span class="p">(</span>
+                        <span class="n">url</span><span class="p">,</span> <span class="n">td_file</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">filename</span><span class="p">,</span>
+                        <span class="n">session</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">,</span> <span class="n">silent</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">download_silent</span>
+                    <span class="p">)</span>
+                    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">td_file</span><span class="p">)</span>
+                    <span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+                <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPError</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Skipped due to download error: </span><span class="si">{</span><span class="n">err</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">except</span> <span class="n">UnidentifiedImageError</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> resource </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1"> unidentified as image, skipped.&#39;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+                <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="n">DecompressionBombError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Skipped due to IO error: </span><span class="si">{</span><span class="n">err</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+                    <span class="k">continue</span>
+
+                <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
+                <span class="k">yield</span> <span class="n">ImageItem</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>It indirectly inherits from the <code class="docutils literal notranslate"><span class="pre">BaseDataSource</span></code> class and implements the <code class="docutils literal notranslate"><span class="pre">_iter</span></code> method.
+In the <code class="docutils literal notranslate"><span class="pre">_iter_data</span></code> method, you need to continuously iterate and provide resource IDs, image URLs,
+and metadata. The downloading and output as <code class="docutils literal notranslate"><span class="pre">ImageItem</span></code> are automatically handled in the <code class="docutils literal notranslate"><span class="pre">_iter</span></code> method.</p>
+<p>With this structure in place, you can easily implement web grabing for custom websites and use it as a
+data source in waifuc. For example, you can grab images from the Huggingface repository (in this case,
+we are using the <a class="reference external" href="https://huggingface.co/datasets/deepghs/game_character_skins">deepghs/game_character_skins</a>
+repository containing character skin data for various popular mobile games):</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">os.path</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">huggingface_hub</span> <span class="kn">import</span> <span class="n">HfApi</span><span class="p">,</span> <span class="n">HfFileSystem</span><span class="p">,</span> <span class="n">hf_hub_url</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">WebDataSource</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="k">class</span> <span class="nc">HuggingfaceSource</span><span class="p">(</span><span class="n">WebDataSource</span><span class="p">):</span>
+<span class="linenos">10</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repo_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">dir_in_repo</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="linenos">11</span>        <span class="n">WebDataSource</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">group_name</span><span class="o">=</span><span class="s1">&#39;huggingface&#39;</span><span class="p">)</span>
+<span class="linenos">12</span>        <span class="bp">self</span><span class="o">.</span><span class="n">repo_id</span> <span class="o">=</span> <span class="n">repo_id</span>
+<span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">dir_in_repo</span> <span class="o">=</span> <span class="n">dir_in_repo</span>
+<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">hf_fs</span> <span class="o">=</span> <span class="n">HfFileSystem</span><span class="p">()</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">hf_client</span> <span class="o">=</span> <span class="n">HfApi</span><span class="p">()</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="k">def</span> <span class="nf">_iter_data</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Tuple</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">int</span><span class="p">],</span> <span class="nb">str</span><span class="p">,</span> <span class="nb">dict</span><span class="p">]]:</span>
+<span class="linenos">18</span>        <span class="n">files</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">hf_fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;datasets/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_id</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">dir_in_repo</span><span class="si">}</span><span class="s1">/**/*.png&#39;</span><span class="p">)</span>
+<span class="linenos">19</span>        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+<span class="linenos">20</span>            <span class="n">file_in_repo</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;datasets/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_id</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="linenos">21</span>            <span class="n">rel_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">relpath</span><span class="p">(</span><span class="n">file_in_repo</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dir_in_repo</span><span class="p">)</span>
+<span class="linenos">22</span>            <span class="n">id_</span> <span class="o">=</span> <span class="n">file_in_repo</span>
+<span class="linenos">23</span>            <span class="n">url</span> <span class="o">=</span> <span class="n">hf_hub_url</span><span class="p">(</span><span class="n">repo_id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">repo_id</span><span class="p">,</span> <span class="n">repo_type</span><span class="o">=</span><span class="s1">&#39;dataset&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="o">=</span><span class="n">file_in_repo</span><span class="p">)</span>
+<span class="linenos">24</span>            <span class="k">yield</span> <span class="n">id_</span><span class="p">,</span> <span class="n">url</span><span class="p">,</span> <span class="p">{</span>
+<span class="linenos">25</span>                <span class="s1">&#39;repo_id&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">repo_id</span><span class="p">,</span>
+<span class="linenos">26</span>                <span class="s1">&#39;dir_in_repo&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">dir_in_repo</span><span class="p">,</span>
+<span class="linenos">27</span>                <span class="s1">&#39;rel_file&#39;</span><span class="p">:</span> <span class="n">rel_file</span><span class="p">,</span>
+<span class="linenos">28</span>                <span class="s1">&#39;filename&#39;</span><span class="p">:</span> <span class="n">rel_file</span><span class="p">,</span>
+<span class="linenos">29</span>            <span class="p">}</span>
+</pre></div>
+</div>
+<p>After defining the above code, you can easily obtain images of my lovely waifu, Amiya’s skin:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span>
+<span class="linenos">3</span><span class="n">s</span> <span class="o">=</span> <span class="n">HuggingfaceSource</span><span class="p">(</span><span class="s1">&#39;deepghs/game_character_skins&#39;</span><span class="p">,</span> <span class="s1">&#39;arknights/R001&#39;</span><span class="p">)</span>
+<span class="linenos">4</span><span class="n">s</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;test_hf_amiya&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The result looks like this:</p>
+<img alt="../../_images/example_huggingface.png" class="align-center" src="../../_images/example_huggingface.png" />
+<p>Similarly, you can integrate your existing web grabing scripts for a specific website into waifuc,
+making them usable as a data source for creating high-quality datasets.</p>
+</section>
+<section id="about-metadata">
+<h3>About Metadata<a class="headerlink" href="#about-metadata" title="Permalink to this heading"></a></h3>
+<p>If you look closely, you may have noticed something - in the first example, the files are named <code class="docutils literal notranslate"><span class="pre">untitled_xxx.png</span></code>,
+which appears to be an automatically generated default filename. However, in the second example,
+the filenames are different. To explain this, we need to provide some necessary explanations about the concept
+of “metadata.”</p>
+<p>In the process of automating the handling of actual datasets, images often do not contain all the necessary information.
+Therefore, we have designed the concept of <code class="docutils literal notranslate"><span class="pre">ImageItem</span></code>, which binds images together with their associated metadata.
+This approach facilitates richer image operations in subsequent processing steps and allows us to avoid unnecessary
+redundant calculations using metadata.</p>
+<p>Some fields in the metadata have special meanings, for example:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">filename</span></code> field, which is what caused the difference between the two examples you mentioned. <strong>By writing the filename into this field, you can determine the filename to be used when saving the image</strong>. Moreover, this field also supports filenames with relative paths, which will create subdirectories and save images accordingly. This feature allows you to generate datasets with complex nested directory structures automatically.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">tags</span></code> field, which stores the tags applied to the image by a tagger. It is a mapping structure where keys and values represent tag text and tag confidence, respectively. <strong>When using TextualInversionExporter, the tag information stored in this field will be saved in `txt` format</strong>, generating the format required for LoRA training.</p></li>
+</ul>
+<p>By making good use of metadata, you can efficiently achieve complex data processing tasks in waifuc
+in a straightforward manner.</p>
+</section>
+</section>
+<section id="custom-actions">
+<h2>Custom Actions<a class="headerlink" href="#custom-actions" title="Permalink to this heading"></a></h2>
+<p>Apart from data sources, you can also create your own custom actions.</p>
+<section id="base-action-class">
+<h3>Base Action Class<a class="headerlink" href="#base-action-class" title="Permalink to this heading"></a></h3>
+<p>In waifuc, all action classes inherit from the <code class="docutils literal notranslate"><span class="pre">BaseAction</span></code> class, which is defined as follows:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">waifuc.action.base.</span></span><span class="sig-name descname"><span class="pre">BaseAction</span></span><a class="reference internal" href="../../_modules/waifuc/action/base.html#BaseAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BaseAction</span><span class="p">:</span>
+    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">iter_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iter_</span><span class="p">:</span> <span class="n">Iterable</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">iter_</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">yield from</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">ActionStop</span><span class="p">:</span>
+                <span class="k">break</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+</pre></div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">iter</span></code> method is the core feature of an action. It receives an individual data item and yields one or more
+data items in an iterative manner (although yielding nothing is also allowed). By inheriting from
+the <code class="docutils literal notranslate"><span class="pre">BaseAction</span></code> class and implementing the <code class="docutils literal notranslate"><span class="pre">iter</span></code> method, you can build your custom actions.</p>
+<p>For example, if you want to randomly select some images from a data source and, for the selected images,
+randomly select some of them to apply a mirror rotation, you can also add metadata that reflects random values
+on the names of the final saved images. You can achieve this by creating a <code class="docutils literal notranslate"><span class="pre">MyRandomAction</span></code> like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">copy</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">random</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Iterator</span>
+<span class="linenos"> 4</span>
+<span class="linenos"> 5</span><span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">ImageOps</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">BaseAction</span>
+<span class="linenos"> 8</span><span class="kn">from</span> <span class="nn">waifuc.model</span> <span class="kn">import</span> <span class="n">ImageItem</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span>
+<span class="linenos">11</span><span class="k">class</span> <span class="nc">MyRandomAction</span><span class="p">(</span><span class="n">BaseAction</span><span class="p">):</span>
+<span class="linenos">12</span>    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+<span class="linenos">13</span>        <span class="n">r</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">random</span><span class="p">()</span>
+<span class="linenos">14</span>        <span class="k">if</span> <span class="n">r</span> <span class="o">&lt;</span> <span class="mf">0.3</span><span class="p">:</span>
+<span class="linenos">15</span>            <span class="c1"># just drop this image, no item yielded</span>
+<span class="linenos">16</span>            <span class="k">pass</span>
+<span class="linenos">17</span>        <span class="k">else</span><span class="p">:</span>
+<span class="linenos">18</span>            <span class="c1"># pass the item out</span>
+<span class="linenos">19</span>            <span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;random&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>  <span class="c1"># set meta info</span>
+<span class="linenos">20</span>            <span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;random_</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">.png&#39;</span>  <span class="c1"># set filename</span>
+<span class="linenos">21</span>            <span class="k">yield</span> <span class="n">item</span>
+<span class="linenos">22</span>
+<span class="linenos">23</span>            <span class="k">if</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="mf">0.7</span><span class="p">:</span>  <span class="c1"># pass another mirrored version out</span>
+<span class="linenos">24</span>                <span class="c1"># copy the item to avoid using the same object</span>
+<span class="linenos">25</span>                <span class="n">item</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+<span class="linenos">26</span>                <span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;random&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">r</span>  <span class="c1"># set meta info</span>
+<span class="linenos">27</span>                <span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;random_</span><span class="si">{</span><span class="n">r</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">_inv.png&#39;</span>  <span class="c1"># set filename</span>
+<span class="linenos">28</span>                <span class="n">item</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">ImageOps</span><span class="o">.</span><span class="n">mirror</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+<span class="linenos">29</span>                <span class="c1"># yield both original item and mirrored item</span>
+<span class="linenos">30</span>                <span class="k">yield</span> <span class="n">item</span>
+<span class="linenos">31</span>            <span class="k">else</span><span class="p">:</span>
+<span class="linenos">32</span>                <span class="c1"># yield the original item only</span>
+<span class="linenos">33</span>                <span class="k">pass</span>
+<span class="linenos">34</span>
+<span class="linenos">35</span>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">36</span>        <span class="k">pass</span>
+</pre></div>
+</div>
+<p>Once defined, you can use it like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;surtr_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">])</span>
+<span class="linenos">5</span><span class="n">s</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">6</span>    <span class="n">MyRandomAction</span><span class="p">(),</span>
+<span class="linenos">7</span><span class="p">)[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;test_surtr_inv&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Running this code will produce images like the one below:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Since this action involves randomness, the results may not be exactly the same each time it’s run;
+this image is for reference</p>
+</div>
+<img alt="../../_images/example_random.png" class="align-center" src="../../_images/example_random.png" />
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>You might wonder what the <code class="docutils literal notranslate"><span class="pre">reset</span></code> method is for. Well, as the name suggests, <strong>some actions may have states</strong>.
+For example, the <code class="docutils literal notranslate"><span class="pre">FirstNSelectAction</span></code> code shown below:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">waifuc.action.count.</span></span><span class="sig-name descname"><span class="pre">FirstNSelectAction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/waifuc/action/count.html#FirstNSelectAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FirstNSelectAction</span><span class="p">(</span><span class="n">ProgressBarAction</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">ProgressBarAction</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_n</span> <span class="o">=</span> <span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_passed</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">def</span> <span class="nf">_args</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">Any</span><span class="p">]]:</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_passed</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_n</span><span class="p">:</span>
+            <span class="k">yield</span> <span class="n">item</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_passed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">ActionStop</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_passed</span> <span class="o">=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+<p>The purpose of this action is to keep only the first <code class="docutils literal notranslate"><span class="pre">n</span></code> data items received. When <code class="docutils literal notranslate"><span class="pre">n</span></code> data items have passed
+through this action, it stops accepting new data items. To achieve this functionality, we need to initialize some
+stateful fields in the constructor. Therefore, <strong>in some cases (such as deep copies of action objects), we need to</strong>
+<strong>reset the object to its initial state</strong>. So, for actions that include states, it’s essential to implement
+the <code class="docutils literal notranslate"><span class="pre">reset</span></code> method for resetting the action object.</p>
+</div>
+</section>
+<section id="filter-action-class">
+<h3>Filter Action Class<a class="headerlink" href="#filter-action-class" title="Permalink to this heading"></a></h3>
+<p>In waifuc, filtering is a common paradigm during the workflow setup. Filtering is characterized by:</p>
+<ul class="simple">
+<li><p>Taking one data item as input each time.</p></li>
+<li><p>Producing zero or one data item as output each time, and the output data item remains unchanged.</p></li>
+<li><p>Stateless, meaning the result is consistent whenever the same data item is input.</p></li>
+</ul>
+<p>To facilitate such operations, we provide the <code class="docutils literal notranslate"><span class="pre">FilterAction</span></code> base class. When you inherit from this class,
+you can quickly implement filtering actions. Here’s its code definition:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">waifuc.action.base.</span></span><span class="sig-name descname"><span class="pre">FilterAction</span></span><a class="reference internal" href="../../_modules/waifuc/action/base.html#FilterAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FilterAction</span><span class="p">(</span><span class="n">BaseAction</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">item</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">item</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When inheriting this class, you only need to implement the <code class="docutils literal notranslate"><span class="pre">check</span></code> method. In this method,
+you evaluate the input data item and return a Boolean value indicating whether to keep the data item.</p>
+<p>For example, if you want to obtain images of the sexy babe waifu Texas and only keep comic-style images,
+you can create a <code class="docutils literal notranslate"><span class="pre">ComicOnlyAction</span></code> like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">imgutils.validate</span> <span class="kn">import</span> <span class="n">anime_classify</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FilterAction</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">waifuc.model</span> <span class="kn">import</span> <span class="n">ImageItem</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">class</span> <span class="nc">ComicOnlyAction</span><span class="p">(</span><span class="n">FilterAction</span><span class="p">):</span>
+<span class="linenos"> 8</span>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="linenos"> 9</span>        <span class="n">type_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">anime_classify</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">image</span><span class="p">)</span>
+<span class="linenos">10</span>        <span class="k">return</span> <span class="n">type_</span> <span class="o">==</span> <span class="s1">&#39;comic&#39;</span>
+</pre></div>
+</div>
+<p>Then you can use it like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;texas_(arknights)&#39;</span><span class="p">])</span>
+<span class="linenos">5</span><span class="n">s</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">6</span>    <span class="n">ComicOnlyAction</span><span class="p">(),</span>
+<span class="linenos">7</span><span class="p">)[:</span><span class="mi">10</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;test_texas&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+</section>
+<section id="process-action-class">
+<h3>Process Action Class<a class="headerlink" href="#process-action-class" title="Permalink to this heading"></a></h3>
+<p>In addition to filtering actions, there is another common type of action called processing actions.
+These actions have the following basic properties:</p>
+<ul class="simple">
+<li><p>Taking one data item as input each time.</p></li>
+<li><p>Producing strictly one data item as output each time.</p></li>
+<li><p>Stateless, meaning the result is consistent whenever the same data item is input.</p></li>
+</ul>
+<p>Processing actions can be used to process input data items and directly output them. For this purpose,
+we provide the <code class="docutils literal notranslate"><span class="pre">ProcessAction</span></code> base class. Here’s its code definition:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">waifuc.action.base.</span></span><span class="sig-name descname"><span class="pre">ProcessAction</span></span><a class="reference internal" href="../../_modules/waifuc/action/base.html#ProcessAction"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">ProcessAction</span><span class="p">(</span><span class="n">BaseAction</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageItem</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">iter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]:</span>
+        <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageItem</span><span class="p">:</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">process</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>When your processing action class inherits from <code class="docutils literal notranslate"><span class="pre">ProcessAction</span></code>,
+you only need to implement the <code class="docutils literal notranslate"><span class="pre">process</span></code> method. In this method, you perform the processing of the input
+data item and return the processed item as the method’s result.</p>
+<p>For example, if you want to obtain images of the sexy babe waifu Texas and only keep the head area to
+create a dataset for an AI model that recognizes heads, you can create a <code class="docutils literal notranslate"><span class="pre">CutHeadAction</span></code> like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">imgutils.detect</span> <span class="kn">import</span> <span class="n">detect_heads</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">ProcessAction</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">waifuc.model</span> <span class="kn">import</span> <span class="n">ImageItem</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="k">class</span> <span class="nc">CutHeadAction</span><span class="p">(</span><span class="n">ProcessAction</span><span class="p">):</span>
+<span class="linenos"> 8</span>    <span class="k">def</span> <span class="nf">process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ImageItem</span><span class="p">:</span>
+<span class="linenos"> 9</span>        <span class="n">area</span><span class="p">,</span> <span class="n">type_</span><span class="p">,</span> <span class="n">score</span> <span class="o">=</span> <span class="n">detect_heads</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">image</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+<span class="linenos">10</span>        <span class="k">return</span> <span class="n">ImageItem</span><span class="p">(</span>
+<span class="linenos">11</span>            <span class="n">image</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">image</span><span class="o">.</span><span class="n">crop</span><span class="p">(</span><span class="n">area</span><span class="p">),</span>
+<span class="linenos">12</span>            <span class="n">meta</span><span class="o">=</span><span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">,</span>
+<span class="linenos">13</span>        <span class="p">)</span>
+</pre></div>
+</div>
+<p>Then you can use it like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;texas_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">])</span>
+<span class="linenos">5</span><span class="n">s</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">6</span>    <span class="n">CutHeadAction</span><span class="p">(),</span>
+<span class="linenos">7</span><span class="p">)[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;test_texas_head&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<img alt="../../_images/example_process_1.png" class="align-center" src="../../_images/example_process_1.png" />
+<p>The resulting images might initially seem not to be so good,
+but they can be improved by using the <code class="docutils literal notranslate"><span class="pre">FilterSimilarAction</span></code> in combination, like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FilterSimilarAction</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">3</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos">4</span>
+<span class="linenos">5</span><span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;texas_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">])</span>
+<span class="linenos">6</span><span class="n">s</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">7</span>    <span class="n">FilterSimilarAction</span><span class="p">(),</span>
+<span class="linenos">8</span>    <span class="n">CutHeadAction</span><span class="p">(),</span>
+<span class="linenos">9</span><span class="p">)[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;test_texas_head&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>Congratulations, you now have a dataset of Texas with her head, and she is so fluffy you might want to give her a kiss!</p>
+<img alt="../../_images/example_process_2.png" class="align-center" src="../../_images/example_process_2.png" />
+</section>
+</section>
+<section id="custom-exporters">
+<h2>Custom Exporters<a class="headerlink" href="#custom-exporters" title="Permalink to this heading"></a></h2>
+<p>Clearly, <strong>data exporters can also be customized</strong>. Let’s take a look at the code definition of <code class="docutils literal notranslate"><span class="pre">BaseExporter</span></code>:</p>
+<dl class="py class">
+<dt class="sig sig-object py">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">waifuc.export.base.</span></span><span class="sig-name descname"><span class="pre">BaseExporter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ignore_error_when_export</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/waifuc/export/base.html#BaseExporter"><span class="viewcode-link"><span class="pre">[source]</span></span></a></dt>
+<dd></dd></dl>
+
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BaseExporter</span><span class="p">(</span><span class="n">NamedObject</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ignore_error_when_export</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_error_when_export</span> <span class="o">=</span> <span class="n">ignore_error_when_export</span>
+
+    <span class="k">def</span> <span class="nf">pre_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">export_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">post_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+
+    <span class="k">def</span> <span class="nf">export_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">items</span><span class="p">:</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">ImageItem</span><span class="p">]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pre_export</span><span class="p">()</span>
+        <span class="n">names</span> <span class="o">=</span> <span class="n">get_task_names</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">names</span><span class="p">:</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1"> - </span><span class="si">{</span><span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">names</span><span class="p">)</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">desc</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="si">}</span><span class="s1">&#39;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">items</span><span class="p">,</span> <span class="n">desc</span><span class="o">=</span><span class="n">desc</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">export_item</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_error_when_export</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">post_export</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span>  <span class="c1"># pragma: no cover</span>
+</pre></div>
+</div>
+<p>By reading the code, it’s evident that there are four methods to implement:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">pre_export</span></code>, which is executed before the actual export process and is typically used for initialization.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">export_item</span></code>, which is executed when a data item to be exported is obtained and is generally used for data writing operations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">post_export</span></code>, which is executed after all data items have been exported and is generally used for resource cleanup and post-processing operations.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">reset</span></code>, similar to action classes, initializes the state of the data exporter object.</p></li>
+</ul>
+<p>For example, if you don’t want to save LoRA datasets in the format of image + txt but prefer image + csv
+(a tabular data format for storing image filenames and their tags), you can do the following:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">import</span> <span class="nn">csv</span>
+<span class="linenos"> 2</span><span class="kn">import</span> <span class="nn">os.path</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="kn">from</span> <span class="nn">imgutils.tagging</span> <span class="kn">import</span> <span class="n">tags_to_text</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">BaseExporter</span>
+<span class="linenos"> 7</span><span class="kn">from</span> <span class="nn">waifuc.model</span> <span class="kn">import</span> <span class="n">ImageItem</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="k">class</span> <span class="nc">CsvExporter</span><span class="p">(</span><span class="n">BaseExporter</span><span class="p">):</span>
+<span class="linenos">11</span>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dst_dir</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="linenos">12</span>        <span class="n">BaseExporter</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ignore_error_when_export</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="linenos">13</span>        <span class="bp">self</span><span class="o">.</span><span class="n">dst_dir</span> <span class="o">=</span> <span class="n">dst_dir</span>
+<span class="linenos">14</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_file</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="linenos">15</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_writer</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="linenos">16</span>
+<span class="linenos">17</span>    <span class="k">def</span> <span class="nf">pre_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">18</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst_dir</span><span class="p">,</span> <span class="s1">&#39;tags.csv&#39;</span><span class="p">),</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+<span class="linenos">19</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_writer</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">writer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_tag_file</span><span class="p">)</span>
+<span class="linenos">20</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="s1">&#39;filename&#39;</span><span class="p">,</span> <span class="s1">&#39;tags&#39;</span><span class="p">])</span>
+<span class="linenos">21</span>
+<span class="linenos">22</span>    <span class="k">def</span> <span class="nf">export_item</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">item</span><span class="p">:</span> <span class="n">ImageItem</span><span class="p">):</span>
+<span class="linenos">23</span>        <span class="n">item</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dst_dir</span><span class="p">,</span> <span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]))</span>
+<span class="linenos">24</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_writer</span><span class="o">.</span><span class="n">writerow</span><span class="p">([</span><span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">],</span> <span class="n">tags_to_text</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;tags&#39;</span><span class="p">])])</span>
+<span class="linenos">25</span>
+<span class="linenos">26</span>    <span class="k">def</span> <span class="nf">post_export</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">27</span>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tag_file</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="linenos">28</span>            <span class="bp">self</span><span class="o">.</span><span class="n">_tag_file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="linenos">29</span>            <span class="bp">self</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+<span class="linenos">30</span>
+<span class="linenos">31</span>    <span class="k">def</span> <span class="nf">reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="linenos">32</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_file</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="linenos">33</span>        <span class="bp">self</span><span class="o">.</span><span class="n">_tag_writer</span> <span class="o">=</span> <span class="kc">None</span>
+</pre></div>
+</div>
+<p>Then you can use it like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">FilterSimilarAction</span><span class="p">,</span> <span class="n">TaggingAction</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="n">s</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;texas_(arknights)&#39;</span><span class="p">,</span> <span class="s1">&#39;solo&#39;</span><span class="p">])</span>
+<span class="linenos">5</span><span class="n">s</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">6</span>    <span class="n">FilterSimilarAction</span><span class="p">(),</span>
+<span class="linenos">7</span>    <span class="n">TaggingAction</span><span class="p">(),</span>
+<span class="linenos">8</span><span class="p">)[:</span><span class="mi">30</span><span class="p">]</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">CsvExporter</span><span class="p">(</span><span class="s1">&#39;test_texas_csv&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>The resulting files will be as shown below:</p>
+<img alt="../../_images/example_export.png" class="align-center" src="../../_images/example_export.png" />
+<p>The contents of the <code class="docutils literal notranslate"><span class="pre">tags.csv</span></code> file will be as follows:</p>
+<img alt="../../_images/example_export_csv.png" class="align-center" src="../../_images/example_export_csv.png" />
+<p>With this, we have covered the customization of all three core components of waifuc.
+If you want to further understand the internal mechanisms, you can consider reading the source code.
+<strong>We look forward to waifuc users unleashing their imagination to develop their own data sources, actions,</strong>
+<strong>and data exporters. We welcome anyone to contribute their development results as pull requests or release</strong>
+<strong>them as independent PyPI packages to help more people.</strong>
+This is exactly what the DeepGHS team hoped to see when designing waifuc as a framework.</p>
+</section>
+</section>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../dynamic/index.html" class="btn btn-neutral float-left" title="I Need to Dynamically Design the Processing Flow" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ccip/index.html" class="btn btn-neutral float-right" title="What is CCIP, and What are its Features?" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, narugo1992.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev/session
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">dev/session</a></dd>
+                        <dd><a href="../../../gif/advanced_guides/customize/index.html">dev/gif</a></dd>
+                        <dd><a href="../../../../main/advanced_guides/customize/index.html">main</a></dd>
+                </dl>
+        </div>
+    </div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

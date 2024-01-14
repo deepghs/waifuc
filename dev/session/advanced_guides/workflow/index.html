@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en">
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Understanding the Waifuc Workflow &mdash; waifuc 0.0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/custom.css?v=c9d0a6ec" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f6245a2f"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="I Need to Dynamically Design the Processing Flow" href="../dynamic/index.html" />
+    <link rel="prev" title="Reading Instructions" href="../before_read/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            waifuc
+          </a>
+              <div class="version">
+                0.0.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/installation/index.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quick_start/index.html">Training a LoRA for My Waifu</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_images/index.html">Crawling Some Images From Websites</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/process_images/index.html">Process Crawled or Local Images and Data</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/crawl_videos/index.html">Extracting Character Images from Videos</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/device/index.html">How to Prevent Waifuc from Using GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">中文教程</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/installation/index.html">使用须知</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/quick_start/index.html">我想给我老婆炼丹</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_images/index.html">我想从网站上爬取一些数据</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/process_images/index.html">我想处理爬取到的或本地的图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/crawl_videos/index.html">我想从视频中获取角色图像</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials-CN/device/index.html">我不想让Waifuc占用GPU</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced Guides</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../before_read/index.html">Reading Instructions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Understanding the Waifuc Workflow</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#let-s-whip-up-some-donuts">Let’s Whip Up Some Donuts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#source">Source</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#actions">Actions</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#order-matters">Order Matters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#semi-finished-products">Semi-Finished Products?</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#exporter">Exporter</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../dynamic/index.html">I Need to Dynamically Design the Processing Flow</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../customize/index.html">How to Customize In Waifuc?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ccip/index.html">What is CCIP, and What are its Features?</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Information</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../information/environment.result.html">Run Environment Information</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">API Documentation</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../api_doc/config/index.html">waifuc.config</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">waifuc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Understanding the Waifuc Workflow</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/advanced_guides/workflow/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+    
+    
+  <section id="understanding-the-waifuc-workflow">
+<span id="waifuc-workflow"></span><h1>Understanding the Waifuc Workflow<a class="headerlink" href="#understanding-the-waifuc-workflow" title="Permalink to this heading"></a></h1>
+<section id="let-s-whip-up-some-donuts">
+<h2>Let’s Whip Up Some Donuts<a class="headerlink" href="#let-s-whip-up-some-donuts" title="Permalink to this heading"></a></h2>
+<p>Now, you might find this title a tad surprising, but hang tight! Picture this scenario:
+you’ve got a charming little donut shop, and from time to time, customers with various taste preferences
+swing by to buy some delectable donuts. So, what’s on your to-do list?</p>
+<p>The answer is pretty simple, broken down into three key tasks:</p>
+<ol class="arabic simple">
+<li><p><strong>Get Your Undecorated Donuts</strong>: Before your official opening each day, getting your hands on some ready-to-fry donuts is undoubtedly your top priority. This typically involves coordinating with your ingredient supplier or prepping them yourself.</p></li>
+<li><p><strong>Artisanal Crafting Services</strong>: Before welcoming customers, you’ve got to pick the donuts, sift out any flawed ones, and keep track of losses. And then comes the wide array of customer requests: hollowed or intricately carved shapes, smearing icing, sprinkling toppings, and much more, making your day “eventful.”</p></li>
+<li><p><strong>Wrap Up the Tempting Delights</strong>: When it’s time to hand them over to customers, don’t forget the elegant packaging and a cheerful message. Remember to wish them a delightful meal!</p></li>
+</ol>
+<p>“Phew, that’s quite a hassle!”😅</p>
+<p>For waifuc, although the workflow matches these steps—corresponding to Data Source, Action, and Exporter—
+it handles everything from acquiring the donuts to packaging and delivery within its realm.
+In a nutshell, waifuc can transform you into the proud owner of an all-in-one donut vending machine.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>To make upcoming reading more convenient, we’ve drawn some comparisons between concepts:</p>
+<ul class="simple">
+<li><p>Donut Vending Production Line — Waifuc Workflow</p></li>
+<li><p>Getting Undecorated Donuts — Source</p></li>
+<li><p>Crafting Donuts — Action</p></li>
+<li><p>Donut Packaging — Exporter</p></li>
+</ul>
+</div>
+</section>
+<section id="source">
+<h2>Source<a class="headerlink" href="#source" title="Permalink to this heading"></a></h2>
+<p>Before you whip up those delectable donuts, you need to get your hands on some pre-fried donuts.
+Depending on your specific situation, you might have various options:</p>
+<ul class="simple">
+<li><p>Mix and make the dough on-site, then fry them into golden-brown donuts (undecorated donuts).</p></li>
+<li><p>Leftover donuts? Not bad! always the refrigerator works well.</p></li>
+<li><p>Still not enough? Well, you could always “grab” some from your neighbor… like how Jerry often do😏</p></li>
+</ul>
+<img alt="../../_images/jerry_and_donuts.png" class="align-center" src="../../_images/jerry_and_donuts.png" />
+<p>Regardless of the scenario, <strong>all you need are the fried donuts</strong>—how the donuts came to be?
+Well, that’s not really important.</p>
+<p>If you’ve grasped the above process, congratulations — <strong>you’ve also understood the concept of Source in waifuc</strong>.
+If we were to draw a parallel between this logic and the waifuc paradigm, it might look something like this:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that the following code is not executable; it’s for illustration and analogy purposes only</p>
+</div>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">mydonutsstore.source</span> <span class="kn">import</span> <span class="n">FryingSource</span><span class="p">,</span> <span class="n">RefrigeratorSource</span><span class="p">,</span> <span class="n">NeighborSource</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="c1"># fry it now</span>
+<span class="linenos"> 4</span><span class="n">process_source</span> <span class="o">=</span> <span class="n">FryingSource</span><span class="p">()</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="c1"># take from the 2nd compartment of your refrigerator</span>
+<span class="linenos"> 7</span><span class="n">local_source</span> <span class="o">=</span> <span class="n">RefrigeratorSource</span><span class="p">(</span><span class="n">compartment_no</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1"># *borrow* from your neighbor</span>
+<span class="linenos">10</span><span class="n">grab_source</span> <span class="o">=</span> <span class="n">NeighborSource</span><span class="p">(</span><span class="n">from</span><span class="o">=</span><span class="s2">&quot;Crazy Dave&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In a nutshell, you might <strong>acquire images from various sources</strong>, like grabing from Danbooru,
+reading from your hard drive, or extracting frames from videos, and so on.
+However, <strong>they will all be output in a uniform format for downstream processing</strong>.
+For example, the following code illustrates different image data sources,
+but they are used in the same way with no differences:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span><span class="p">,</span> <span class="n">LocalSource</span><span class="p">,</span> <span class="n">VideoSource</span>
+<span class="linenos"> 2</span>
+<span class="linenos"> 3</span><span class="c1"># Crawl images from Danbooru</span>
+<span class="linenos"> 4</span><span class="n">danbooru_source</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;1girl&#39;</span><span class="p">])</span>
+<span class="linenos"> 5</span>
+<span class="linenos"> 6</span><span class="c1"># Local images from directory &#39;/your/directory&#39;</span>
+<span class="linenos"> 7</span><span class="n">local_source</span> <span class="o">=</span> <span class="n">LocalSource</span><span class="p">(</span><span class="s1">&#39;/your/directory&#39;</span><span class="p">)</span>
+<span class="linenos"> 8</span>
+<span class="linenos"> 9</span><span class="c1"># Extract frames from videos in &#39;/your/anime/directory&#39;</span>
+<span class="linenos">10</span><span class="n">video_source</span> <span class="o">=</span> <span class="n">VideoSource</span><span class="o">.</span><span class="n">from_directory</span><span class="p">(</span><span class="s1">&#39;/your/anime/directory&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So, no matter where your images come from, they all play nicely together! 😄</p>
+</section>
+<section id="actions">
+<h2>Actions<a class="headerlink" href="#actions" title="Permalink to this heading"></a></h2>
+<p>Once you have enough undecorated donuts, the next step is the actual donut-making process.
+Depending on various requirements, you might perform the following actions:</p>
+<ul class="simple">
+<li><dl class="simple">
+<dt><strong>Filtering</strong>:</dt><dd><ul>
+<li><p>Discard donuts that have gone bad overnight.</p></li>
+<li><p>Get rid of donuts that were poorly made on the spot.</p></li>
+<li><p>Toss out the neighbor’s subpar donuts with no regrets.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><strong>Processing</strong>:</dt><dd><ul>
+<li><p>Satisfy picky customers by carving suitable patterns on the donuts.</p></li>
+<li><p>Spread the desired icing evenly over the donuts.</p></li>
+<li><p>Sprinkle toppings like honey, sugar, nut sprinkles, jimmies, or other condiments as needed.</p></li>
+<li><p>Special decorations might bring novelty during festivities.</p></li>
+<li><p>If necessary, cut the donuts into bite-sized pieces for easy consumption.</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+<p>After going through these steps, you’ll have <strong>finished donuts</strong>.</p>
+<p>If you understood the process above, congratulations — <strong>you’ve also grasped the concept of Actions in waifuc</strong>.
+To draw a parallel with waifuc’s paradigm, the following code snippets provide a similar analogy:</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that the code below is not meant to run, it’s for illustrative purposes only.</p>
+</div>
+<ul class="simple">
+<li><p>Producing some plain chocolate donuts</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">mydonutsstore.action</span> <span class="kn">import</span> <span class="n">IcingAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">mydonutsstore.source</span> <span class="kn">import</span> <span class="n">FryingSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># fry it by myself</span>
+<span class="linenos"> 5</span><span class="n">source</span> <span class="o">=</span> <span class="n">FryingSource</span><span class="p">()</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1"># Icing with chocolate, and that is all</span>
+<span class="linenos"> 8</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 9</span>    <span class="n">IcingAction</span><span class="p">(</span><span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;chocolate&#39;</span><span class="p">),</span>
+<span class="linenos">10</span><span class="p">)</span>
+<span class="linenos">11</span>
+</pre></div>
+</div>
+<p>The final product should look like this (image provided by DALL-E):</p>
+<img alt="../../_images/donut_choco.png" class="align-center" src="../../_images/donut_choco.png" />
+<ul class="simple">
+<li><p>Producing some strawberry-flavored donuts with jimmies</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">mydonutsstore.action</span> <span class="kn">import</span> <span class="n">IcingAction</span><span class="p">,</span> <span class="n">JimmiesAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">mydonutsstore.source</span> <span class="kn">import</span> <span class="n">FryingSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># fry it by myself</span>
+<span class="linenos"> 5</span><span class="n">source</span> <span class="o">=</span> <span class="n">FryingSource</span><span class="p">()</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1"># Icing with strawberry, and put some jimmies on it</span>
+<span class="linenos"> 8</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 9</span>    <span class="n">IcingAction</span><span class="p">(</span><span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;strawberry&#39;</span><span class="p">),</span>
+<span class="linenos">10</span>    <span class="n">JimmiesAction</span><span class="p">(),</span>
+<span class="linenos">11</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The final product will look something like this (image provided by DALL-E):</p>
+<img alt="../../_images/donut_strawberry.png" class="align-center" src="../../_images/donut_strawberry.png" />
+<p>In simple terms, in waifuc, after going through a series of actions (Action) such as filtering, processing,
+and slicing for images, <strong>you will get a collection of processed images that make up your training dataset</strong>.
+For example, in the following waifuc code, after crawling images, monochrome images will first be removed.
+Following that, if an image is too large, it will be resized to a smaller size. Finally, each image will be tagged.
+The resulting image data will go through these three processes sequentially.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span><span class="p">,</span> <span class="n">AlignMinSizeAction</span><span class="p">,</span> <span class="n">TaggingAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># crawl Surtr&#39;s sexy images from Danbooru</span>
+<span class="linenos"> 5</span><span class="n">source</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;surtr_(arknights)&#39;</span><span class="p">])</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1"># 1. Drop the monochrome images.</span>
+<span class="linenos"> 8</span><span class="c1"># 2. If the image is too large, resize it to a smaller size.</span>
+<span class="linenos"> 9</span><span class="c1"># 3. Tag the images.</span>
+<span class="linenos">10</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">11</span>    <span class="n">NoMonochromeAction</span><span class="p">(),</span>
+<span class="linenos">12</span>    <span class="n">AlignMinSizeAction</span><span class="p">(</span><span class="mi">640</span><span class="p">),</span>
+<span class="linenos">13</span>    <span class="n">TaggingAction</span><span class="p">()</span>
+<span class="linenos">14</span><span class="p">)</span>
+</pre></div>
+</div>
+<section id="order-matters">
+<h3>Order Matters<a class="headerlink" href="#order-matters" title="Permalink to this heading"></a></h3>
+<p>After seeing the above code, you might have a question – what is the relationship between the actions
+used in the <code class="docutils literal notranslate"><span class="pre">attach</span></code> function? Is their order important?</p>
+<p>To answer this question, let’s continue with the analogy of the donut shop.
+In the previous content, we tried to make strawberry-flavored donuts with jimmies.
+In the analogous code, we used <code class="docutils literal notranslate"><span class="pre">IcingAction</span></code> first and then <code class="docutils literal notranslate"><span class="pre">JimmiesAction</span></code>, indicating that for donuts,
+we first apply icing and then sprinkle sugar candies.</p>
+<p>But what if we reverse the order, first sprinkle sugar candies, and then apply icing – obviously,
+sugar candies will have a hard time sticking to the donut and will often end up in a mess.
+This means that <code class="docutils literal notranslate"><span class="pre">JimmiesAction</span></code> did not work as expected; afterward, we apply strawberry-flavored icing.</p>
+<p>Here’s the code:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">mydonutsstore.action</span> <span class="kn">import</span> <span class="n">IcingAction</span><span class="p">,</span> <span class="n">JimmiesAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">mydonutsstore.source</span> <span class="kn">import</span> <span class="n">FryingSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># fry it by myself</span>
+<span class="linenos"> 5</span><span class="n">source</span> <span class="o">=</span> <span class="n">FryingSource</span><span class="p">()</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1"># put jimmies before icing</span>
+<span class="linenos"> 8</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 9</span>    <span class="n">JimmiesAction</span><span class="p">(),</span>  <span class="c1"># jimmies action will fail</span>
+<span class="linenos">10</span>    <span class="n">IcingAction</span><span class="p">(</span><span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;strawberry&#39;</span><span class="p">),</span>
+<span class="linenos">11</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>So, the donut you will end up with will look like this (image provided by DALL-E, please ignore the strawberry
+above because it seems to not quite understand what I meant):</p>
+<img alt="../../_images/donut_strawberry_failed.png" src="../../_images/donut_strawberry_failed.png" />
+<p>In simple terms, the <code class="docutils literal notranslate"><span class="pre">attach</span></code> method represents the order of operations, and changing the order means
+a significant change in the processing flow – we shouldn’t understand the relationship between operations
+in the <code class="docutils literal notranslate"><span class="pre">attach</span></code> method as a simple unordered stack. For example, <strong>in the waifuc code example above,</strong>
+<strong>if we move</strong> <code class="docutils literal notranslate"><span class="pre">NoMonochromeAction</span></code> <strong>to the end, the entire process will become – first, scaling and tagging,</strong>
+<strong>and then filtering</strong>. The consequence of this is that a large number of monochrome images will be tagged first
+and then deleted, resulting in significantly slower program execution and unnecessary waste of computing resources.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span><span class="p">,</span> <span class="n">AlignMinSizeAction</span><span class="p">,</span> <span class="n">TaggingAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># crawl images from Danbooru</span>
+<span class="linenos"> 5</span><span class="n">source</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;surtr_(arknights)&#39;</span><span class="p">])</span>
+<span class="linenos"> 6</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 7</span>    <span class="n">AlignMinSizeAction</span><span class="p">(</span><span class="mi">640</span><span class="p">),</span>
+<span class="linenos"> 8</span>    <span class="c1"># all the images will be tagged!!!!!</span>
+<span class="linenos"> 9</span>    <span class="c1"># no matter if it is colorful or not</span>
+<span class="linenos">10</span>    <span class="n">TaggingAction</span><span class="p">(),</span>
+<span class="linenos">11</span>
+<span class="linenos">12</span>    <span class="c1"># monochrome images dropped</span>
+<span class="linenos">13</span>    <span class="c1"># there is NO need to tag them actually</span>
+<span class="linenos">14</span>    <span class="n">NoMonochromeAction</span><span class="p">(),</span>
+<span class="linenos">15</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="semi-finished-products">
+<h3>Semi-Finished Products?<a class="headerlink" href="#semi-finished-products" title="Permalink to this heading"></a></h3>
+<p>Imagine a scenario where you are preparing to make a batch of donuts with jimmies,
+and you have already applied the icing. However, you suddenly have to leave for a while due to an unexpected event.
+In a situation like this, what should you do when you come back? It’s similar to the following code,
+so what should you do next?</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="kn">from</span> <span class="nn">mydonutsstore.action</span> <span class="kn">import</span> <span class="n">IcingAction</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">mydonutsstore.source</span> <span class="kn">import</span> <span class="n">FryingSource</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1"># fry it by myself</span>
+<span class="linenos">5</span><span class="n">source</span> <span class="o">=</span> <span class="n">FryingSource</span><span class="p">()</span>
+<span class="linenos">6</span>
+<span class="linenos">7</span><span class="c1"># just icing, not completed!</span>
+<span class="linenos">8</span><span class="n">process_source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">IcingAction</span><span class="p">(</span><span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;strawberry&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>It’s quite simple; you just need to heat it up a bit to melt the icing slightly and then sprinkle the sugar candies,
+just like this:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">mydonutsstore.action</span> <span class="kn">import</span> <span class="n">IcingAction</span><span class="p">,</span> <span class="n">JimmiesAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">mydonutsstore.source</span> <span class="kn">import</span> <span class="n">FryingSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># fry it by myself</span>
+<span class="linenos"> 5</span><span class="n">source</span> <span class="o">=</span> <span class="n">FryingSource</span><span class="p">()</span>
+<span class="linenos"> 6</span>
+<span class="linenos"> 7</span><span class="c1"># just icing, not completed!</span>
+<span class="linenos"> 8</span><span class="n">process_source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">IcingAction</span><span class="p">(</span><span class="n">flavor</span><span class="o">=</span><span class="s1">&#39;strawberry&#39;</span><span class="p">))</span>
+<span class="linenos"> 9</span>
+<span class="linenos">10</span><span class="c1"># heating, and then put jimmies on donuts</span>
+<span class="linenos">11</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">12</span>    <span class="n">HeatingAction</span><span class="p">(),</span>  <span class="c1"># melting down the ice</span>
+<span class="linenos">13</span>    <span class="n">JimmiesAction</span><span class="p">(),</span>
+<span class="linenos">14</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>In reality, when the first <code class="docutils literal notranslate"><span class="pre">attach</span></code> is called, a new secondary data source (Secondary Source,
+corresponding to the concept of Primary Source, such as the <code class="docutils literal notranslate"><span class="pre">DanbooruSource</span></code> at the beginning) has already been generated.
+This data source is exactly the same as the others, except it produces donuts with the previous icing.
+We just need to process this new data source as usual. In waifuc, this concept is similar.
+For example, the following two code snippets are completely equivalent:</p>
+<ul class="simple">
+<li><p>Code 1 (using a single <code class="docutils literal notranslate"><span class="pre">attach</span></code>):</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span><span class="p">,</span> <span class="n">AlignMinSizeAction</span><span class="p">,</span> <span class="n">TaggingAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># crawl images from danbooru</span>
+<span class="linenos"> 5</span><span class="n">source</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;surtr_(arknights)&#39;</span><span class="p">])</span>
+<span class="linenos"> 6</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos"> 7</span>    <span class="n">NoMonochromeAction</span><span class="p">(),</span>
+<span class="linenos"> 8</span>    <span class="n">AlignMinSizeAction</span><span class="p">(</span><span class="mi">640</span><span class="p">),</span>
+<span class="linenos"> 9</span>    <span class="n">TaggingAction</span><span class="p">(),</span>
+<span class="linenos">10</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Code 2 (first using <code class="docutils literal notranslate"><span class="pre">attach</span></code> to generate a new source, then attaching operations to that source):</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos"> 1</span><span class="kn">from</span> <span class="nn">waifuc.action</span> <span class="kn">import</span> <span class="n">NoMonochromeAction</span><span class="p">,</span> <span class="n">AlignMinSizeAction</span><span class="p">,</span> <span class="n">TaggingAction</span>
+<span class="linenos"> 2</span><span class="kn">from</span> <span class="nn">waifuc.source</span> <span class="kn">import</span> <span class="n">DanbooruSource</span>
+<span class="linenos"> 3</span>
+<span class="linenos"> 4</span><span class="c1"># crawl images from danbooru</span>
+<span class="linenos"> 5</span><span class="n">source</span> <span class="o">=</span> <span class="n">DanbooruSource</span><span class="p">([</span><span class="s1">&#39;surtr_(arknights)&#39;</span><span class="p">])</span>
+<span class="linenos"> 6</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span><span class="n">NoMonochromeAction</span><span class="p">())</span>  <span class="c1"># just drop the monochrome images</span>
+<span class="linenos"> 7</span>
+<span class="linenos"> 8</span><span class="c1"># process the colorful images</span>
+<span class="linenos"> 9</span><span class="n">source</span> <span class="o">=</span> <span class="n">source</span><span class="o">.</span><span class="n">attach</span><span class="p">(</span>
+<span class="linenos">10</span>    <span class="n">AlignMinSizeAction</span><span class="p">(</span><span class="mi">640</span><span class="p">),</span>
+<span class="linenos">11</span>    <span class="n">TaggingAction</span><span class="p">(),</span>
+<span class="linenos">12</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="exporter">
+<h2>Exporter<a class="headerlink" href="#exporter" title="Permalink to this heading"></a></h2>
+<p>When we have finished making donuts, we need to deliver them to the customers.
+Specifically, you may encounter the following scenarios:</p>
+<ul class="simple">
+<li><p>During tea time, hungry customers want to have hot donuts right away. You need to <strong>put the freshly made donuts into paper bags</strong> and <strong>hand them over</strong> to the customers.</p></li>
+<li><p>Customers want to buy a dozen donuts as a snack for late-night coding. You need to neatly <strong>pack the donuts in a box</strong> and help the customer wrap it for <strong>carrying back home</strong>.</p></li>
+<li><p>Customers who have heard about your donuts want to buy a whole cartload of them for a party. You need to <strong>put the donuts in a fresh-keeping bag</strong>, <strong>load them into a van</strong>, secure them with tie-down straps to prevent them from falling off during transport.</p></li>
+</ul>
+<p>In any of these cases, what you need to do is deliver the finished donuts to the customers.
+<strong>You need to deliver in different forms according to the actual needs of the customers, but you don’t care about how the donuts were made before or how the customers will use them.</strong></p>
+<p>If you understand the above process, congratulations - <strong>you have also understood the concept of Exporter in waifuc</strong>.
+If we compare this logic to the paradigm of waifuc, it should be something like the following code snippets</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Please note that the following code cannot actually run, it is for analogy and illustration purposes.</p>
+</div>
+<ul class="simple">
+<li><p>Hand over the donuts directly to the customer</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># NOTE: you already have a source that can provide some donuts</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">mydonutsstore.exporter</span> <span class="kn">import</span> <span class="n">HandOverExporter</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1"># hand it over the customer</span>
+<span class="linenos">5</span><span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">HandOverExporter</span><span class="p">())</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Package a dozen donuts and hand them over to the customer</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># NOTE: you already have a source that can provide some donuts</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">mydonutsstore.exporter</span> <span class="kn">import</span> <span class="n">DozenPackExporter</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1"># hand the dozen of donuts over the customer</span>
+<span class="linenos">5</span><span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">DozenPackExporter</span><span class="p">())</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Load a large quantity of donuts into boxes and onto a pickup truck</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># NOTE: you already have a source that can provide some donuts</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">mydonutsstore.exporter</span> <span class="kn">import</span> <span class="n">TruckExporter</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1"># place the donuts onto the pickup truck</span>
+<span class="linenos">5</span><span class="c1"># which has a bed length of 5.5 feet, width of 5 feet, and height of 1.5 feet.</span>
+<span class="linenos">6</span><span class="n">source</span><span class="o">.</span><span class="n">export</span><span class="p">(</span><span class="n">TruckExporter</span><span class="p">(</span><span class="nb">type</span><span class="o">=</span><span class="s1">&#39;pickup&#39;</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mf">5.5</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>With this, your donut shop is officially up and running. Congratulations! 🎉👏🎊</p>
+<p>In simple terms, a Data Exporter retrieves data from the data source you provide
+(it could be a native data source or a secondary data source) and exports the data in the desired format according
+to a preset process. For example, in the following waifuc code, using different Data Exporters with the same
+data source results in completely different data formats:</p>
+<ul class="simple">
+<li><p>Export in the format of images + JSON metadata</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># NOTE: you already have a source that can provide image items</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1"># save to /my/dataset with images and JSON metadata files</span>
+<span class="linenos">5</span><span class="n">source</span><span class="o">.</span><span class="n">exporter</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/my/dataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Export only images, without JSON metadata</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># NOTE: you already have a source that can provide image items</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">SaveExporter</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1"># save to /my/dataset with images only, no JSON files</span>
+<span class="linenos">5</span><span class="n">source</span><span class="o">.</span><span class="n">exporter</span><span class="p">(</span><span class="n">SaveExporter</span><span class="p">(</span><span class="s1">&#39;/my/dataset&#39;</span><span class="p">,</span> <span class="n">no_meta</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p>Export in the format of images + TXT, which is suitable for training most neural network models</p></li>
+</ul>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="linenos">1</span><span class="c1"># NOTE: you already have a source that can provide image items</span>
+<span class="linenos">2</span><span class="kn">from</span> <span class="nn">waifuc.export</span> <span class="kn">import</span> <span class="n">TextualInversionExporter</span>
+<span class="linenos">3</span>
+<span class="linenos">4</span><span class="c1"># save to /my/lora/dataset with images and TXTs</span>
+<span class="linenos">5</span><span class="c1"># which is ready for LoRA Training</span>
+<span class="linenos">6</span><span class="n">source</span><span class="o">.</span><span class="n">exporter</span><span class="p">(</span><span class="n">TextualInversionExporter</span><span class="p">(</span><span class="s1">&#39;/my/lora/dataset&#39;</span><span class="p">))</span>
+</pre></div>
+</div>
+<p>With this, a complete waifuc image data processing workflow is set up.</p>
+</section>
+</section>
+
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../before_read/index.html" class="btn btn-neutral float-left" title="Reading Instructions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../dynamic/index.html" class="btn btn-neutral float-right" title="I Need to Dynamically Design the Processing Flow" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, narugo1992.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+    <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    <span class="fa fa-book"> Other Versions</span>
+    v: dev/session
+    <span class="fa fa-caret-down"></span>
+  </span>
+        <div class="rst-other-versions">
+                <dl>
+                    <dt>Branches</dt>
+                        <dd><a href="index.html">dev/session</a></dd>
+                        <dd><a href="../../../gif/advanced_guides/workflow/index.html">dev/gif</a></dd>
+                        <dd><a href="../../../../main/advanced_guides/workflow/index.html">main</a></dd>
+                </dl>
+        </div>
+    </div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
