@@ -371,7 +371,7 @@ Its basic structure is defined as follows:</p>
                     <span class="k">continue</span>
 
                 <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
-                <span class="k">yield</span> <span class="n">ImageItem</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+                <span class="k">yield from</span> <span class="n">_FrameSource</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>It indirectly inherits from the <code class="docutils literal notranslate"><span class="pre">BaseDataSource</span></code> class and implements the <code class="docutils literal notranslate"><span class="pre">_iter</span></code> method.
@@ -846,8 +846,8 @@ This is exactly what the DeepGHS team hoped to see when designing waifuc as a fr
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
+                        <dd><a href="../../../dev/video/advanced_guides/customize/index.html">dev/video</a></dd>
                         <dd><a href="../../../dev/session/advanced_guides/customize/index.html">dev/session</a></dd>
-                        <dd><a href="../../../dev/gif/advanced_guides/customize/index.html">dev/gif</a></dd>
                         <dd><a href="index.html">main</a></dd>
                 </dl>
         </div>
