@@ -363,18 +363,49 @@ Its basic structure is defined as follows:</p>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Skipped due to download error: </span><span class="si">{</span><span class="n">err</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
                     <span class="k">continue</span>
 
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">td_file</span><span class="p">)</span>
-                    <span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
-                <span class="k">except</span> <span class="n">UnidentifiedImageError</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> resource </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1"> unidentified as image, skipped.&#39;</span><span class="p">)</span>
-                    <span class="k">continue</span>
-                <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="n">DecompressionBombError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Skipped due to IO error: </span><span class="si">{</span><span class="n">err</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
-                    <span class="k">continue</span>
+                <span class="n">file_type</span> <span class="o">=</span> <span class="n">get_file_type</span><span class="p">(</span><span class="n">td_file</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">file_type</span> <span class="o">==</span> <span class="s1">&#39;image&#39;</span><span class="p">:</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="n">image</span> <span class="o">=</span> <span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">td_file</span><span class="p">)</span>
+                        <span class="n">image</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
+                    <span class="k">except</span> <span class="n">UnidentifiedImageError</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> resource </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1"> unidentified as image, skipped.&#39;</span><span class="p">)</span>
+                        <span class="k">continue</span>
+                    <span class="k">except</span> <span class="p">(</span><span class="ne">IOError</span><span class="p">,</span> <span class="n">DecompressionBombError</span><span class="p">)</span> <span class="k">as</span> <span class="n">err</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Skipped due to IO error: </span><span class="si">{</span><span class="n">err</span><span class="si">!r}</span><span class="s1">&#39;</span><span class="p">)</span>
+                        <span class="k">continue</span>
 
-                <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
-                <span class="k">yield from</span> <span class="n">_FrameSource</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+                    <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
+                    <span class="k">yield from</span> <span class="n">_FrameSource</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">file_type</span> <span class="o">==</span> <span class="s1">&#39;video&#39;</span><span class="p">:</span>
+                    <span class="kn">from</span> <span class="nn">.video</span> <span class="kn">import</span> <span class="n">_VIDEO_EXTRACT_AVAILABLE</span><span class="p">,</span> <span class="n">VideoSource</span>
+                    <span class="k">if</span> <span class="n">_VIDEO_EXTRACT_AVAILABLE</span><span class="p">:</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> resource </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1"> &#39;</span>
+                                     <span class="sa">f</span><span class="s1">&#39;file </span><span class="si">{</span><span class="n">filename</span><span class="si">!r}</span><span class="se">\&#39;</span><span class="s1">s type is a </span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s1"> file, &#39;</span>
+                                     <span class="sa">f</span><span class="s1">&#39;extracting images from it.&#39;</span><span class="p">)</span>
+                        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">VideoSource</span><span class="p">(</span><span class="n">td_file</span><span class="p">):</span>
+                            <span class="n">v_time</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;time&#39;</span><span class="p">]</span>
+                            <span class="n">v_index</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">meta</span><span class="p">[</span><span class="s1">&#39;index&#39;</span><span class="p">]</span>
+                            <span class="n">i_meta</span> <span class="o">=</span> <span class="p">{</span><span class="o">**</span><span class="n">meta</span><span class="p">,</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">v_time</span><span class="p">,</span> <span class="s1">&#39;index&#39;</span><span class="p">:</span> <span class="n">v_index</span><span class="p">,</span> <span class="s1">&#39;url&#39;</span><span class="p">:</span> <span class="n">url</span><span class="p">}</span>
+                            <span class="k">if</span> <span class="s1">&#39;filename&#39;</span> <span class="ow">in</span> <span class="n">i_meta</span><span class="p">:</span>
+                                <span class="n">fn</span><span class="p">,</span> <span class="n">fext</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">i_meta</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">])</span>
+                                <span class="n">i_meta</span><span class="p">[</span><span class="s1">&#39;filename&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">fn</span><span class="si">}</span><span class="s1">_keyframe_</span><span class="si">{</span><span class="n">v_index</span><span class="si">}</span><span class="s1">.png&#39;</span>
+                            <span class="k">yield</span> <span class="n">ImageItem</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">image</span><span class="p">,</span> <span class="n">i_meta</span><span class="p">)</span>
+
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> resource </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1"> &#39;</span>
+                                      <span class="sa">f</span><span class="s1">&#39;file </span><span class="si">{</span><span class="n">filename</span><span class="si">!r}</span><span class="se">\&#39;</span><span class="s1">s type is a </span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s1"> file, &#39;</span>
+                                      <span class="sa">f</span><span class="s1">&#39;but video file is not supported for pyav library is not yet installed, &#39;</span>
+                                      <span class="sa">f</span><span class="s1">&#39;skipped.&#39;</span><span class="p">)</span>
+
+                <span class="k">elif</span> <span class="n">file_type</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> resource </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1"> &#39;</span>
+                                  <span class="sa">f</span><span class="s1">&#39;file </span><span class="si">{</span><span class="n">filename</span><span class="si">!r}</span><span class="se">\&#39;</span><span class="s1">s type is a </span><span class="si">{</span><span class="n">file_type</span><span class="si">}</span><span class="s1"> file, skipped.&#39;</span><span class="p">)</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="o">.</span><span class="n">capitalize</span><span class="p">()</span><span class="si">}</span><span class="s1"> resource </span><span class="si">{</span><span class="n">id_</span><span class="si">}</span><span class="s1"> &#39;</span>
+                                  <span class="sa">f</span><span class="s1">&#39;file </span><span class="si">{</span><span class="n">filename</span><span class="si">!r}</span><span class="se">\&#39;</span><span class="s1">s type is unknown, skipped.&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>It indirectly inherits from the <code class="docutils literal notranslate"><span class="pre">BaseDataSource</span></code> class and implements the <code class="docutils literal notranslate"><span class="pre">_iter</span></code> method.
@@ -849,8 +880,8 @@ This is exactly what the DeepGHS team hoped to see when designing waifuc as a fr
         <div class="rst-other-versions">
                 <dl>
                     <dt>Branches</dt>
-                        <dd><a href="../../../../main/advanced_guides/customize/index.html">main</a></dd>
                         <dd><a href="index.html">dev/video</a></dd>
+                        <dd><a href="../../../../main/advanced_guides/customize/index.html">main</a></dd>
                 </dl>
         </div>
     </div><script>
