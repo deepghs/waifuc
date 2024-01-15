@@ -13,7 +13,7 @@ from pyrate_limiter import Rate, Duration, Limiter
 from .base import NamedDataSource
 from .frames import _FrameSource
 from ..model import ImageItem
-from ..utils import get_requests_session, download_file, get_random_ua
+from ..utils import get_requests_session, download_file, get_random_ua, get_file_type
 
 
 class NoURL(Exception):
@@ -62,18 +62,49 @@ class WebDataSource(NamedDataSource):
                     warnings.warn(f'Skipped due to download error: {err!r}')
                     continue
 
-                try:
-                    image = Image.open(td_file)
-                    image.load()
-                except UnidentifiedImageError:
-                    warnings.warn(f'{self.group_name.capitalize()} resource {id_} unidentified as image, skipped.')
-                    continue
-                except (IOError, DecompressionBombError) as err:
-                    warnings.warn(f'Skipped due to IO error: {err!r}')
-                    continue
+                file_type = get_file_type(td_file)
+                if file_type == 'image':
+                    try:
+                        image = Image.open(td_file)
+                        image.load()
+                    except UnidentifiedImageError:
+                        warnings.warn(f'{self.group_name.capitalize()} resource {id_} unidentified as image, skipped.')
+                        continue
+                    except (IOError, DecompressionBombError) as err:
+                        warnings.warn(f'Skipped due to IO error: {err!r}')
+                        continue
 
-                meta = {**meta, 'url': url}
-                yield from _FrameSource(image, meta)
+                    meta = {**meta, 'url': url}
+                    yield from _FrameSource(image, meta)
+
+                elif file_type == 'video':
+                    from .video import _VIDEO_EXTRACT_AVAILABLE, VideoSource
+                    if _VIDEO_EXTRACT_AVAILABLE:
+                        logging.info(f'{self.group_name.capitalize()} resource {id_} '
+                                     f'file {filename!r}\'s type is a {file_type} file, '
+                                     f'extracting images from it.')
+                        for item in VideoSource(td_file):
+                            v_time = item.meta['time']
+                            v_index = item.meta['index']
+                            i_meta = {**meta, 'time': v_time, 'index': v_index, 'url': url}
+                            if 'filename' in i_meta:
+                                fn, fext = os.path.splitext(i_meta['filename'])
+                                i_meta['filename'] = f'{fn}_keyframe_{v_index}.png'
+                            yield ImageItem(item.image, i_meta)
+
+                    else:
+                        warnings.warn(f'{self.group_name.capitalize()} resource {id_} '
+                                      f'file {filename!r}\'s type is a {file_type} file, '
+                                      f'but video file is not supported for pyav library is not yet installed, '
+                                      f'skipped.')
+
+                elif file_type:
+                    warnings.warn(f'{self.group_name.capitalize()} resource {id_} '
+                                  f'file {filename!r}\'s type is a {file_type} file, skipped.')
+
+                else:
+                    warnings.warn(f'{self.group_name.capitalize()} resource {id_} '
+                                  f'file {filename!r}\'s type is unknown, skipped.')
 
 
 class WebPlusDataSource(WebDataSource):

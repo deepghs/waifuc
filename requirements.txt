@@ -13,3 +13,4 @@ xmltodict
 huggingface_hub>=0.14.0
 httpx[http2]
 pyrate-limiter
+filetype
