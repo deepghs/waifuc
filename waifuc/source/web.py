@@ -11,7 +11,6 @@ from hbutils.system import urlsplit, TemporaryDirectory
 from pyrate_limiter import Rate, Duration, Limiter
 
 from .base import NamedDataSource
-from .frames import _FrameSource
 from ..model import ImageItem
 from ..utils import get_requests_session, download_file, get_random_ua
 
@@ -42,35 +41,42 @@ class WebDataSource(NamedDataSource):
 
         return getattr(cls, '_rate_limit')
 
-    def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
+    def _iter_data(self) -> Iterator[Tuple[Union[str, int], Union[str, Image.Image], dict]]:
         raise NotImplementedError  # pragma: no cover
 
     def _iter(self) -> Iterator[ImageItem]:
         for id_, url, meta in self._iter_data():
-            with TemporaryDirectory(ignore_cleanup_errors=True) as td:
-                _, ext_name = os.path.splitext(urlsplit(url).filename)
-                filename = f'{self.group_name}_{id_}{ext_name}'
-                td_file = os.path.join(td, filename)
-                try:
-                    self._rate_limiter().try_acquire(filename)
-                    download_file(
-                        url, td_file, desc=filename,
-                        session=self.session, silent=self.download_silent
-                    )
-                    image = Image.open(td_file)
-                    image.load()
-                except httpx.HTTPError as err:
-                    warnings.warn(f'Skipped due to download error: {err!r}')
-                    continue
-                except UnidentifiedImageError:
-                    warnings.warn(f'{self.group_name.capitalize()} resource {id_} unidentified as image, skipped.')
-                    continue
-                except (IOError, DecompressionBombError) as err:
-                    warnings.warn(f'Skipped due to IO error: {err!r}')
-                    continue
+            if isinstance(url, Image.Image):
+                meta = dict(meta)
+                if 'url' not in meta:
+                    meta = {**meta, 'url': None}
+                yield ImageItem(url, meta)
 
-                meta = {**meta, 'url': url}
-                yield from _FrameSource(image, meta)
+            else:
+                with TemporaryDirectory(ignore_cleanup_errors=True) as td:
+                    _, ext_name = os.path.splitext(urlsplit(url).filename)
+                    filename = f'{self.group_name}_{id_}{ext_name}'
+                    td_file = os.path.join(td, filename)
+                    try:
+                        self._rate_limiter().try_acquire(filename)
+                        download_file(
+                            url, td_file, desc=filename,
+                            session=self.session, silent=self.download_silent
+                        )
+                        image = Image.open(td_file)
+                        image.load()
+                    except httpx.HTTPError as err:
+                        warnings.warn(f'Skipped due to download error: {err!r}')
+                        continue
+                    except UnidentifiedImageError:
+                        warnings.warn(f'{self.group_name.capitalize()} resource {id_} unidentified as image, skipped.')
+                        continue
+                    except (IOError, DecompressionBombError) as err:
+                        warnings.warn(f'Skipped due to IO error: {err!r}')
+                        continue
+
+                    meta = {**meta, 'url': url}
+                    yield ImageItem(image, meta)
 
 
 class WebPlusDataSource(WebDataSource):

@@ -10,7 +10,6 @@ from imgutils.data import load_image
 from tqdm.auto import tqdm
 
 from .base import NamedDataSource
-from .frames import _FrameSource
 from ..model import ImageItem
 
 
@@ -65,7 +64,7 @@ class LocalSource(BaseDirectorySource):
                 'group_id': group_name,
                 'filename': target_filename,
             }
-            yield from _FrameSource(origin_item.image, meta)
+            yield ImageItem(origin_item.image, meta)
 
 
 class LocalTISource(BaseDirectorySource):
