@@ -9,7 +9,7 @@ from PIL import Image, UnidentifiedImageError
 from PIL.Image import DecompressionBombError
 from hbutils.system import urlsplit, TemporaryDirectory
 from pixivpy3 import AppPixivAPI
-from pixivpy3.utils import JsonDict
+from pixivpy3.utils import JsonDict, PixivError
 
 from .web import WebDataSource
 from ..utils import get_requests_session, download_file
@@ -150,7 +150,13 @@ class BasePixivSource(WebDataSource):
                     yield f'{illust["id"]}_{i}', url, meta
 
             elif illust['type'] == 'ugoira':
-                metadata = _remove_pixiv_json(self.client.ugoira_metadata(illust_id=illust['id'])['ugoira_metadata'])
+                try:
+                    metadata = _remove_pixiv_json(
+                        self.client.ugoira_metadata(illust_id=illust['id'])['ugoira_metadata'])
+                except (KeyError, PixivError) as err:
+                    warnings.warn(f'Ugoira work {illust["id"]} skipped due to error on metadata api: {err!r}.')
+                    continue
+
                 frame_infos = metadata['frames']
                 zip_urls = metadata['zip_urls']
                 for scale in [self.select, 'original', 'large', 'medium']:
