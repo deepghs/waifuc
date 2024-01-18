@@ -9,6 +9,7 @@ from .debug import ArrivalAction
 from .filename import FileExtAction, FileOrderAction
 from .filter import NoMonochromeAction, OnlyMonochromeAction, ClassFilterAction, RatingFilterAction, FaceCountAction, \
     HeadCountAction, PersonRatioAction, MinSizeFilterAction, MinAreaFilterAction
+from .frame import FrameSplitAction
 from .head import HeadCoverAction, HeadCutOutAction
 from .lpips import FilterSimilarAction
 from .safety import SafetyAction
