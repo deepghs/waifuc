@@ -125,9 +125,6 @@ class SankakuSource(WebDataSource):
                 break
 
             for data in resp.json():
-                if 'file_type' not in data or 'image' not in data['file_type']:
-                    continue
-
                 try:
                     url = self._select_url(data)
                 except NoURL:
