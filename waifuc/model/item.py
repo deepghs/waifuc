@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from typing import Optional, Mapping, Any
 
 from PIL import Image
+from PIL.Image import SAVE_ALL, EXTENSION, init
 from hbutils.encoding import base64_decode, base64_encode
 from hbutils.reflection import quick_import_object
 
@@ -83,14 +84,35 @@ class ImageItem:
 
     def save(self, image_file, no_meta: bool = False, skip_when_image_exist: bool = False,
              save_params: Optional[Mapping[str, Any]] = None):
+        save_params = dict(save_params or {})
+        format = self._get_format(save_params.get('format'))
+        if format and format.upper() in SAVE_ALL:
+            save_params = {'save_all': True, **save_params}
         if not skip_when_image_exist or not os.path.exists(image_file):
             logging.debug(f'Saving image to {image_file!r}, params: {save_params or {}!r} ...')
-            self.image.save(image_file, **(save_params or {}))
+            self.image.save(image_file, **save_params)
         if not no_meta and self.meta:
             meta_file = self._image_file_to_meta_file(image_file)
             logging.debug(f'Saving metadata file for image {image_file!r} to {meta_file!r} ...')
             with open(meta_file, 'w', encoding='utf-8') as f:
                 json.dump(dump_meta(self.meta), f)
+
+    def _get_format(self, format: Optional[str] = None):
+        if format:
+            return format
+        if self.image.format:
+            return self.image.format
+
+        if self.meta.get('filename'):
+            ext = os.path.splitext(self.meta['filename'])[1].lower()
+            if ext not in EXTENSION:
+                init()
+            if ext in EXTENSION:
+                return EXTENSION[ext]
+            else:
+                return None
+        else:
+            return None
 
     def __repr__(self):
         values = {'size': self.image.size}
