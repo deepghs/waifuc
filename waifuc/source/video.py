@@ -56,7 +56,7 @@ class VideoSource(NamedDataSource):
                             'video_file': self.video_file,
                             'time': frame.time,
                             'index': i,
-                            'filename': f'{filebody}_time_{frame.time}s.png',
+                            'filename': f'{filebody}_time_{frame.time:.3f}s.png',
                         }
                         yield ImageItem(frame.to_image(), meta)
                         _last_frame_time = frame.time
