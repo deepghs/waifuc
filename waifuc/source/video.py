@@ -1,7 +1,7 @@
 import glob
 import logging
 import os
-from typing import Iterator
+from typing import Iterator, Optional
 from urllib.error import HTTPError
 
 from tqdm.auto import tqdm
@@ -24,7 +24,7 @@ _DEFAULT_MIN_FRAME_INTERVAL: float = 0.5
 
 
 class VideoSource(NamedDataSource):
-    def __init__(self, video_file, min_frame_interval: float = _DEFAULT_MIN_FRAME_INTERVAL):
+    def __init__(self, video_file, min_frame_interval: Optional[float] = _DEFAULT_MIN_FRAME_INTERVAL):
         if not _VIDEO_EXTRACT_AVAILABLE:
             raise ImportError(f'pyav not installed, {self.__class__.__name__} is unavailable. '
                               f'Please install this with `pip install git+https://github.com/deepghs/waifuc.git@main#egg=waifuc[video]` to solve this problem.')
@@ -50,7 +50,8 @@ class VideoSource(NamedDataSource):
                 for i, frame in enumerate(tqdm(
                         container.decode(stream),
                         desc=f'Video Extracting - {os.path.basename(self.video_file)}')):
-                    if _last_frame_time is None or frame.time - _last_frame_time >= self.min_frame_interval:
+                    if self.min_frame_interval is None or \
+                            _last_frame_time is None or frame.time - _last_frame_time >= self.min_frame_interval:
                         filebody, _ = os.path.splitext(os.path.basename(self.video_file))
                         meta = {
                             'video_file': self.video_file,
