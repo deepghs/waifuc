@@ -107,7 +107,7 @@ class DanbooruSource(DanbooruLikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = None, tag_domains: _DanbooruTagDomainTyping = None):
+                 group_name: Optional[str] = None, tag_domains: Optional[List[_DanbooruTagDomainTyping]] = None):
         DanbooruLikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
                                     'danbooru', 'https://danbooru.donmai.us/', group_name, tag_domains)
 
@@ -116,7 +116,7 @@ class SafebooruSource(DanbooruLikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = None, tag_domains: _DanbooruTagDomainTyping = None):
+                 group_name: Optional[str] = None, tag_domains: Optional[List[_DanbooruTagDomainTyping]] = None):
         DanbooruLikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
                                     'safebooru', 'https://safebooru.donmai.us', group_name, tag_domains)
 
@@ -125,7 +125,7 @@ class ATFBooruSource(DanbooruLikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = None, tag_domains: _DanbooruTagDomainTyping = None):
+                 group_name: Optional[str] = None, tag_domains: Optional[List[_DanbooruTagDomainTyping]] = None):
         DanbooruLikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
                                     'danbooru', 'https://booru.allthefallen.moe', group_name, tag_domains)
 
@@ -135,7 +135,7 @@ class E621LikeSource(DanbooruLikeSource):
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
                  site_name: Optional[str] = 'e621', site_url: Optional[str] = 'https://e621.net/',
-                 group_name: Optional[str] = None, tag_domains: _E621DomainTyping = None):
+                 group_name: Optional[str] = None, tag_domains: Optional[List[_E621DomainTyping]] = None):
         DanbooruLikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
                                     site_name, site_url, group_name or site_name, tag_domains)
 
@@ -177,7 +177,7 @@ class E621Source(E621LikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = 'e621', tag_domains: _E621DomainTyping = None):
+                 group_name: Optional[str] = 'e621', tag_domains: Optional[List[_E621DomainTyping]] = None):
         E621LikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
                                 'e621', 'https://e621.net/', group_name, tag_domains)
 
@@ -186,6 +186,6 @@ class E926Source(E621LikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = 'e926', tag_domains: _E621DomainTyping = None):
+                 group_name: Optional[str] = 'e926', tag_domains: Optional[List[_E621DomainTyping]] = None):
         E621LikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
                                 'e926', 'https://e926.net/', group_name, tag_domains)
