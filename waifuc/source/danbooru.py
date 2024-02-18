@@ -8,13 +8,15 @@ from .web import NoURL, WebDataSource, DynamicUAWebDataSource
 from ..utils import srequest
 
 _DanbooruSiteTyping = Literal['konachan', 'yandere', 'danbooru', 'safebooru', 'lolibooru']
+_DanbooruTagDomainTyping = Literal['general', 'character', 'copyright', 'artist', 'meta']
+_E621DomainTyping = Literal['artist', 'character', 'copyright', 'general', 'invalid', 'lore', 'meta', 'species']
 
 
 class DanbooruLikeSource(DynamicUAWebDataSource):
     def __init__(self, tags: List[str], min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
                  site_name: Optional[str] = 'danbooru', site_url: Optional[str] = 'https://danbooru.donmai.us/',
-                 group_name: Optional[str] = None):
+                 group_name: Optional[str] = None, tag_domains: Optional[List[str]] = None):
         WebDataSource.__init__(self, group_name or site_name, None, download_silent)
         self.session.headers.update({
             'Content-Type': 'application/json; charset=utf-8',
@@ -26,6 +28,7 @@ class DanbooruLikeSource(DynamicUAWebDataSource):
         self.site_name, self.site_url = site_name, site_url
         self.tags = tags
         self.min_size = min_size
+        self.tag_domains = tag_domains
 
     def _check_session(self) -> bool:
         resp = srequest(self.session, 'GET', f'{self.site_url}/posts.json', params={
@@ -59,7 +62,13 @@ class DanbooruLikeSource(DynamicUAWebDataSource):
         return data['file_url']
 
     def _get_tags(self, data):
-        return re.split(r'\s+', data["tag_string"])
+        if self.tag_domains is None:
+            return re.split(r'\s+', data["tag_string"])
+        else:
+            tags = []
+            for tag_domain in self.tag_domains:
+                tags.extend(re.split(r'\s+', data[f'tag_string_{tag_domain}']))
+            return tags
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
         page = 1
@@ -98,27 +107,27 @@ class DanbooruSource(DanbooruLikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = None):
+                 group_name: Optional[str] = None, tag_domains: _DanbooruTagDomainTyping = None):
         DanbooruLikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
-                                    'danbooru', 'https://danbooru.donmai.us/', group_name)
+                                    'danbooru', 'https://danbooru.donmai.us/', group_name, tag_domains)
 
 
 class SafebooruSource(DanbooruLikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = None):
+                 group_name: Optional[str] = None, tag_domains: _DanbooruTagDomainTyping = None):
         DanbooruLikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
-                                    'safebooru', 'https://safebooru.donmai.us', group_name)
+                                    'safebooru', 'https://safebooru.donmai.us', group_name, tag_domains)
 
 
 class ATFBooruSource(DanbooruLikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = None):
+                 group_name: Optional[str] = None, tag_domains: _DanbooruTagDomainTyping = None):
         DanbooruLikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
-                                    'danbooru', 'https://booru.allthefallen.moe', group_name)
+                                    'danbooru', 'https://booru.allthefallen.moe', group_name, tag_domains)
 
 
 class E621LikeSource(DanbooruLikeSource):
@@ -126,9 +135,9 @@ class E621LikeSource(DanbooruLikeSource):
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
                  site_name: Optional[str] = 'e621', site_url: Optional[str] = 'https://e621.net/',
-                 group_name: Optional[str] = None):
+                 group_name: Optional[str] = None, tag_domains: _E621DomainTyping = None):
         DanbooruLikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
-                                    site_name, site_url, group_name or site_name)
+                                    site_name, site_url, group_name or site_name, tag_domains)
 
     def _get_data_from_raw(self, raw):
         return raw['posts']
@@ -154,8 +163,13 @@ class E621LikeSource(DanbooruLikeSource):
 
     def _get_tags(self, data):
         tags = []
-        for value in data['tags'].values():
-            tags.extend(value)
+        if self.tag_domains is None:
+            for value in data['tags'].values():
+                tags.extend(value)
+        else:
+            for key, value in data['tags'].items():
+                if key in self.tag_domains:
+                    tags.extend(value)
         return tags
 
 
@@ -163,15 +177,15 @@ class E621Source(E621LikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = 'e621'):
+                 group_name: Optional[str] = 'e621', tag_domains: _E621DomainTyping = None):
         E621LikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
-                                'e621', 'https://e621.net/', group_name)
+                                'e621', 'https://e621.net/', group_name, tag_domains)
 
 
 class E926Source(E621LikeSource):
     def __init__(self, tags: List[str],
                  min_size: Optional[int] = 800, download_silent: bool = True,
                  username: Optional[str] = None, api_key: Optional[str] = None,
-                 group_name: Optional[str] = 'e926'):
+                 group_name: Optional[str] = 'e926', tag_domains: _E621DomainTyping = None):
         E621LikeSource.__init__(self, tags, min_size, download_silent, username, api_key,
-                                'e926', 'https://e926.net/', group_name)
+                                'e926', 'https://e926.net/', group_name, tag_domains)
