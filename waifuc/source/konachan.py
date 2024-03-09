@@ -192,7 +192,18 @@ class RealbooruSource(Rule34LikeSource):
                                   tags, min_size, group_name, download_silent)
 
     def _select_url(self, data):
-        return f'{self.site_url}/images/{data["directory"]}/{data["image"]}'
+        url = f'{self.site_url}/images/{data["directory"]}/{data["image"]}'
+        resp = self.session.head(url)
+        if resp.status_code // 100 == 2:
+            return url
+
+        _, ext = os.path.splitext(data['image'])
+        url = f'{self.site_url}/images/{data["directory"]}/{data["hash"]}{ext}'
+        resp = self.session.head(url)
+        if resp.status_code // 100 == 2:
+            return url
+
+        raise NoURL
 
 
 class XbooruLikeSource(Rule34LikeSource):
