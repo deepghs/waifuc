@@ -1,4 +1,5 @@
-from typing import Iterator
+import random
+from typing import Iterator, Union, Tuple
 
 from imgutils.detect import detect_heads, detect_faces
 from imgutils.operate import censor_areas
@@ -54,8 +55,8 @@ class HeadCutOutAction(BaseAction):
 
 
 class HeadCoverAction(ProcessAction):
-    def __init__(self, color: str = 'black', scale: float = 0.8, level: str = 's', max_infer_size=640,
-                 conf_threshold: float = 0.3, iou_threshold: float = 0.7):
+    def __init__(self, color: str = 'random', scale: Union[float, Tuple[float, float]] = 0.8,
+                 level: str = 's', max_infer_size=640, conf_threshold: float = 0.3, iou_threshold: float = 0.7):
         self.color = color
         self.scale = scale
         self.level = level
@@ -69,10 +70,19 @@ class HeadCoverAction(ProcessAction):
                 detect_heads(item.image, self.level, self.max_infer_size, self.conf_threshold, self.iou_threshold):
             width, height = x1 - x0, y1 - y0
             xc, yc = (x0 + x1) / 2, (y0 + y1) / 2
-            width, height = width * self.scale, height * self.scale
+            if isinstance(self.scale, tuple):
+                min_scale, max_scale = self.scale
+                scale = min_scale + random.random() * (max_scale - min_scale)
+            else:
+                scale = self.scale
+            width, height = width * scale, height * scale
             x0, x1 = xc - width / 2, xc + width / 2
             y0, y1 = yc - height / 2, yc + height / 2
             head_areas.append((x0, y0, x1, y1))
 
-        image = censor_areas(item.image, 'color', head_areas, color=self.color)
+        if self.color == 'random':
+            color = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+        else:
+            color = self.color
+        image = censor_areas(item.image, 'color', head_areas, color=color)
         return ImageItem(image, item.meta)
