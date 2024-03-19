@@ -2,7 +2,8 @@ from functools import partial
 from typing import Iterator, Union, List, Mapping, Literal
 
 from PIL import Image
-from imgutils.tagging import get_deepdanbooru_tags, get_wd14_tags, get_mldanbooru_tags, drop_overlap_tags
+from imgutils.tagging import get_deepdanbooru_tags, get_wd14_tags, get_mldanbooru_tags, drop_overlap_tags, \
+    is_blacklisted, remove_underline
 
 from .base import ProcessAction, BaseAction
 from ..model import ImageItem
@@ -18,7 +19,12 @@ def _deepdanbooru_tagging(image: Image.Image, use_real_name: bool = False,
 def _wd14_tagging(image: Image.Image, model_name: str,
                   general_threshold: float = 0.35, character_threshold: float = 0.85, **kwargs):
     _ = kwargs
-    _, features, characters = get_wd14_tags(image, model_name, general_threshold, character_threshold)
+    _, features, characters = get_wd14_tags(
+        image,
+        model_name=model_name,
+        general_threshold=general_threshold,
+        character_threshold=character_threshold,
+    )
     return {**features, **characters}
 
 
@@ -34,15 +40,21 @@ _TAGGING_METHODS = {
     'wd14_convnext': partial(_wd14_tagging, model_name='ConvNext'),
     'wd14_convnextv2': partial(_wd14_tagging, model_name='ConvNextV2'),
     'wd14_swinv2': partial(_wd14_tagging, model_name='SwinV2'),
+    'wd14_moat': partial(_wd14_tagging, model_name='MOAT'),
+    'wd14_v3_swinv2': partial(_wd14_tagging, model_name='SwinV2_v3'),
+    'wd14_v3_convnext': partial(_wd14_tagging, model_name='ConvNext_v3'),
+    'wd14_v3_vit': partial(_wd14_tagging, model_name='ViT_v3'),
     'mldanbooru': _mldanbooru_tagging,
 }
 
 TaggingMethodTyping = Literal[
-    'deepdanbooru', 'wd14_vit', 'wd14_convnext', 'wd14_convnextv2', 'wd14_swinv2', 'mldanbooru']
+    'deepdanbooru', 'wd14_vit', 'wd14_convnext', 'wd14_convnextv2', 'wd14_swinv2', 'mldanbooru',
+    'wd14_moat', 'wd14_v3_swinv2', 'wd14_v3_convnext', 'wd14_v3_vit',
+]
 
 
 class TaggingAction(ProcessAction):
-    def __init__(self, method: TaggingMethodTyping = 'wd14_convnextv2', force: bool = False, **kwargs):
+    def __init__(self, method: TaggingMethodTyping = 'wd14_v3_swinv2', force: bool = False, **kwargs):
         self.method = _TAGGING_METHODS[method]
         self.force = force
         self.kwargs = kwargs
@@ -100,4 +112,18 @@ class TagDropAction(ProcessAction):
     def process(self, item: ImageItem) -> ImageItem:
         tags = dict(item.meta.get('tags') or {})
         tags = {tag: score for tag, score in tags.items() if tag not in self.tags_to_drop}
+        return ImageItem(item.image, {**item.meta, 'tags': tags})
+
+
+class BlacklistedTagDropAction(ProcessAction):
+    def process(self, item: ImageItem) -> ImageItem:
+        tags = dict(item.meta.get('tags') or {})
+        tags = {tag: score for tag, score in tags.items() if not is_blacklisted(tag)}
+        return ImageItem(item.image, {**item.meta, 'tags': tags})
+
+
+class TagRemoveUnderlineAction(ProcessAction):
+    def process(self, item: ImageItem) -> ImageItem:
+        tags = dict(item.meta.get('tags') or {})
+        tags = {remove_underline(tag): score for tag, score in tags.items()}
         return ImageItem(item.image, {**item.meta, 'tags': tags})

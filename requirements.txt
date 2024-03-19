@@ -4,7 +4,7 @@ numpy
 tqdm
 pandas
 random_user_agent
-dghs-imgutils>=0.3.3
+dghs-imgutils>=0.4.0
 requests
 pixivpy3
 cloudscraper
