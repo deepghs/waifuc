@@ -60,9 +60,10 @@ def _remove_pixiv_json(obj):
 
 class BasePixivSource(WebDataSource):
     def __init__(self, group_name: str = 'pixiv', select: _SelectTyping = 'large',
-                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
+                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True, download_gif: bool = True):
         self.select = select
         self.no_ai = no_ai
+        self.download_gif = download_gif
         self.refresh_token = refresh_token
         self.client = AppPixivAPI()
         self.client.requests = get_requests_session(session=self.client.requests)
@@ -73,7 +74,7 @@ class BasePixivSource(WebDataSource):
         raise NotImplementedError  # pragma: no cover
 
     def _make_gif_for_ugoira(self, frames_info: list, zip_url: str):
-        with TemporaryDirectory() as td:
+        with TemporaryDirectory(ignore_cleanup_errors=True) as td:
             filename = urlsplit(zip_url).filename
             frame_zip = os.path.join(td, filename)
             try:
@@ -123,7 +124,6 @@ class BasePixivSource(WebDataSource):
 
         for illust in self._iter_illustration():
             illust = _remove_pixiv_json(illust)
-
             if self.no_ai and illust['illust_ai_type'] == 2:
                 logging.info(f'Work {illust["id"]} skipped due to AI-filtering policy.')
                 continue
@@ -168,21 +168,22 @@ class BasePixivSource(WebDataSource):
                                  f'in urls {zip_urls!r}, skipped.')
                     continue
 
-                try:
-                    gif_image = self._make_gif_for_ugoira(frame_infos, zip_url)
-                    gif_image.load()
-                except _UgoiraSkip:
-                    continue
-                filename = f'{self.group_name}_{illust["id"]}.gif'
-                meta = {
-                    'pixiv': illust,
-                    'ugoira': metadata,
-                    'group_id': f'{self.group_name}_{illust["id"]}',
-                    'instance_id': f'{self.group_name}_{illust["id"]}',
-                    'filename': filename,
-                    'url': zip_url,
-                }
-                yield f'{illust["id"]}', gif_image, meta
+                if self.download_gif:
+                    try:
+                        gif_image = self._make_gif_for_ugoira(frame_infos, zip_url)
+                        gif_image.load()
+                    except _UgoiraSkip:
+                        continue
+                    filename = f'{self.group_name}_{illust["id"]}.gif'
+                    meta = {
+                        'pixiv': illust,
+                        'ugoira': metadata,
+                        'group_id': f'{self.group_name}_{illust["id"]}',
+                        'instance_id': f'{self.group_name}_{illust["id"]}',
+                        'filename': filename,
+                        'url': zip_url,
+                    }
+                    yield f'{illust["id"]}', gif_image, meta
 
             else:
                 logging.info(f'Work {illust["id"]} skipped due to it is a {illust["type"]}.')
@@ -194,7 +195,7 @@ class PixivSearchSource(BasePixivSource):
                  sort: _SortTyping = "date_desc", duration: _DurationTyping = None, start_date: Optional[str] = None,
                  end_date: Optional[str] = None, filter: _FilterTyping = "for_ios", req_auth: bool = True,
                  group_name: str = 'pixiv', select: _SelectTyping = 'large',
-                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
+                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True, download_gif: bool = True):
         BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
         self.word = word
         self.search_target = search_target
@@ -204,6 +205,7 @@ class PixivSearchSource(BasePixivSource):
         self.end_date = end_date
         self.filter = filter
         self.req_auth = req_auth
+        self.download_gif = download_gif
 
     def _args(self):
         return [self.word]
@@ -228,12 +230,13 @@ class PixivUserSource(BasePixivSource):
     def __init__(self, user_id: Union[int, str], type: _TypeTyping = "illust",
                  filter: _FilterTyping = "for_ios", req_auth: bool = True,
                  group_name: str = 'pixiv', select: _SelectTyping = 'large',
-                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
+                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True, download_gif: bool = True):
         BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
         self.user_id = user_id
         self.type = type
         self.filter = filter
         self.req_auth = req_auth
+        self.download_gif = download_gif
 
     def _args(self):
         return [self.user_id]
@@ -247,7 +250,6 @@ class PixivUserSource(BasePixivSource):
                 break
             illustrations = data['illusts']
             yield from illustrations
-
             offset += len(illustrations)
             if not illustrations:
                 break
@@ -257,12 +259,13 @@ class PixivRankingSource(BasePixivSource):
     def __init__(self, mode: _ModeTyping = "day", filter: _FilterTyping = "for_ios",
                  date: Optional[str] = None, req_auth: bool = True,
                  group_name: str = 'pixiv', select: _SelectTyping = 'large',
-                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True):
+                 no_ai: bool = False, refresh_token: Optional[str] = None, download_silent: bool = True, download_gif: bool = True):
         BasePixivSource.__init__(self, group_name, select, no_ai, refresh_token, download_silent)
         self.mode = mode
         self.filter = filter
         self.date = date
         self.req_auth = req_auth
+        self.download_gif = download_gif
 
     def _args(self):
         return [self.mode]
@@ -276,7 +279,6 @@ class PixivRankingSource(BasePixivSource):
                 break
             illustrations = data['illusts']
             yield from illustrations
-
             offset += len(illustrations)
             if not illustrations:
                 break
