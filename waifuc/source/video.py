@@ -37,8 +37,8 @@ class VideoSource(NamedDataSource):
     def _iter(self) -> Iterator[ImageItem]:
         try:
             content = av.datasets.curated(self.video_file)
-        except HTTPError:
-            logging.error(f'Video {self.video_file!r} is invalid, skipped')
+        except HTTPError as err:
+            logging.error(f'Video {self.video_file!r} is invalid, skipped - {err!r}')
             return
 
         try:
