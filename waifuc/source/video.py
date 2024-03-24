@@ -48,11 +48,14 @@ class VideoSource(NamedDataSource):
             _last_frame_time = None
             with av.open(content) as container:
                 stream = container.streams.video[0]
-                total_time = float(stream.time_base * stream.duration)
+                if stream.time_base and stream.duration:
+                    total_time = float(stream.time_base * stream.duration)
+                else:
+                    total_time = None
                 stream.codec_context.skip_frame = "NONKEY" if self.key_frames_only else "DEFAULT"
 
                 pg = tqdm(
-                    total=int(total_time),
+                    total=int(total_time) if total_time is not None else None,
                     desc=f'Video Extracting - {os.path.basename(self.video_file)}'
                 )
                 for i, frame in enumerate(container.decode(stream), ):
@@ -68,9 +71,13 @@ class VideoSource(NamedDataSource):
                         yield ImageItem(frame.to_image(), meta)
                         pg.update(int(frame.time) - int(_last_frame_time or 0.0))
                         _last_frame_time = frame.time
-                        pg.set_description(f'Video Extracting - {os.path.basename(self.video_file)} - '
-                                           f'{time_to_delta_str(int(frame.time))} / '
-                                           f'{time_to_delta_str(int(total_time))}')
+                        if total_time is not None:
+                            pg.set_description(f'Video Extracting - {os.path.basename(self.video_file)} - '
+                                               f'{time_to_delta_str(int(frame.time))} / '
+                                               f'{time_to_delta_str(int(total_time))}')
+                        else:
+                            pg.set_description(f'Video Extracting - {os.path.basename(self.video_file)} - '
+                                               f'{time_to_delta_str(int(frame.time))}')
         except (InvalidDataError, av.error.ValueError, IndexError, UnicodeError) as err:
             logging.warning(f'Video extraction skipped due to error - {err!r}')
 
