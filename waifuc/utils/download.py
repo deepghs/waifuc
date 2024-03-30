@@ -24,6 +24,7 @@ def download_file(url, filename, expected_size: int = None, desc=None, session=N
     session = session or get_requests_session()
     with _get_stream(session, url, **kwargs) as response:
         response: Union[httpx.Response, requests.Response]
+        response.raise_for_status()
         expected_size = expected_size or response.headers.get('Content-Length', None)
         expected_size = int(expected_size) if expected_size is not None else expected_size
 
