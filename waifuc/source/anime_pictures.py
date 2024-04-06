@@ -81,9 +81,9 @@ class AnimePicturesSource(DynamicUAWebDataSource):
     def _get_url(self, post, resp):
         id_, md5 = post['id'], post['md5']
         if self.select == 'thumbnail':
-            return f'https://cdn.anime-pictures.net/previews/{md5[:3]}/{md5}_bp.jpg'
+            return f'https://opreviews.anime-pictures.net/{md5[:3]}/{md5}_bp.jpg'
         elif self.select == 'preview':
-            return f'https://cdn.anime-pictures.net/previews/{md5[:3]}/{md5}_cp.jpg'
+            return f'https://opreviews.anime-pictures.net/{md5[:3]}/{md5}_cp.jpg'
         elif self.select == 'original':
             return pq(resp.text)('.rating a.download_icon').attr('href')
         else:
