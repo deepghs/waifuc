@@ -94,7 +94,7 @@ class CharacterEnhanceAction(BaseAction):
         if self.degree_range:
             min_degree, max_degree = self.degree_range
             degree = random.random() * (max_degree - min_degree) + min_degree
-            image = squeeze_with_transparency(image.rotate(degree, expand=True))
+            image = squeeze_with_transparency(image.rotate(degree, expand=True, resample=Image.BILINEAR))
         else:
             degree = None
 
