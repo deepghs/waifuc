@@ -1,5 +1,5 @@
 from .align import AlignMaxSizeAction, AlignMinSizeAction, PaddingAlignAction, AlignMaxAreaAction
-from .augument import RandomFilenameAction, RandomChoiceAction, BaseRandomAction, MirrorAction
+from .augument import RandomFilenameAction, RandomChoiceAction, BaseRandomAction, MirrorAction, CharacterEnhanceAction
 from .background import BackgroundRemovalAction
 from .base import BaseAction, ProcessAction, FilterAction, ActionStop, ProgressBarAction
 from .basic import ModeConvertAction
