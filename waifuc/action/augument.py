@@ -142,8 +142,8 @@ class CharacterEnhanceAction(BaseAction):
             rx = max(max_width / bg_image.width, max_height / bg_image.height)
             bg_image = bg_image.resize((int(bg_image.width * rx), int(bg_image.height * rx)))
 
-        px0 = random.randint(0, bg_image.width - cropped.width)
-        py0 = random.randint(0, bg_image.height - cropped.height)
+        px0 = random.randint(0, max(bg_image.width - cropped.width, 1))
+        py0 = random.randint(0, max(bg_image.height - cropped.height, 1))
 
         x0, y0 = px0 - dx0, py0 - dy0
         x1, y1 = x0 + origin_image.width, y0 + origin_image.height
