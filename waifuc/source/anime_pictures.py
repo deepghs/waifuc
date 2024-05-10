@@ -85,7 +85,7 @@ class AnimePicturesSource(DynamicUAWebDataSource):
         elif self.select == 'preview':
             return f'https://opreviews.anime-pictures.net/{md5[:3]}/{md5}_cp.jpg'
         elif self.select == 'original':
-            return pq(resp.text)('.rating a.download_icon').attr('href')
+            return pq(resp.text)('.rating a.icon_download').attr('href')
         else:
             raise ValueError(f'Invalid image selection - {self.select!r}.')
 
