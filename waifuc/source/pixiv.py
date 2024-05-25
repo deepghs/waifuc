@@ -204,6 +204,7 @@ class PixivSearchSource(BasePixivSource):
         self.end_date = end_date
         self.filter = filter
         self.req_auth = req_auth
+        self.no_ai = int(no_ai)
 
     def _args(self):
         return [self.word]
@@ -212,7 +213,7 @@ class PixivSearchSource(BasePixivSource):
         offset = 0
         while True:
             data = self.client.search_illust(self.word, self.search_target, self.sort, self.duration,
-                                             self.start_date, self.end_date, self.filter, offset, self.req_auth)
+                                             self.start_date, self.end_date, self.filter, self.no_ai, offset, self.req_auth)
             if 'illusts' not in data:
                 logging.warning(f'Illusts not found in page (offset: {offset!r}), skipped: {data!r}.')
                 break
