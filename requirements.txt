@@ -1,6 +1,6 @@
 hbutils>=0.9.3
 pillow
-numpy
+numpy<2
 tqdm
 pandas
 random_user_agent
