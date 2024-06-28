@@ -211,8 +211,19 @@ class PixivSearchSource(BasePixivSource):
     def _iter_illustration(self) -> Iterator[dict]:
         offset = 0
         while True:
-            data = self.client.search_illust(self.word, self.search_target, self.sort, self.duration,
-                                             self.start_date, self.end_date, self.filter, offset, self.req_auth)
+            # data = self.client.search_illust(self.word, self.search_target, self.sort, self.duration,
+            #                                  self.start_date, self.end_date, self.filter, offset, self.req_auth)
+            data = self.client.search_illust(
+                word=self.word,
+                search_target=self.search_target,
+                sort=self.sort,
+                duration=self.duration,
+                start_date=self.start_date,
+                end_date=self.end_date,
+                filter=self.filter,
+                offset=offset,
+                req_auth=self.req_auth
+            )
             if 'illusts' not in data:
                 logging.warning(f'Illusts not found in page (offset: {offset!r}), skipped: {data!r}.')
                 break
