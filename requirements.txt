@@ -6,7 +6,7 @@ pandas
 random_user_agent
 dghs-imgutils>=0.4.3
 requests
-pixivpy3
+pixivpy3>=3.7.5
 cloudscraper
 pyquery
 xmltodict
