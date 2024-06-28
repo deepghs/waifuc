@@ -204,6 +204,7 @@ class PixivSearchSource(BasePixivSource):
         self.end_date = end_date
         self.filter = filter
         self.req_auth = req_auth
+        self.no_ai = no_ai
 
     def _args(self):
         return [self.word]
@@ -211,8 +212,7 @@ class PixivSearchSource(BasePixivSource):
     def _iter_illustration(self) -> Iterator[dict]:
         offset = 0
         while True:
-            # data = self.client.search_illust(self.word, self.search_target, self.sort, self.duration,
-            #                                  self.start_date, self.end_date, self.filter, offset, self.req_auth)
+            # noinspection PyTypeChecker
             data = self.client.search_illust(
                 word=self.word,
                 search_target=self.search_target,
@@ -221,6 +221,7 @@ class PixivSearchSource(BasePixivSource):
                 start_date=self.start_date,
                 end_date=self.end_date,
                 filter=self.filter,
+                search_ai_type=0 if self.no_ai else 1,
                 offset=offset,
                 req_auth=self.req_auth
             )
