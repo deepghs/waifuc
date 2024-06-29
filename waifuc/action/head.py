@@ -86,3 +86,37 @@ class HeadCoverAction(ProcessAction):
             color = self.color
         image = censor_areas(item.image, 'color', head_areas, color=color)
         return ImageItem(image, item.meta)
+
+class FaceCoverAction(ProcessAction):
+    def __init__(self, color: str = 'random', scale: Union[float, Tuple[float, float]] = 0.8,
+                 level: str = 's',version: str = 'v1.4', max_infer_size=640, conf_threshold: float = 0.3, iou_threshold: float = 0.7):
+        self.color = color
+        self.scale = scale
+        self.level = level
+        self.version = version
+        self.max_infer_size = max_infer_size
+        self.conf_threshold = conf_threshold
+        self.iou_threshold = iou_threshold
+
+    def process(self, item: ImageItem) -> ImageItem:
+        faces_areas = []
+        for (x0, y0, x1, y1), _, _ in \
+                detect_faces(item.image, self.level, self.version, self.max_infer_size, self.conf_threshold, self.iou_threshold):
+            width, height = x1 - x0, y1 - y0
+            xc, yc = (x0 + x1) / 2, (y0 + y1) / 2
+            if isinstance(self.scale, tuple):
+                min_scale, max_scale = self.scale
+                scale = min_scale + random.random() * (max_scale - min_scale)
+            else:
+                scale = self.scale
+            width, height = width * scale, height * scale
+            x0, x1 = xc - width / 2, xc + width / 2
+            y0, y1 = yc - height / 2, yc + height / 2
+            faces_areas.append((x0, y0, x1, y1))
+
+        if self.color == 'random':
+            color = "#{:06x}".format(random.randint(0, 0xFFFFFF))
+        else:
+            color = self.color
+        image = censor_areas(item.image, 'color', faces_areas, color=color)
+        return ImageItem(image, item.meta)

@@ -1,7 +1,7 @@
 import math
 from typing import Tuple
 
-from PIL import Image
+from PIL import Image, ImageChops
 from imgutils.data import load_image
 
 from .base import ProcessAction
@@ -65,3 +65,15 @@ class PaddingAlignAction(ProcessAction):
         left, top = int((new_image.width - resized.width) // 2), int((new_image.height - resized.height) // 2)
         new_image.paste(resized, (left, top, left + resized.width, top + resized.height), resized)
         return ImageItem(new_image.convert(item.image.mode), item.meta)
+
+class PaddingAlignBackgroundAction(ProcessAction):
+    def __init__(self, color: str = 'white'):
+        self.color = color
+    def process(self, item: ImageItem) -> ImageItem:
+        image = item.image
+        bg = Image.new(image.mode,image.size, self.color)
+        diff = ImageChops.difference(image, bg)
+        bbox = ImageChops.add(diff,diff, 2.0, -100).getbbox()
+        if bbox:
+            image = image.crop(bbox)
+        return ImageItem(image, item.meta)
