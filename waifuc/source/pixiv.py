@@ -105,7 +105,7 @@ class BasePixivSource(WebDataSource):
                     all_frames.append(frame_img)
                     all_durations.append(frame['delay'])
 
-            gif_file = os.path.join(td, os.path.splitext(filename)[0] + '.gif')
+            gif_file = os.path.join(td, os.path.splitext(filename)[0] + '.webp')
             all_frames[0].save(
                 gif_file,
                 save_all=True,
@@ -115,6 +115,8 @@ class BasePixivSource(WebDataSource):
             )
 
             gif_img = Image.open(gif_file)
+            gif_img.load()
+            gif_img._close_fp()
             return gif_img
 
     def _iter_data(self) -> Iterator[Tuple[Union[str, int], str, dict]]:
@@ -170,10 +172,9 @@ class BasePixivSource(WebDataSource):
 
                 try:
                     gif_image = self._make_gif_for_ugoira(frame_infos, zip_url)
-                    gif_image.load()
                 except _UgoiraSkip:
                     continue
-                filename = f'{self.group_name}_{illust["id"]}.gif'
+                filename = f'{self.group_name}_{illust["id"]}.webp'
                 meta = {
                     'pixiv': illust,
                     'ugoira': metadata,
