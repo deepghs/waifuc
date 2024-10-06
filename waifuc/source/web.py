@@ -27,7 +27,7 @@ class WebDataSource(NamedDataSource):
         self.download_silent = download_silent
         self.session = session or get_requests_session()
         self.group_name = group_name
-        self.skip_video = False
+        self.file_ext_filter = None # not filter file extension as default
 
     @classmethod
     def _rate_limiter(cls) -> Limiter:
@@ -58,9 +58,13 @@ class WebDataSource(NamedDataSource):
                     _, ext_name = os.path.splitext(urlsplit(url).filename)
                     filename = f'{self.group_name}_{id_}{ext_name}'
                     td_file = os.path.join(td, filename)
-                    if self.skip_video and any(x in filename.lower() for x in [".webm",".mp4",".gif",".mov",".avi",".avchd",".flv"]):
-                        warnings.warn(f'Skipped due to skip_video setting')
-                        continue
+                    if self.file_ext_filter:
+                        file_ext=filename.split(".")[-1]
+                        if any(x.replace(".","").lower() in file_ext.lower() for x in self.file_ext_filter):
+                            pass # only want the extension i want
+                        else:
+                            warnings.warn(f'Skipped due to file extension download filter')
+                            continue
                     try:
                         self._rate_limiter().try_acquire(filename)
                         download_file(
