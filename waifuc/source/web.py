@@ -58,7 +58,7 @@ class WebDataSource(NamedDataSource):
                     _, ext_name = os.path.splitext(urlsplit(url).filename)
                     filename = f'{self.group_name}_{id_}{ext_name}'
                     td_file = os.path.join(td, filename)
-                    if self.skip_video and any(x in filename for x.lower() in [".webm",".mp4",".gif",".mov",".avi",".avchd",".flv"]):
+                    if self.skip_video and any(x.lower() in filename for x in [".webm",".mp4",".gif",".mov",".avi",".avchd",".flv"]):
                         warnings.warn(f'Skipped due to skip_video setting')
                         continue
                     try:
