@@ -58,6 +58,7 @@ class WebDataSource(NamedDataSource):
                     _, ext_name = os.path.splitext(urlsplit(url).filename)
                     filename = f'{self.group_name}_{id_}{ext_name}'
                     td_file = os.path.join(td, filename)
+                    
                     if self.file_ext_filter:
                         file_ext=filename.split(".")[-1]
                         if any(x.replace(".","").lower() in file_ext.lower() for x in self.file_ext_filter):
