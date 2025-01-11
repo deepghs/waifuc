@@ -44,17 +44,21 @@ _TAGGING_METHODS = {
     'wd14_v3_swinv2': partial(_wd14_tagging, model_name='SwinV2_v3'),
     'wd14_v3_convnext': partial(_wd14_tagging, model_name='ConvNext_v3'),
     'wd14_v3_vit': partial(_wd14_tagging, model_name='ViT_v3'),
+    'wd14_v3_eva02_large': partial(_wd14_tagging, model_name='EVA02_Large'),
+    'wd14_v3_vit_large': partial(_wd14_tagging, model_name='ViT_Large'),
     'mldanbooru': _mldanbooru_tagging,
 }
 
 TaggingMethodTyping = Literal[
     'deepdanbooru', 'wd14_vit', 'wd14_convnext', 'wd14_convnextv2', 'wd14_swinv2', 'mldanbooru',
-    'wd14_moat', 'wd14_v3_swinv2', 'wd14_v3_convnext', 'wd14_v3_vit',
+    'wd14_moat', 'wd14_v3_swinv2', 'wd14_v3_convnext', 'wd14_v3_vit', 'wd14_v3_eva02_large', 'wd14_v3_vit_large'
 ]
+
+DEFAULT_TAGGING_METHOD: TaggingMethodTyping = 'wd14_v3_swinv2'
 
 
 class TaggingAction(ProcessAction):
-    def __init__(self, method: TaggingMethodTyping = 'wd14_v3_swinv2', force: bool = False, **kwargs):
+    def __init__(self, method: TaggingMethodTyping = DEFAULT_TAGGING_METHOD, force: bool = False, **kwargs):
         self.method = _TAGGING_METHODS[method]
         self.force = force
         self.kwargs = kwargs
@@ -70,7 +74,7 @@ class TaggingAction(ProcessAction):
 class TagFilterAction(BaseAction):
     # noinspection PyShadowingBuiltins
     def __init__(self, tags: Union[List[str], Mapping[str, float]],
-                 method: TaggingMethodTyping = 'wd14_convnextv2', reversed: bool = False, **kwargs):
+                 method: TaggingMethodTyping = DEFAULT_TAGGING_METHOD, reversed: bool = False, **kwargs):
         if isinstance(tags, (list, tuple)):
             self.tags = {tag: 1e-6 for tag in tags}
         elif isinstance(tags, dict):
